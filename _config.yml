@@ -5,24 +5,25 @@ url: "https://kkelchte.github.io/"
 # THEME-SPECIFIC CONFIGURATION
 theme_settings:
   # Meta
-  title: DoShiCo
-  avatar: assets/img/avatar.png
-  favicon: assets/favicon.ico
+  title: #DoShiCo
+  avatar: #assets/img/avatar.png
+  favicon: assets/drone.png
   gravatar: # Email MD5 hash
-  description: "A website with blog posts and pages" # used by search engines
+  description: "A website defining Domain shift challenge for training deep neural network control policies." # used by search engines
 
   # Header and footer text
   header_text: >
-     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-
-     <p>Remove all header text in <code>_config.yml</code> to disable this feature.</p>
-  header_text_feature_image:
+     <h1>DoShiCo</h1>
+     <p><b>Domain Shift challenge for Control</b></p>
+     <p><b>Klaas Kelchtermans and Tinne Tuytelaars</b></p>
+  header_text_feature_image: assets/img/website.png
   footer_text: >
-   Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/rohanchandra/type-theme">Type Theme</a>
+      Oct 2017 - Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/rohanchandra/type-theme">Type Theme</a>
+
 
   # Icons
   rss: false
-  email_address: # Full email address, e.g. "sam@example.com"
+  email_address: klaas.kelchtermans@esat.kuleuven.be # Full email address, e.g. "sam@example.com"
   behance:
   bitbucket:
   dribbble:
@@ -39,7 +40,7 @@ theme_settings:
   stack_exchange:  # Full URL
   steam:
   tumblr:
-  twitter: "twitter"
+  twitter: # "twitter"
   wordpress:
   youtube:
 
@@ -65,6 +66,11 @@ theme_settings:
 
   # Post navigation
   post_navigation: false
+
+  my_navigation: true
+  str_home: "Home"
+  str_what: "What's DoShiCo?"
+  str_try: "Try it!"
 
 # PAGINATION
 paginate: 5

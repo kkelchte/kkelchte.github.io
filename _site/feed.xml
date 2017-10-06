@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title></title>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <link>http://localhost:4000/</link>
+    <description>A website defining Domain shift challenge for training deep neural network control policies.</description>
+    <pubDate>Fri, 06 Oct 2017 13:54:28 +0200</pubDate>
+    
+      <item>
+        <title>What is DoShiCo?</title>
+        <link>http://localhost:4000/what</link>
+        <guid isPermaLink="true">http://localhost:4000/what</guid>
+        <description>&lt;p&gt;DoShiCo is a benchmark to compare the performance of different deep neural network policies on the task of monocular collision avoidance. Between the simulated and the real world is a very large domain shift. Dealing with this domain shift is crucial for making deep neural policies perform well in the real world. It is however very difficult to compare different training methods or architectures as long as there is no clear benchmark. DoShiCo responds to this demand.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/frontpage.png&quot; alt=&quot;frontpage&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;DoShiCo represents a dummy domain shift in simulation as well as an offline test bench with real-world data. The training happens in three types of basic simulated environments defined in Gazebo.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Canyon: a corridor of two straight walls with constant width and bending corners varying in angle. Flying distance: 45m&lt;/li&gt;
+  &lt;li&gt;Forest: a set of cylinders on varying locations with constant density. Flying distance: 45m&lt;/li&gt;
+  &lt;li&gt;Sandbox: a big room in varying colors and objects randomly selected from 13 different objectmodels. Flying distance: 7m&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/expsenvs_esat.png&quot; alt=&quot;experimental setup environments&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Validation happens by flying online through a more realistic environment, called ESAT.&lt;/p&gt;
+
+&lt;p&gt;In order to get a sense of the performance in the real world, an offline almost-collision dataset is provided in which collision would certainly occur if the wrong action was applied. Flying online in the real world can be tedious and is very dependent on external factors like wifi connections or battery status. The almost-collision dataset makes it possible to compare policies on real-world data quantitatively.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/almost_col_basic.png&quot; alt=&quot;almost-collision dataset&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;More details can be found in &lt;a href=&quot;http://localhost:4000/assets/paper.pdf&quot;&gt;our paper&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p style=&quot;color:gray; font-size: 80%; text-align: center;&quot;&gt;Training deep neural control networks end-to-end for real-world applications 
+typically requires big demonstration datasets in the real world or big sets consisting of a large variety of realistic and closely related  3D CAD models. These real or virtual data should, moreover, have very similar characteristics to the conditions expected at test time. These stringent requirements and the time consuming data collection processes that they entail, are probably the most important impediment that keeps deep neural policies from being deployed in real-world applications.
+Therefore, we advocate an alternative approach, where instead of avoiding any domain shift by carefully selecting the training data, the goal is to learn a policy that can cope with this domain shift. To this end, we propose a new challenge: to train a model in very basic synthetic environments, far from realistic, in a way that it can fly in more realistic environments as well as take the control decisions on real-world data.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 05 Oct 2017 00:00:00 +0200</pubDate>
+      </item>
+    
+      <item>
+        <title>Try it yourself!</title>
+        <link>http://localhost:4000/try</link>
+        <guid isPermaLink="true">http://localhost:4000/try</guid>
+        <description>&lt;p&gt;In order to use DoShiCo as a benchmark we made everything accessible. In the following steps we explain first how to get the general required software packages. The second step describes the comunication with the drone either in simulator or in the real world. The final step explains how you can reproduce our results published in &lt;a href=&quot;http://localhost:4000/assets/paper.pdf&quot;&gt;our paper&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2&gt;1. Install ROS, Gazebo, Tensorflow, Nvidia&lt;/h2&gt;
+&lt;p&gt;DoShiCo requires a combination of ROS (kinetic), Gazebo (7) and Tensorflow-gpu (1.11). Installing ROS is most convenient on a Ubuntu (16.4) operating system. The full installation can be tedious. Therefore we supply a docker image that can easily be pulled from the dockerhub page.&lt;/p&gt;
+
+&lt;p&gt;In order to run the docker image it is necessary to have a linux computer with docker installed. Preferrably the computer has a Nvidia GPU with the latest drivers (required for Tensorflow-gpu). If not, a local Tensorflow version should be installed for instance in a virtual environment. The docker image is labelled indicating it requires nvidia-drivers. &lt;!-- In case you can't start it without, please contact me. --&gt;&lt;/p&gt;
+
+&lt;p&gt;In case you have a Nvidia-GPU the &lt;a href=&quot;https://github.com/NVIDIA/nvidia-docker&quot; target=&quot;_blank&quot;&gt;Nvidia-docker plugin&lt;/a&gt; should be installed.&lt;/p&gt;
+
+&lt;p&gt;Running the docker image with your home folder mounted and the local graphical session forwarded:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;nvidia-docker run ...
+&lt;span class=&quot;c&quot;&gt;# test docker image&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# two $$ are use to indicate the bash within a docker image&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The docker image has Xpra installed. This makes it possible to run applications without using a graphical session. The latter is especially suited in combination with a computing cluster where graphical sessions are often not allowed. In order to start the Xpra, you’ll have to adjust the entrypoint in order to set the correct environment variables.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;nvidia-docker run ... call entrypoint&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2&gt;2. Install ROS- and Tensorflow-packages&lt;/h2&gt;
+&lt;p&gt;If all big software packages (ROS, Gazebo, Tensorflow) are installed or you could run the docker image successfully, you have the environment ready to clone the local ROS- and Tensorflow-packages for flying the drone with a DNN policy. The packages are depicted bellow and are grouped in the following way:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/kkelchte/hector_quadrotor&quot; target=&quot;_blank&quot;&gt;Drone Simulator&lt;/a&gt; is a simulated version of the bebop 2 drone based on the Hector quadrotor package of TU Darmstad.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/kkelchte/simulated-supervised&quot; target=&quot;_blank&quot;&gt;Simulated-Supervised&lt;/a&gt; is a ROS package forming the interface between the simulated drone and the DNN policy&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/kkelchte/pilot_online&quot; target=&quot;_blank&quot;&gt;Online Training&lt;/a&gt; represents the code block for training the DNN policy in an online fashion with tensorflow. The checkpoints are used and kept in a log folder.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/kkelchte/pilot_offline&quot; target=&quot;_blank&quot;&gt;Offline Training&lt;/a&gt; represents the code block for training the DNN policy offline from offline data.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://homes.esat.kuleuven.be/~kkelchte/checkpoints/offl_mobsm_test.zip&quot; target=&quot;_blank&quot;&gt;Log&lt;/a&gt; is a folder containing the latest checkpoints and is used during offline and online training.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://homes.esat.kuleuven.be/~kkelchte/pilot_data/data.zip&quot; target=&quot;_blank&quot;&gt;data&lt;/a&gt; is a folder containing data captured by the expert in the DoShiCo environments and used for offline training.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/project.png&quot; alt=&quot;frontpage&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+
+&lt;h4&gt;Drivers&lt;/h4&gt;
+
+&lt;h2&gt;3. Reproduce Results&lt;/h2&gt;
+
+&lt;!-- In order to reproduce the results there is a big package of ROS required called DoShiCo? / simulation-supervised. This package groups the DoShiCo environments in simulation-supervised-demo, the behavior arbitration control for supervision in a control subpackage and extra tools. The main simulation-supervised package contains scripts required to run the training over different training methods.... --&gt;
+&lt;h3&gt;Install DoShi&lt;/h3&gt;
+
+&lt;h3&gt;DoShiCo environments&lt;/h3&gt;
+&lt;p&gt;Demo package of simulation-supervised&lt;/p&gt;
+
+&lt;h3&gt;Simulation-Supervision&lt;/h3&gt;
+&lt;p&gt;Behavior arbitration package and how to use it&lt;/p&gt;
+
+&lt;h3&gt;Simulation-Supervision&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/frontpage.png&quot; alt=&quot;frontpage&quot; class=&quot;center-image&quot; /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Thu, 05 Oct 2017 00:00:00 +0200</pubDate>
+      </item>
+    
+  </channel>
+</rss>
