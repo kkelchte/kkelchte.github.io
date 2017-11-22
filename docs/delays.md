@@ -1,3 +1,8 @@
+---
+title: Delays with ROS - tensorflow - docker - singularity
+layout: default
+---
+
 # Evaluating the delays of tensorflow in different settings
 Delay is measured in between tensorflow (rosinterface) receiving an image and publishing a control back to ROS.
 
