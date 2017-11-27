@@ -7,6 +7,7 @@ layout: default
 Delay is measured in between tensorflow (rosinterface) receiving an image and publishing a control back to ROS.
 
 **Evaluate**
+
 This was run without gpu acceleration due to wrond cuda (9.0) and cudnn (5.0) version incompatibility with tensorflow (1.4).
 
 | Device | min | avg | max |
@@ -35,6 +36,7 @@ There are some quick wins by disabling the plotting of the depth prediction (0.0
 Switching from Docker to Singularity introduces a small 0.01s delay on average when using the graphics though with xpra Singularity seems to be faster, surprisingly!
 
 **Train**
+
 Filling replay buffer on the fly and further experimenting with improving on the minimum speed. A minimum framerate of 10 frames per second should be possible. At this moment the kinect works at 20 fps.
 
 | Device | min | avg | max | remark |
