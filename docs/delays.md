@@ -10,10 +10,10 @@ Delay is measured in between tensorflow (rosinterface) receiving an image and pu
 This was run without gpu acceleration due to wrond cuda (9.0) and cudnn (5.0) version incompatibility with tensorflow (1.4).
 
 | Device | min | avg | max |
+|-----|-|-|---|
 | Laptop without Depth | 0.13 | 0.16 | 0.35 | 
 | Laptop with aux Depth | 0.14 | 0.17 | 0.33 |
 | Laptop with aux Depth and plot depth | 0.14 | 0.18 | 0.4 |
-|-----|-|-|---|
 | Docker with Graphics without Depth | 0.14 | 0.17 | 0.33 |
 | Docker with Graphics with aux Depth | 0.14 | 0.17 | 0.33 |
 | Docker with Graphics with aux Depth and plot depth | 0.16 | 0.18 | 0.37 |
@@ -23,7 +23,6 @@ This was run without gpu acceleration due to wrond cuda (9.0) and cudnn (5.0) ve
 | Docker with xpra with aux Depth (without displaying control) | 0.16 | 0.21 | 0.56 |
 | Docker with xpra with aux Depth and plot depth | 0.19 | 0.25 | 0.64 |
 | Docker with xpra with aux Depth and plot depth (without displaying control) | 0.17 | 0.22 | 0.57 |
-|----|-|-|-----|
 | Singularity with Graphics without Depth | 0.14 | 0.18 | 0.46 |
 | Singularity with Graphics with aux Depth | 0.14 | 0.16 | 0.34 |
 | Singularity with Graphics with aux Depth and plot depth | 0.15 | 0.17 | 0.39 |
