@@ -1,5 +1,5 @@
 ---
-title: Delays with ROS - tensorflow - docker - singularity
+title: Delays
 layout: default
 ---
 
