@@ -8,7 +8,7 @@ Delay is measured in between tensorflow (rosinterface) receiving an image and pu
 
 **Evaluate**
 
-This was run without gpu acceleration due to wrond cuda (9.0) and cudnn (5.0) version incompatibility with tensorflow (1.4).
+This was run without gpu acceleration due to wrond cuda (8.0) and cudnn (5.0) version incompatibility with tensorflow (1.4).
 
 | Device | min | avg | max |
 |-----|-|-|---|
@@ -48,12 +48,21 @@ Filling replay buffer on the fly and further experimenting with improving on the
 | Laptop naux | 0.02 | 0.11 | 0.61 | no gpu growth |
 
 Using a GPU decreases the average delay from 0.16 to 0.11 on the laptop. The maximum delay is increased a lot which is due to the loading of the network on the gpu.
-There seems to be some discrepantie between the parallel image-callbacks that can't follow to stream of images. It is also still surprising that the delay does not allow 10fps while before summer this used to allow even 30fps (if my measures were correct).
+There seems to be some discrepantie between the parallel image-callbacks that can't follow to stream of images. It is also still surprising that the delay does not allow 10fps while before summer this used to allow even 30fps (if my measures were correct as well as my memory).
 
+**Offline**
+| Laptop scratch | 0.02 | 0.12 | 3.98 | dataformat NCHW instead of NHWC |
+| Laptop scratch | 0.02 | 0.11 | 0.68 | dataformat NCHW instead of NHWC |
+| Laptop scratch | 0.02 | 0.11 | 0.67 | dataformat NCHW instead of NHWC |
+| Laptop scratch | 0.02 | 0.12 | 3.98 | offline 1 by 1 |
+| Laptop scratch | 0.02 | 0.11 | 0.68 | offline 1 by 1 |
+| Laptop scratch | 0.02 | 0.11 | 0.67 | offline 1 by 1 |
 
-
-
-
+> In order to make NCHW work with mobilenet I had to change a line in the contrib library: tensorflow/contrib/layers/python/layers/layer.py.
+Change on line 2536:
+`strides = [1, stride_h, stride_w, 1]`
+in:
+`strides = [1, 1, stride_h, stride_w] if data_format.startswith('NC') else [1, stride_h, stride_w, 1]`
 
 ## Code for redoing these experiments:
 #### Code for laptop
