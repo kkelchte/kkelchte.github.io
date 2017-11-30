@@ -63,6 +63,8 @@ $ singularity build ros_gazebo_tensorflow.img docker://kkelchte/ros_gazebo_tenso
 
 Pip uninstall and reinstall in docker might not be recognized by Singularity as an updated layer. Singularity probably keeps some cached docker layers from which singularity build pulls which seems to boycot a proper update of the singularity image. To overcome this issue I build the singularity image as a sandbox and run it in --writable mode after which I rebuild as a normal singularity read-only image file.
 
+Note that even though this troubleshoot has only 3 steps, it actually take much longer. Building a writable sandbox takes up to more than 30min with an image of this size.
+
 * Step 1: create a sandbox image as root
 
 ```

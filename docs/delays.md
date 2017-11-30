@@ -6,9 +6,7 @@ layout: default
 # Evaluating the delays of tensorflow in different settings
 Delay is measured in between tensorflow (rosinterface) receiving an image and publishing a control back to ROS. Dimension of all numbers is seconds and measured on an Alienware laptop with GeForce GTX 780M GPU.
 
-**Evaluate**
-
-This was run without gpu acceleration due to wrond cuda (8.0) and cudnn (5.0) version incompatibility with tensorflow (1.4).
+**Evaluate on CPU**
 
 | Device | min | avg | max |
 |-----|-|-|---|
@@ -30,7 +28,6 @@ This was run without gpu acceleration due to wrond cuda (8.0) and cudnn (5.0) ve
 | Singularity with xpra without Depth (without displaying control) | 0.13 | 0.19 | 0.50 |
 | Singularity with xpra with aux Depth (without displaying control) | 0.13 | 0.19 | 0.51 |
 | Singularity with xpra with aux Depth and plot depth (without displaying control) | 0.13 | 0.20 | 0.49 |
-
 
 There are some quick wins by disabling the plotting of the depth prediction (0.01s on average) and avoiding the console display to be rendered in xpra (0.02s on average). Rendering with GPU acceleration (graphics) is much faster than rendering softwarewise with xpra.
 Switching from Docker to Singularity introduces a small 0.01s delay on average when using the graphics though with xpra Singularity seems to be faster, surprisingly!
@@ -87,7 +84,7 @@ Working with only 1frame gives me the following 'true' results:
 | Laptop | 0.004 | 0.005 | 0.459 | NCHW 1f |
 | Laptop | 0.007 | 0.008 | 0.545 | NCHW 3fs |
 | Laptop | 0.006 | 0.010 | 0.586 | NCHW 3fs auxd |
-| Laptop | 0.007 | 0.011 | 0.555 |  | NCHW 3fs auxd show depth|
+| Laptop | 0.007 | 0.011 | 0.555 | NCHW 3fs auxd show depth|
 | Laptop | 0.010 | 0.014 | 0.603 | NCHW 3fs auxd mob-0.5 |
 | Laptop | 0.018 | 0.021 | 0.969 | NCHW 3fs auxd mob-1.0 |
 
@@ -101,26 +98,28 @@ Note:
 - Increasing the depth of the network from 0.25 to 0.5 increases the average delay with 3ms (14ms)
 - Increasing the depth of the network from 0.5 to 1.0 increases the average delay with 7ms (21ms)
 
-| Device | min | avg | max | remark |
+| Device                        | min   | avg   | max   | remark |
 |---|
-| Laptop | 0.007 | 0.011 | 0.555 |  | NCHW 3fs auxd show depth|
-| Docker Graphics |  0.008 | 0.012 | 0.592 | NCHW 3fs auxd plot depth |
-| Docker Xpra | 0.008 | 0.011 | 0.746 | NCHW 3fs auxd plot depth |
-| Docker (condor) Graphics | NCHW 3fs auxd plot depth |
-| Docker (condor) Xpra | NCHW 3fs auxd plot depth |
-| Singularity Graphics | NCHW 3fs auxd plot depth |
-| Singularity Xpra | NCHW 3fs auxd plot depth |
-| Singularity (condor) Graphics | NCHW 3fs auxd plot depth |
-| Singularity (condor) Xpra | NCHW 3fs auxd plot depth |
+| Laptop                        | 0.007 | 0.011 | 0.555 | NCHW 3fs auxd show depth|
+| Docker Graphics               | 0.008 | 0.012 | 0.592 | NCHW 3fs auxd plot depth |
+| Docker Xpra                   | 0.008 | 0.011 | 0.746 | NCHW 3fs auxd plot depth |
+| Docker (condor) Xpra          | NCHW 3fs auxd plot depth |
+| Singularity Graphics          | 0.007 | 0.010 | 0.574 | NCHW 3fs auxd plot depth |
+| Singularity Xpra              | 0.008 | 0.010 | 0.792 | NCHW 3fs auxd plot depth |
+| Singularity (condor) Xpra     | NCHW 3fs auxd plot depth |
 
 The experiments in docker and singularity are repeated 3 times from which the last time is used. This avoids some start up delays.
 
 - Docker with graphics increases the average delay with only 1ms
 - Docker with xpra decrease the average delay with a 1ms bringing it close to the standard delay except for the first frame.
+- Working in singularity brings a small but consistent win of 1 to 2 ms over working in docker or graphically. This is especially graphically a surprise.
+- Xpra makes the start up delay increase with 50% (from 0.5 to 0.75) although there seems not to be an increase of delay of average, maybe even a slight decrease.
 
 
 ## Code for redoing the last experiments:
+
 #### Code for laptop
+
 ```bash
 roscd simulation_supervised
 ./scripts/train_model.sh -s start_python.sh -n 1 -p "--show_depth False --scratch True --auxiliary_depth False --n_fc False --n_frames 1 --data_format NHWC" -t online_naux_1f_NHWC
@@ -133,6 +132,7 @@ roscd simulation_supervised
 ```
 
 #### Code for docker with graphics
+
 ```bash
 $ sudo nvidia-docker run -it --rm -v /tmp/.X11-unix:/tmp/.X11-unix -v /home/klaas:/home/klaas -u klaas kkelchte/ros_gazebo_tensorflow
 $ export DISPLAY=:0
@@ -142,6 +142,7 @@ $ for i in 0 1 2 ; do ./scripts/train_model.sh -s start_python_docker.sh -n 1 -p
 ```
 
 #### Code for docker with xpra
+
 ```bash
 $ sudo nvidia-docker run -it --rm -v /home/klaas:/home/klaas -u klaas kkelchte/ros_gazebo_tensorflow
 $ source /home/klaas/docker_home/.entrypoint
@@ -150,6 +151,7 @@ $ for i in 0 1 2 ; do ./scripts/train_model.sh -s start_python_docker.sh -n 1 -p
 ```
 
 #### Code for singularity with graphics
+
 ```bash
 $ singularity shell --nv ~/ros_gazebo_tensorflow.img
 $ source /opt/ros/$ROS_DISTRO/setup.bash
@@ -160,14 +162,10 @@ $ for i in 0 1 2 ; do ./scripts/train_model.sh -s start_python_docker.sh -n 1 -p
 ```
 
 #### Code for singularity with xpra
-```
+
+```bash
 $ singularity shell --nv ~/ros_gazebo_tensorflow.img
 $ source /home/klaas/docker_home/.entrypoint_sing
 $ roscd simulation_supervised
-$ ./scripts/train_model.sh -s start_python_docker.sh -m naux -t training_on_sing_xpra_naux -p "--show_depth False" -g false
-$ less /home/klaas/tensorflow/log/training_on_sing_xpra_naux
-$ ./scripts/train_model.sh -s start_python_docker.sh -m auxd -t training_on_sing_xpra_auxd -p "--show_depth False" -g false
-$ less /home/klaas/tensorflow/log/training_on_sing_xpra_auxd
-$ ./scripts/train_model.sh -s start_python_docker.sh -m auxd -t training_on_sing_xpra_auxd_show_depth -p "--show_depth True" -g false
-$ less /home/klaas/tensorflow/log/training_on_sing_xpra_auxd_show_depth
+$ for i in 0 1 2 ; do ./scripts/train_model.sh -s start_python_sing.sh -n 1 -p "--scratch True" -t online_auxd_3f_NCHW_showd_singxpra; done
 ```
