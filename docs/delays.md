@@ -78,6 +78,7 @@ AHA!
 The main misconceptation I had so far was that I was concatenating 3 frames. The frames are send at 20FPS so every 0.05s. Using 3 frames as inputs makes the delay between the first input image and the final control at least 2x this 0.05s delay resulting in 0.1s delay giving the impression that it can only work at 10FPS. But that is thus not at all the case. The max delay of around 0.5s is only for the first image when the network still needs to load on the GPU.
 
 Working with only 1frame gives me the following 'true' results:
+
 | Device | min | avg | max | remark |
 |---|
 | Laptop | 0.004 | 0.004 | 0.487 | NHWC 1f |
@@ -105,8 +106,9 @@ Note:
 | Docker Xpra                   | 0.008 | 0.011 | 0.746 | NCHW 3fs auxd plot depth |
 | Docker (condor) Xpra          | NCHW 3fs auxd plot depth |
 | Singularity Graphics          | 0.007 | 0.010 | 0.574 | NCHW 3fs auxd plot depth |
+| Singularity Graphics (qayd)   | 0.013 | 0.019 | 1.176 | NCHW 3fs auxd plot depth |
 | Singularity Xpra              | 0.008 | 0.010 | 0.792 | NCHW 3fs auxd plot depth |
-| Singularity (condor) Xpra     | NCHW 3fs auxd plot depth |
+| Singularity Xpra (condor)     | 0.021 | 0.037 | 1.589 | NCHW 3fs auxd plot depth |
 
 The experiments in docker and singularity are repeated 3 times from which the last time is used. This avoids some start up delays.
 
