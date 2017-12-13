@@ -5,6 +5,7 @@ layout: default
 ### Intro
 
 This is a guide to build docker images from a dockerfile. 
+
 | Specifications | Version |
 | -------------  | ------- |
 | Ubuntu         |  16.04  |
