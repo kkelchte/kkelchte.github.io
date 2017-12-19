@@ -116,7 +116,8 @@ The experiments in docker and singularity are repeated 3 times from which the la
 - Docker with xpra decrease the average delay with a 1ms bringing it close to the standard delay except for the first frame.
 - Working in singularity brings a small but consistent win of 1 to 2 ms over working in docker or graphically. This is especially graphically a surprise.
 - Xpra makes the start up delay increase with 50% (from 0.5 to 0.75) although there seems not to be an increase of delay of average, maybe even a slight decrease.
-- Using condor to introduces a double in delay. This might be due to the read and write operations to the harddrive of qayd, though this only happens between the runs and not during. This could be tested by evaluating a model on condor but solely on qayd.
+- Using condor to introduces an average delay of 0.033 on the following machines: quaoar, tyl, izar, unuk, pollux, wasat,
+- Using condor to introduces an average delay of 0.014 on the following machines: citrine, ruchba, amethyst, hematite, kunzite , opal, iolite, pyrite
 
 
 ## Code for redoing the last experiments:
