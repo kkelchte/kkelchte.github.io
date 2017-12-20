@@ -49,3 +49,6 @@ It is also remarkable to see how the imagenet pretrained weights has an overall 
 By Seeding both the canyon generator and the OUNoise file to a fixed number, we can make sure that the same canyon is generated. The experiment of above is repeated but with more models per parameter and only 1 canyon to fly through. Comparing the different trajectories in the same canyon might give a better intuition over the vairance of the different models.
 
 ![the canyon for evaluation]({{ "/imgs/17-12-20-canyon.png" | absolute_url }})
+
+The variance can also be due to severe overfitting. In that case a super simple model with only 3 conv layers might improve the stability a lot.
+
