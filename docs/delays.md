@@ -108,7 +108,8 @@ Note:
 | Singularity Graphics          | 0.007 | 0.010 | 0.574 | NCHW 3fs auxd plot depth |
 | Singularity Graphics (qayd)   | 0.013 | 0.019 | 1.176 | NCHW 3fs auxd plot depth |
 | Singularity Xpra              | 0.008 | 0.010 | 0.792 | NCHW 3fs auxd plot depth |
-| Singularity Xpra (condor)     | 0.021 | 0.037 | 1.589 | NCHW 3fs auxd plot depth |
+| Singularity Xpra (condor quaoar)| 0.021 | 0.037 | 1.589 | NCHW 3fs auxd plot depth |
+| Singularity Xpra (condor hematite)| 0.013 | 0.014 | 0.018 | NCHW 3fs auxd plot depth |
 
 The experiments in docker and singularity are repeated 3 times from which the last time is used. This avoids some start up delays.
 
