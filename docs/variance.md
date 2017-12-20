@@ -31,11 +31,21 @@ done
 
 ### Primal results
 
+First test is checking whether doshico performs the same as during summer. In green you see the NAUX model and in blue the AUXD. The performance seems to be a bit worse than over the population in the paper, though the auxiliary depth is again a clear overall improvement.
+
 ![Doshico variance]({{ "/imgs/17-12-20-doshico_auxd_naux.png" | absolute_url }})
+
+The first results on different parameters as mentioned above with the color indicating what kind of model. It is remarkable to see that changing over different seeds seems to have a positive influence on the variance. Which does not make sense. The models of the different seeds where also evaluated on different condor machines resulting in different delays while the reference models were all evaluated on the same machine.
+
+It is also remarkable to see how the imagenet pretrained weights has an overall good influence on the performance though a very bad impact on the variance.
+
 ![Performance over population]({{ "/imgs/17-12-20-performance_over_population.png" | absolute_url }})
+
 ![Variance in histograms]({{ "/imgs/17-12-20-variance_in_histograms.png" | absolute_url }})
 
 
 ### Flying throught 1 type of canyon
 
-By Seeding both the canyon generator and the OUNoise file to a fixed number, we can make sure that the same canyon is generated.
+By Seeding both the canyon generator and the OUNoise file to a fixed number, we can make sure that the same canyon is generated. The experiment of above is repeated but with more models per parameter and only 1 canyon to fly through. Comparing the different trajectories in the same canyon might give a better intuition over the vairance of the different models.
+
+![the canyon for evaluation]({{ "/imgs/17-12-20-canyon.png" | absolute_url }})
