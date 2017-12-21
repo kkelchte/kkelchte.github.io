@@ -12,11 +12,11 @@ The reference model is a mobile-0.25 network trained from scratch with seed 123 
 
 ```
 for i in $(seq 0 9) ; do
-	./condor_task_offline.sh -t variance_ref_$i -m mobilenet_025  -e true -n 30 -w "canyon" -p "--dataset canyon --auxiliary_depth False --n_fc False --random_seed 123 --scratch True" 
-	./condor_task_offline.sh -t variance_seed_$i -m mobilenet_025  -e true -n 30 -w "canyon" -p "--dataset canyon --auxiliary_depth False --n_fc False --random_seed $((115+$i)) --scratch True"
-	./condor_task_offline.sh -t variance_auxd_$i -m mobilenet_025  -e true -n 30 -w "canyon" -p "--dataset canyon --auxiliary_depth True --n_fc False --random_seed 123 --scratch True" 
-	./condor_task_offline.sh -t variance_imgnet_$i -m mobilenet_025  -e true -n 30 -w "canyon" -p "--dataset canyon --auxiliary_depth False --n_fc False --random_seed 123" 
-	./condor_task_offline.sh -t variance_nfc_$i -m mobilenet_025  -e true -n 30 -w "canyon" -p "--dataset canyon --auxiliary_depth False --n_fc True --random_seed 123 --scratch True" 
+	./condor_task_offline.sh -t variance_ref_$i  -e true -n 30 -w "canyon" -p "--dataset canyon --auxiliary_depth False --n_fc False --random_seed 512" 
+	./condor_task_offline.sh -t variance_seed_$i  -e true -n 30 -w "canyon" -p "--dataset canyon --auxiliary_depth False --n_fc False --random_seed $((3+$i))"
+	./condor_task_offline.sh -t variance_auxd_$i  -e true -n 30 -w "canyon" -p "--dataset canyon --auxiliary_depth True --n_fc False --random_seed 512" 
+	./condor_task_offline.sh -t variance_imgnet_$i -m mobilenet_025  -e true -n 30 -w "canyon" -p "--dataset canyon --auxiliary_depth False --n_fc False --random_seed 512" 
+	./condor_task_offline.sh -t variance_nfc_$i  -e true -n 30 -w "canyon" -p "--dataset canyon --auxiliary_depth False --n_fc True --random_seed 512" 
 done
 
 ```
@@ -51,4 +51,8 @@ By Seeding both the canyon generator and the OUNoise file to a fixed number, we 
 ![the canyon for evaluation]({{ "/imgs/17-12-20-canyon.png" | absolute_url }})
 
 The variance can also be due to severe overfitting. In that case a super simple model with only 3 conv layers might improve the stability a lot.
+
+### Secondary results
+
+The models learned from scratch over 80 episodes converge to a loss of 0.3 while the loss of the model initialized with imagenet converges to 0.17. This might explain the bad performance of all the models except the imagenet initialized model. Redo experiments with training for 160 instead of 80 episodes the models that are trained from scratch. 
 
