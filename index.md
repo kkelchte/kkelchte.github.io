@@ -2,9 +2,11 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
-#### [20-12-2017: variance in runs on condor [ongoing](./docs/variance.md)
+#### [21-12-2017: Paper idea: Learning camera rules from youtube videos for autonomous UAVs](./docs/gan_rl.md)
 
-#### [19-12-2017: building discrete control [ongoing](./docs/discrete_control.md)
+#### [20-12-2017: variance in runs on condor (ongoing)](./docs/variance.md)
+
+#### [19-12-2017: building discrete control (ongoing)](./docs/discrete_control.md)
 
 #### [13-12-2017: clean build from Dockerfile](./docs/docker_build.md)
 
