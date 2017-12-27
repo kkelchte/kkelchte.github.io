@@ -108,7 +108,8 @@ Note:
 | Singularity Graphics          | 0.007 | 0.010 | 0.574 | NCHW 3fs auxd plot depth |
 | Singularity Graphics (qayd)   | 0.013 | 0.019 | 1.176 | NCHW 3fs auxd plot depth |
 | Singularity Xpra              | 0.008 | 0.010 | 0.792 | NCHW 3fs auxd plot depth |
-| Singularity Xpra (condor)     | 0.021 | 0.037 | 1.589 | NCHW 3fs auxd plot depth |
+| Singularity Xpra (condor quaoar)| 0.021 | 0.037 | 1.589 | NCHW 3fs auxd plot depth |
+| Singularity Xpra (condor hematite)| 0.013 | 0.014 | 0.018 | NCHW 3fs auxd plot depth |
 
 The experiments in docker and singularity are repeated 3 times from which the last time is used. This avoids some start up delays.
 
@@ -116,6 +117,8 @@ The experiments in docker and singularity are repeated 3 times from which the la
 - Docker with xpra decrease the average delay with a 1ms bringing it close to the standard delay except for the first frame.
 - Working in singularity brings a small but consistent win of 1 to 2 ms over working in docker or graphically. This is especially graphically a surprise.
 - Xpra makes the start up delay increase with 50% (from 0.5 to 0.75) although there seems not to be an increase of delay of average, maybe even a slight decrease.
+- Using condor to introduces an average delay of 0.033 on the following machines: quaoar, tyl, izar, unuk, pollux, wasat,
+- Using condor to introduces an average delay of 0.014 on the following machines: citrine, ruchba, amethyst, hematite, kunzite , opal, iolite, pyrite
 
 
 ## Code for redoing the last experiments:
