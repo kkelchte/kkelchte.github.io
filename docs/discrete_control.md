@@ -7,7 +7,7 @@ layout: default
 
 ## step 1: redefine network for outputs
 
-In mobilenet a parameter num_classes defines number of outputs
+In mobilenet a parameter num_classes defines number of outputs.
 
 ## step 2: discretize labels
 

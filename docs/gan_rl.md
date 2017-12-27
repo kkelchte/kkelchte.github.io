@@ -21,9 +21,8 @@ This paper is more a conceptual idea with a proof of concept. We explore a new t
 
 * We can extract attention blobs in a consistent way, robust against clutter and occlusions.
 	* Todo: find a proper segmentation/attention network that robustly detects the attention blob in the image.
-* Filming behavior is defined by moving attention blobs. A state representation as an attention blob is enough to learn this behavior.
-	* Todo: extract attention blobs from some nice looking youtube movies and try to discriminate from bad looking movies
-	* Todo: define good and bad filming behavior
+* Filming behavior is defined by moving attention blobs. A state representation as an attention blob is enough to learn this behavior. Somethings will be very convenient to learn with an attention blob, for instance: golden ratio and how fast the focus area moves in the screen. Other important camera tricks will not be captured by the policy, for instance: the beauty of the background, the atmosphere of the surroundings. 
+	* Todo: extract attention blobs from some nice looking youtube movies and try to discriminate from bad looking movies, see how professional vs amateuristic use of the golden ratio improves the film.
 * The loss of a discriminator is a valid reward signal in RL.
 	* Todo: train a grid world policy (ex Zig Zag) to act like a heuristic by taking the discriminators prediction as a negative reward that needs to be minimized
 
