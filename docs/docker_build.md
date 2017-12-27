@@ -92,7 +92,8 @@ RUN apt-get update && apt-get install -y \
     ros-kinetic-hector-gazebo-plugins \
     ros-kinetic-hector-sensors-description \
     ros-kinetic-hector-sensors-gazebo \
-    python-pip vim less openbox
+    python-pip vim less 
+
 
 #-- current size: 3.09G (old)
 
@@ -131,7 +132,22 @@ RUN pip install pyyaml \
 	scikit-image pyinotify \
     lxml sklearn
 
+# Versions:
+# scipy (1.0.0)
+# scikit-image (0.13.1)
+# pyinotify (0.9.6)
+# lxml (4.1.1)
+# sklearn (0.0)
+# rospy (1.12.7)
+# rospkg (1.1.4)
+# rospkg-modules (1.1.4)
+# matplotlib (1.5.1)
+
 #-- current size: 6.97GB
+
+# TODO: apt-get install -y openbox xorg xserver-xorg-video-dummy xpra
+
+
 ```
 
 Pip versions:
