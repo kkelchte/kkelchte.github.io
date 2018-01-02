@@ -5,7 +5,7 @@ Launch_condor file adjusts the walltime according the learning rate.
 ```
 i=0
 echo "i;LR;WD;DO" > /esat/qayd/kkelchte/docker_home/tensorflow/log/gridsearchtags
-for LR in 0.5 0.1 0.01 0.001 0.0001 ; do
+for LR in 0.5 0.1 0.01 0.001 ; do
        for WD in 20 10 4 2 1 ; do
                for DO in 0.87 0.75 0.5 0.25 0.125 ; do
                        echo gridsearch_$i
@@ -19,12 +19,52 @@ for LR in 0.5 0.1 0.01 0.001 0.0001 ; do
 done
 ```
 
-### Evaluate resutls of offline training:
+### Evaluate results:
 
-Script can be found in jupyter 'Evaluate Gridsearch'.
+Script can be found in jupyter 'Evaluate Gridsearch'. Or in the log file:
+
+```
+$ tensorboard $(python -c 'for i in range(0,24): print "gridsearch_"+str(i)+" ",')
+```
+
+#### Influence of different hyperparams on offline training
+
+**Dropout**
+
+Dropout keep probability is decreased from 0.87 to 0.125 in 5 steps. This leads to slower convergence on the training imitation loss. The resulting loss is around the same for different values of dropout keep probability. No clear trends are visible.
 
 
-**Check highest checkpoint**
+**Weight decay**
+
+It is hard to find a trend in the weight decay. At lr 0.5 a lower weight decay seems to improve on the imitation loss while at lr 0.1 the oposite seems true.
+
+**Learning rate**
+
+The learning rate varies over 0.5, 0.1, 0.01, 0.001. Decreasing the learning rate has a direct impact on the convergence speed. At a learning rate of 0.01 convergence can be expected after more or less 24h. At 0.001 this would result in 10 days.
+
+The runs with lr 0.1 run 5 times longer than 0.5 resulint in 40k steps instead of 8. The convergence in the validation imitation loss varies stronger with a learning rate of 0.1 than with learning rate 0.5.
+
+#### Influence of different hyperparams on online evaluation
+
+Average flying distance over 20 flights:
+
+![Average flying distance over 20 flights]({{ "/imgs/18-01-02-gridsearch_online.png" | absolute_url }})
+
+Only few of the networks trained without crash actually performs well. Due to this low number of succes networks it seems unlikely that we can draw proper conclusions. 
+
+A high weight decay seems to make a proper learning too hard. 
+
+It is not super clear, but especially with a high learning rate, a higher dropout keep probability or so less severe regularization with dropout tends to a better online performance. Though again this is arguable as the trend is different with a lower learning rate.
+
+A very low learning rate and longer training might positively influence the learning stability. A similar effect might be visible with a larger batchsize but without the need for extreme long training. The models trained at 0.001 took around 3 to 4 days to train offline with batchsize 32. 
+
+With a batchsize of 64 or 128, the amount of episodes should be 2 to 4 times less making the model converge hopefully in less than 1 day. __TODO__ increase batchsize as big as possible while it fits on a 2g GPU. According to this relative increase the learning rate can be increased keeping stability at an equal level resulting in a faster convergence.
+
+
+#### Check condor failure cases
+
+**Check highest checkpoint in offline training**
+
 ```
 gridsearch_0 : lr: 0.5 wd: 20e-05 do: 0.8 : 7900
 gridsearch_1 : lr: 0.5 wd: 20e-05 do: 0.7 : 7900
@@ -156,6 +196,13 @@ gridsearch_99 : lr: 0.001 wd: 1e-05 do: 0.12 : 980000
 
 badguys:
 >amethyst, vega, wasat, unuk, emerald
+
+Main reason was the following: decide to leave those 5 machines in blacklist.
+
+```'Job disconnected, attempting to reconnect
+    Socket between submit and execute hosts closed unexpectedly
+    Trying to reconnect to'
+```
 
 goodguys:
 
