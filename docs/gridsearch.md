@@ -152,10 +152,15 @@ gridsearch_99 : lr: 0.001 wd: 1e-05 do: 0.12 : 980000
 
 **Check on which machines this failed**
 
->17 out of 100 or better 17% failed.
->badguys:
->set(['amethyst', 'vega', 'wasat', 'unuk', 'emerald'])
->goodguys:
->set(['triton', 'cancer', 'ymir', 'garnet', 'emerald', 'umbriel', >'proteus', 'realgar', 'quaoar', 'wasat', 'ruchba', 'malachite', 'virgo', 'libra', 'amethyst', 'ricotta', 'kunzite', 'diamond', 'nickeline', 'pollux', 'leo', 'rosalind', 'miranda', 'hematite', 'lesath', 'vladimir', 'opal', 'vega', 'vesta'])
->both good and bad: 
->set(['emerald', 'vega', 'amethyst', 'wasat'])
+17 out of 100 or better 17% failed.
+
+badguys:
+>amethyst, vega, wasat, unuk, emerald
+
+goodguys:
+
+>triton, cancer, ymir, garnet, emerald, umbriel, proteus, realgar, quaoar, wasat, ruchba, malachite, virgo, libra, amethyst, ricotta, kunzite, diamond, nickeline, pollux, leo, rosalind, miranda, hematite, lesath, vladimir, opal, vega, vesta
+
+both good and bad: 
+
+>emerald, vega, amethyst, wasat
