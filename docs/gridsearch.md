@@ -52,13 +52,46 @@ Average flying distance over 20 flights:
 
 Only few of the networks trained without crash actually performs well. Due to this low number of succes networks it seems unlikely that we can draw proper conclusions. 
 
-A high weight decay seems to make a proper learning too hard. 
+A high **weight decay** seems to make it impossible to train a network that performs well online.
 
-It is not super clear, but especially with a high learning rate, a higher dropout keep probability or so less severe regularization with dropout tends to a better online performance. Though again this is arguable as the trend is different with a lower learning rate.
+It is not super clear, but especially with a high learning rate, a **higher dropout keep probability**, in other words less severe regularization with dropout, tends to a better online performance. Though again this is arguable as the trend is different with a lower learning rate. But when we look at models that did learn something we see that this is possible with a dropout keep prob of 0.87, 0.75 and even 0.25 (73).
 
 A very low learning rate and longer training might positively influence the learning stability. A similar effect might be visible with a larger batchsize but without the need for extreme long training. The models trained at 0.001 took around 3 to 4 days to train offline with batchsize 32. 
 
-With a batchsize of 64 or 128, the amount of episodes should be 2 to 4 times less making the model converge hopefully in less than 1 day. __TODO__ increase batchsize as big as possible while it fits on a 2g GPU. According to this relative increase the learning rate can be increased keeping stability at an equal level resulting in a faster convergence.
+With a batchsize of 64 or 128, the amount of episodes should be 2 to 4 times less making the model converge hopefully in less than 1 day. The batchsize that fits on a 2g GPU with a mobilenet 0.25 network is 256. This will decrease the amount of episodes required for convergence and increase stability in case of higher learning rates. 
+
+A higher learning rate is in general preferable as long as it does not lead to divergence of the performance.
+
+|i|LR|BS|
+|-|-|-|
+|0|0.5|16|
+|1|0.5|32|
+|2|0.5|64|
+|3|0.5|128|
+|4|0.1|16|
+|5|0.1|32|
+|6|0.1|64|
+|7|0.1|128|
+|8|0.05|16|
+|9|0.05|32|
+|10|0.05|64|
+|11|0.05|128|
+|12|0.01|16|
+|13|0.01|32|
+|14|0.01|64|
+|15|0.01|128|
+
+Training with different batchsizes and learning rates gives the following tendency: the higher the learning rate the lower the validation loss (offline) but not necessarily the better the policy. The only policy capable of flying through the canyon was nr 5. The policy with the lowest validation loss was nr 2, though when testing online this policy couldn't successfully fly through any canyon.
+
+This shows how the validation loss is not representative for the offline training which is problematic in the case of hyperparameter tuning. A new set of validation data should be created that covers the variance expected when flying online. 
+
+![Variance in control in canyon-forest-sandbox dataset]({{ "/imgs/18-01-03-histograms_ctr_canyon_forest_sandbox.png" | absolute_url }})
+
+
+A second question is whether the model with the lowest validation imitation loss is be capable of flying online through training/validation worlds. This I strongly doubt as the policy performed bad in 10 different canyons, not showing any intention to avoid collision.
+
+While creating a new offline validation set, variance is checked over 10 versions of hyperparameter 5. Finished around 20:00.
+
 
 
 #### Check condor failure cases
