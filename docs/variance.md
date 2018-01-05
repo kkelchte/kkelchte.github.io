@@ -62,7 +62,28 @@ I trained 10 offline models with parameters (lr 0.1, bs 32). The offline trainin
 
 **Online evaluation is now solely done on machine with very low delay: citrine, pyrite, opal, kunzite, iolite, hematite, amethyst, nickeline, garnet**
 
+### Different validation canyons
 
+The different basic models, starting from same seed, all successfully flew through different canyons.
 
+| model | distance |
+|-|-|
+| redo_in_diff_canyons_0 | 44.7619722459 | 
+| redo_in_diff_canyons_1 | 44.752768864 | 
+| redo_in_diff_canyons_2 | 44.7220505948 | 
+| redo_in_diff_canyons_3 | 44.729201301 | 
+| redo_in_diff_canyons_4 | 44.7254554614 | 
+| redo_in_diff_canyons_5 | 44.7355742225 | 
+| redo_in_diff_canyons_6 | 44.7808028844 | 
+| redo_in_diff_canyons_7 | 44.752506359 |
 
+### Redo doshico challenge with better evaluation
+
+```
+for i in $(seq 0 49) ; do
+	WT=$(( 3*60*60*4 ))
+	ME=$(( 3*5*100 ))
+	./condor_task_offline.sh -q $WT -t doshico_auxd/doshico_$i -m mobilenet_025 -e true -n 20 -w "esat_v1 esat_v2" -p "--batch_size 64 --max_episodes $ME --learning_rate 0.1 --dataset overview --random_seed $(( 3000*$i+1539)) --n_fc True --auxiliary_depth True" 
+done
+```
 

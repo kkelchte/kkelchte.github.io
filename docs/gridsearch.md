@@ -91,7 +91,7 @@ Looking at the histograms, it seems that the forest has a better distributed con
 
 A second question is whether the model with the lowest validation imitation loss is be capable of flying online through training/validation worlds. This I strongly doubt as the policy performed bad in 10 different canyons, not showing any intention to avoid collision.
 
-Found wrongly set gradient multiplier at 0.001 which makes the feature extracting weight change at a learning rate that is 1000 times smaller. This should not be when training and testing solely in the canyon.
+Found a parameter set wrongly: gradient multiplier is 0.001 which makes the feature extracting weight change at a learning rate that is 1000 times smaller. This should not be when training and testing solely in the canyon.
 
 Creating a new dataset with auxd network steering, but keeping the BA control labels. First run should not be used as it fails due to the delay after loading in the network on the GPU. The first 15 frames are also skipped both in data as in steering commands to avoid the influence of the start up delay. The canyon is the same canyon as used for online evaluation.
 
@@ -131,146 +131,25 @@ gridsearch_10 |  0.006  | 44.7543601293 | amethyst
 gridsearch_11 |  0.007  | 44.7549903748 | citrine 
 gridsearch_15 |  0.007  | 44.7442175556 | citrine
 
-It is clear from model 1, 2 and 3 that a high learning rate ( 0.5 ) in combination with a large batchsize ( >32 ) results in bad online performance. Unfortunately this is still not visible in the offline validation. 
+It is clear from model 1, 2 and 3 that a high learning rate ( 0.5 ) in combination with a large batchsize ( >32 ) results in bad online performance. Unfortunately this is still not visible in the offline validation unfortunately. The use of the new set of validation data did not improve the representation of the validation loss for the online performance. 
 
-Looking at the graph it's clear how model 0 and model 6 saturate after 1h of offline training. Indicating that those two hyperparameters might be most convenient: ( LR:0.5 BS:16 ) or ( LR:0.1 BS:64)
+The graph shows that model 0 and model 6 saturate after 1h of offline training. Indicating that those two hyperparameters might be most interesting in time efficiency: ( LR:0.5 BS:16 ) or ( LR:0.1 BS:64)
 
 ![Offline validation]({{ "/imgs/18-01-05-gridsearch_offline_graph.png" | absolute_url }})
 ![Offline validation]({{ "/imgs/18-01-05-gridsearch_offline_legend.png" | absolute_url }})
 
 
-#### Check condor failure cases
+The next question is to see how robust this model handles different canyons. If a model succeeds in one canyon, does that mean it succeeds in all canyons?
+TODO
 
-**Check highest checkpoint in offline training**
 
-```
-gridsearch_0 : lr: 0.5 wd: 20e-05 do: 0.8 : 7900
-gridsearch_1 : lr: 0.5 wd: 20e-05 do: 0.7 : 7900
-gridsearch_2 : lr: 0.5 wd: 20e-05 do: 0. : 7900
-gridsearch_3 : lr: 0.5 wd: 20e-05 do: 0.2 : 7900
-gridsearch_4 : lr: 0.5 wd: 20e-05 do: 0.12 : 7900
-------------------------
-gridsearch_5 : lr: 0.5 wd: 10e-05 do: 0.8 : 7900
-gridsearch_6 : lr: 0.5 wd: 10e-05 do: 0.7 : 7900
-gridsearch_7 : lr: 0.5 wd: 10e-05 do: 0. : 7900
-gridsearch_8 : lr: 0.5 wd: 10e-05 do: 0.2 : 7900
-gridsearch_9 : lr: 0.5 wd: 10e-05 do: 0.12 : no checkpoint
-------------------------
-gridsearch_10 : lr: 0.5 wd: 4e-05 do: 0.8 : 7900
-gridsearch_11 : lr: 0.5 wd: 4e-05 do: 0.7 : 7900
-gridsearch_12 : lr: 0.5 wd: 4e-05 do: 0. : no checkpoint
-gridsearch_13 : lr: 0.5 wd: 4e-05 do: 0.2 : 7900
-gridsearch_14 : lr: 0.5 wd: 4e-05 do: 0.12 : no checkpoint
-------------------------
-gridsearch_15 : lr: 0.5 wd: 2e-05 do: 0.8 : 7900
-gridsearch_16 : lr: 0.5 wd: 2e-05 do: 0.7 : 7900
-gridsearch_17 : lr: 0.5 wd: 2e-05 do: 0. : 7900
-gridsearch_18 : lr: 0.5 wd: 2e-05 do: 0.2 : 7900
-gridsearch_19 : lr: 0.5 wd: 2e-05 do: 0.12 : 7900
-------------------------
-gridsearch_20 : lr: 0.5 wd: 1e-05 do: 0.8 : 7900
-gridsearch_21 : lr: 0.5 wd: 1e-05 do: 0.7 : 7900
-gridsearch_22 : lr: 0.5 wd: 1e-05 do: 0. : 7900
-gridsearch_23 : lr: 0.5 wd: 1e-05 do: 0.2 : 7900
-gridsearch_24 : lr: 0.5 wd: 1e-05 do: 0.12 : 7900
-------------------------
-%%%%%%%%%%%%%%%%%%%%%%%%%
-gridsearch_25 : lr: 0.1 wd: 20e-05 do: 0.8 : 39900
-gridsearch_26 : lr: 0.1 wd: 20e-05 do: 0.7 : 39900
-gridsearch_27 : lr: 0.1 wd: 20e-05 do: 0. : 39900
-gridsearch_28 : lr: 0.1 wd: 20e-05 do: 0.2 : 39900
-gridsearch_29 : lr: 0.1 wd: 20e-05 do: 0.12 : no checkpoint
-------------------------
-gridsearch_30 : lr: 0.1 wd: 10e-05 do: 0.8 : 8000
-gridsearch_31 : lr: 0.1 wd: 10e-05 do: 0.7 : no checkpoint
-gridsearch_32 : lr: 0.1 wd: 10e-05 do: 0. : no checkpoint
-gridsearch_33 : lr: 0.1 wd: 10e-05 do: 0.2 : 39900
-gridsearch_34 : lr: 0.1 wd: 10e-05 do: 0.12 : 39900
-------------------------
-gridsearch_35 : lr: 0.1 wd: 4e-05 do: 0.8 : 39900
-gridsearch_36 : lr: 0.1 wd: 4e-05 do: 0.7 : 39900
-gridsearch_37 : lr: 0.1 wd: 4e-05 do: 0. : no checkpoint
-gridsearch_38 : lr: 0.1 wd: 4e-05 do: 0.2 : no checkpoint
-gridsearch_39 : lr: 0.1 wd: 4e-05 do: 0.12 : no checkpoint
-------------------------
-gridsearch_40 : lr: 0.1 wd: 2e-05 do: 0.8 : 2000
-gridsearch_41 : lr: 0.1 wd: 2e-05 do: 0.7 : 39900
-gridsearch_42 : lr: 0.1 wd: 2e-05 do: 0. : 39900
-gridsearch_43 : lr: 0.1 wd: 2e-05 do: 0.2 : 2000
-gridsearch_44 : lr: 0.1 wd: 2e-05 do: 0.12 : 39900
-------------------------
-gridsearch_45 : lr: 0.1 wd: 1e-05 do: 0.8 : no checkpoint
-gridsearch_46 : lr: 0.1 wd: 1e-05 do: 0.7 : 39900
-gridsearch_47 : lr: 0.1 wd: 1e-05 do: 0. : 39900
-gridsearch_48 : lr: 0.1 wd: 1e-05 do: 0.2 : no checkpoint
-gridsearch_49 : lr: 0.1 wd: 1e-05 do: 0.12 : 39900
-------------------------
-%%%%%%%%%%%%%%%%%%%%%%%%%
-gridsearch_50 : lr: 0.01 wd: 20e-05 do: 0.8 : 92000
-gridsearch_51 : lr: 0.01 wd: 20e-05 do: 0.7 : 92000
-gridsearch_52 : lr: 0.01 wd: 20e-05 do: 0. : 8000
-gridsearch_53 : lr: 0.01 wd: 20e-05 do: 0.2 : no checkpoint
-gridsearch_54 : lr: 0.01 wd: 20e-05 do: 0.12 : 2000
-------------------------
-gridsearch_55 : lr: 0.01 wd: 10e-05 do: 0.8 : no checkpoint
-gridsearch_56 : lr: 0.01 wd: 10e-05 do: 0.7 : 96000
-gridsearch_57 : lr: 0.01 wd: 10e-05 do: 0. : 96000
-gridsearch_58 : lr: 0.01 wd: 10e-05 do: 0.2 : no checkpoint
-gridsearch_59 : lr: 0.01 wd: 10e-05 do: 0.12 : 96000
-------------------------
-gridsearch_60 : lr: 0.01 wd: 4e-05 do: 0.8 : no checkpoint
-gridsearch_61 : lr: 0.01 wd: 4e-05 do: 0.7 : 94000
-gridsearch_62 : lr: 0.01 wd: 4e-05 do: 0. : 98000
-gridsearch_63 : lr: 0.01 wd: 4e-05 do: 0.2 : 98000
-gridsearch_64 : lr: 0.01 wd: 4e-05 do: 0.12 : 98000
-------------------------
-gridsearch_65 : lr: 0.01 wd: 2e-05 do: 0.8 : 98000
-gridsearch_66 : lr: 0.01 wd: 2e-05 do: 0.7 : 98000
-gridsearch_67 : lr: 0.01 wd: 2e-05 do: 0. : 96000
-gridsearch_68 : lr: 0.01 wd: 2e-05 do: 0.2 : 96000
-gridsearch_69 : lr: 0.01 wd: 2e-05 do: 0.12 : 98000
-------------------------
-gridsearch_70 : lr: 0.01 wd: 1e-05 do: 0.8 : 98000
-gridsearch_71 : lr: 0.01 wd: 1e-05 do: 0.7 : 94000
-gridsearch_72 : lr: 0.01 wd: 1e-05 do: 0. : 98000
-gridsearch_73 : lr: 0.01 wd: 1e-05 do: 0.2 : 96000
-gridsearch_74 : lr: 0.01 wd: 1e-05 do: 0.12 : 96000
-------------------------
-%%%%%%%%%%%%%%%%%%%%%%%%%
-gridsearch_75 : lr: 0.001 wd: 20e-05 do: 0.8 : 8000
-gridsearch_76 : lr: 0.001 wd: 20e-05 do: 0.7 : 98000
-gridsearch_77 : lr: 0.001 wd: 20e-05 do: 0. : 6000
-gridsearch_78 : lr: 0.001 wd: 20e-05 do: 0.2 : 96000
-gridsearch_79 : lr: 0.001 wd: 20e-05 do: 0.12 : no checkpoint
-------------------------
-gridsearch_80 : lr: 0.001 wd: 10e-05 do: 0.8 : 94000
-gridsearch_81 : lr: 0.001 wd: 10e-05 do: 0.7 : 982000
-gridsearch_82 : lr: 0.001 wd: 10e-05 do: 0. : 984000
-gridsearch_83 : lr: 0.001 wd: 10e-05 do: 0.2 : 984000
-gridsearch_84 : lr: 0.001 wd: 10e-05 do: 0.12 : no checkpoint
-------------------------
-gridsearch_85 : lr: 0.001 wd: 4e-05 do: 0.8 : 2000
-gridsearch_86 : lr: 0.001 wd: 4e-05 do: 0.7 : 8000
-gridsearch_87 : lr: 0.001 wd: 4e-05 do: 0. : 960000
-gridsearch_88 : lr: 0.001 wd: 4e-05 do: 0.2 : 990000
-gridsearch_89 : lr: 0.001 wd: 4e-05 do: 0.12 : 992000
-------------------------
-gridsearch_90 : lr: 0.001 wd: 2e-05 do: 0.8 : 98000
-gridsearch_91 : lr: 0.001 wd: 2e-05 do: 0.7 : 994000
-gridsearch_92 : lr: 0.001 wd: 2e-05 do: 0. : 998000
-gridsearch_93 : lr: 0.001 wd: 2e-05 do: 0.2 : 988000
-gridsearch_94 : lr: 0.001 wd: 2e-05 do: 0.12 : 962000
-------------------------
-gridsearch_95 : lr: 0.001 wd: 1e-05 do: 0.8 : 976000
-gridsearch_96 : lr: 0.001 wd: 1e-05 do: 0.7 : 972000
-gridsearch_97 : lr: 0.001 wd: 1e-05 do: 0. : 950000
-gridsearch_98 : lr: 0.001 wd: 1e-05 do: 0.2 : 956000
-gridsearch_99 : lr: 0.001 wd: 1e-05 do: 0.12 : 980000
-```
 
-**Check on which machines this failed**
+### Failure cases on condor
 
+Check on which machines this failed:
 17 out of 100 or better 17% failed.
+
+Added code that restarts disconnected jobs properly.
 
 badguys:
 >amethyst, vega, wasat, unuk, emerald
