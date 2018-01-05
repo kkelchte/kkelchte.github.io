@@ -135,7 +135,7 @@ It is clear from model 1, 2 and 3 that a high learning rate ( 0.5 ) in combinati
 
 The time to train each model indicates that model 0 ( BS:16, LR:0.5 ) or 8 ( BS:16, LR:0.05 ) are the fastest to finish training. Of course is this dependend on the number of maximum episodes. Though looking at the training curve 8 is much more saturated. 
 
-![Offline validation]({{ "/imgs/18-01-03-gridsearch_offline.png" | absolute_url }})
+![Offline validation]({{ "/imgs/18-01-05-gridsearch_offline.png" | absolute_url }})
 
 
 #### Check condor failure cases
