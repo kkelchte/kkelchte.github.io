@@ -87,10 +87,31 @@ This shows how the validation loss is not representative for the offline trainin
 
 ![Variance in control in canyon-forest-sandbox dataset]({{ "/imgs/18-01-03-histograms_ctr_canyon_forest_sandbox.png" | absolute_url }})
 
+Looking at the histograms, it seems that the forest has a better distributed control range, which might be easier to train in a regression setting.
 
 A second question is whether the model with the lowest validation imitation loss is be capable of flying online through training/validation worlds. This I strongly doubt as the policy performed bad in 10 different canyons, not showing any intention to avoid collision.
 
-While creating a new offline validation set, variance is checked over 10 versions of hyperparameter 5. Finished around 20:00.
+Found wrongly set gradient multiplier at 0.001 which makes the feature extracting weight change at a learning rate that is 1000 times smaller. This should not be when training and testing solely in the canyon.
+
+Creating a new dataset with auxd network steering, but keeping the BA control labels. First run should not be used as it fails due to the delay after loading in the network on the GPU. The first 15 frames are also skipped both in data as in steering commands to avoid the influence of the start up delay. The canyon is the same canyon as used for online evaluation.
+
+```
+$ start_sing
+$ source .entrypoint_graph
+$ roscd simulation_supervised
+$ ./scripts/create_data.sh -t can_for_san_val -w "canyon forest sandbox" -n 16 -r none -m auxd -p "--load_config True" 
+$ cd $HOME/pilot_data
+$ for f in canyon forest sandbox ; do \
+echo $f; mv $f/val_set.txt $f/val_set_old.txt; \
+for d in $(ls can_for_san_val | grep $f | grep 00) ; do \
+echo "$PWD/can_for_san_val/$d">>$f/val_set.txt; \
+done; done
+```
+
+**improvement**
+
+TODO: see if the results on the validation imitation loss is more representative for the online performance.
+Redo a variance check with different seeding.
 
 
 

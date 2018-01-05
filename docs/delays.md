@@ -174,3 +174,46 @@ $ source /home/klaas/docker_home/.entrypoint_sing
 $ roscd simulation_supervised
 $ for i in 0 1 2 ; do ./scripts/train_model.sh -s start_python_sing.sh -n 1 -p "--scratch True" -t online_auxd_3f_NCHW_showd_singxpra; done
 ```
+
+
+
+## More delays gathered from the 50* naux and auxd doshico models
+
+The doubles were taken out. The range over delays of different models were tops 2ms. Most of the time it was less than 1ms different.
+
+|computer  | average delay of NAUX and AUXD|
+|--------  |--------------|
+| citrine  |   0.011  |
+| pyrite   |   0.013  |
+| opal     |   0.013  |
+| kunzite  |   0.014  |
+| iolite   |   0.014  |
+| hematite |   0.014  |
+| amethyst |   0.014  |
+|----------|----------|
+| ruchba   |   0.029  |
+| tyl      |   0.031  |
+| quaoar   |   0.038  |
+| unuk     |   0.033  |
+| izar     |   0.035  |
+| wasat    |   0.034  |
+| pollux   |   0.034  |
+
+
+|computer   | average delay of basic model (n_fc False)|
+|--------   |--------------|
+| nickeline |   0.007  |
+| kunzite   |   0.007  |
+| garnet    |   0.008  |
+|-----------|----------|
+| kiviuq    |   0.017  |
+| miranda   |   0.018  |
+| io        |   0.019  |
+| halimede  |   0.021  |
+| nereid    |   0.021  |
+| virgo     |   0.025  |
+
+Delays on second round are much lower due to the smaller model because features were not concatenated. (3 times smaller at least)
+
+**CONCLUSION: only use citrine, pyrite, opal, kunzite, iolite, hematite, amethyst, nickeline, garnet, (?...) for online evaluation.**
+
