@@ -133,9 +133,10 @@ gridsearch_15 |  0.007  | 44.7442175556 | citrine
 
 It is clear from model 1, 2 and 3 that a high learning rate ( 0.5 ) in combination with a large batchsize ( >32 ) results in bad online performance. Unfortunately this is still not visible in the offline validation. 
 
-The time to train each model indicates that model 0 ( BS:16, LR:0.5 ) or 8 ( BS:16, LR:0.05 ) are the fastest to finish training. Of course is this dependend on the number of maximum episodes. Though looking at the training curve 8 is much more saturated. 
+Looking at the graph it's clear how model 0 and model 6 saturate after 1h of offline training. Indicating that those two hyperparameters might be most convenient: ( LR:0.5 BS:16 ) or ( LR:0.1 BS:64)
 
-![Offline validation]({{ "/imgs/18-01-05-gridsearch_offline.png" | absolute_url }})
+![Offline validation]({{ "/imgs/18-01-05-gridsearch_offline_graph.png" | absolute_url }})
+![Offline validation]({{ "/imgs/18-01-05-gridsearch_offline_legend.png" | absolute_url }})
 
 
 #### Check condor failure cases
