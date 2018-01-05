@@ -110,9 +110,32 @@ done; done
 
 **improvement**
 
-TODO: see if the results on the validation imitation loss is more representative for the online performance.
-Redo a variance check with different seeding.
+A second gridsearch over learning rate and batch size has more success thanks to the selection of fast evaluation machines.
+An overview of the results can be extracted with the following command:
 
+```
+$ echo "| model | average online delay | distance | host | "; echo "|-|-|-|-|"; for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 ; do d=gridsearch_$i; echo "$d | $(cat $d/xterm* | tail -1 | cut -d '|' -f 2) | $(cat $d/xterm* | tail -1 | cut -d ',' -f 3 | cut -d ':' -f 2) | $(ls $d/*_eval | grep events | head -1 |cut -d '.' -f 5) "; done
+```
+
+| model | average online delay | distance | host | 
+|-|-|-|-|
+gridsearch_0 |  0.007  | 44.7536157472 | kunzite 
+gridsearch_1 |  0.007  | 1.3887763962 | garnet 
+gridsearch_2 |  0.008  | 1.67935892671 | hematite 
+gridsearch_3 |  0.007  | 4.58545984111 | hematite 
+gridsearch_4 |  0.007  | 44.7298443638 | garnet 
+gridsearch_6 |  0.008  | 44.75238293 | amethyst 
+gridsearch_8 |  0.009  | 44.7550088625 | amethyst 
+gridsearch_9 |  0.007  | 44.7244905593 | garnet 
+gridsearch_10 |  0.006  | 44.7543601293 | amethyst 
+gridsearch_11 |  0.007  | 44.7549903748 | citrine 
+gridsearch_15 |  0.007  | 44.7442175556 | citrine
+
+It is clear from model 1, 2 and 3 that a high learning rate ( 0.5 ) in combination with a large batchsize ( >32 ) results in bad online performance. Unfortunately this is still not visible in the offline validation. 
+
+The time to train each model indicates that model 0 ( BS:16, LR:0.5 ) or 8 ( BS:16, LR:0.05 ) are the fastest to finish training. Of course is this dependend on the number of maximum episodes. Though looking at the training curve 8 is much more saturated. 
+
+![Offline validation]({{ "/imgs/18-01-03-gridsearch_offline.png" | absolute_url }})
 
 
 #### Check condor failure cases

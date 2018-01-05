@@ -56,15 +56,13 @@ The variance can also be due to severe overfitting. In that case a super simple 
 
 The models learned from scratch over 80 episodes converge to a loss of 0.3 while the loss of the model initialized with imagenet converges to 0.17. This might explain the bad performance of all the models except the imagenet initialized model. Redo experiments with training for 160 instead of 80 episodes the models that are trained from scratch. 
 
-### Conclusions
+The variance seemed to be killed by: seeding from the same seed during offline training, evaluating in only **1 canyon**, ensuring that all models successfully trained over the **max number of episodes**. (The overwrite check often killed the offline training too early)
 
-The variance seemed to be killed by: seeding from the same seed during offline training, evaluating in only 1 canyon, ensuring that all models successfully trained over the max number of episodes. (The overwrite check often killed the offline training too early)
-
-These conclusions are based on 'failed' models. In order to be sure about the conclusions, i'll have to check with a setting in which a model is capable of training.
-
-I trained 10 offline models with parameters (lr 0.1, bs 32). The offline training and validation loss were very similar. Varying over a range of 0.2 to 0.4, which corresponds to the variance 1 run experiences over different episodes. The variance in the online performance was due to different delays on different physical machines. Running all the 10 models on garnet (average delay of 0.007) made them fly 20 times successfully through the canyon.
+I trained 10 offline models with parameters (lr 0.1, bs 32). The offline training and validation loss were very similar. Varying over a range of 0.2 to 0.4, which corresponds to the variance 1 run experiences over different episodes. The variance in the online performance was due to **different delays on different physical machines**. Running all the 10 models on garnet (average delay of 0.007) made them fly 20 times successfully through the canyon.
 
 **Online evaluation is now solely done on machine with very low delay: citrine, pyrite, opal, kunzite, iolite, hematite, amethyst, nickeline, garnet**
+
+
 
 
 

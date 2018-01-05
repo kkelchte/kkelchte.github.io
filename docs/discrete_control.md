@@ -52,10 +52,17 @@ Add a discretize function to model that takes as input the targets as floats and
 
 
 Current issue occurs when using data_format NCHW which is probably due to a library version difference in the contrib library between
-singularity and my virtualenvironment. For now Ill use NHWC.
+singularity and my virtualenvironment. For now using NHWC.
+
 ```
 ValueError: Can not squeeze dim[3] expected a dimension of 1, got 29 for MobileV1/control/SpationSqueeze with input [?,9,1,29]
 ```
 
+As a side note: NHWC did not show the acceleration it used to. This might be due to new versions of nvidia/tensorflow/contrib.
 
+## step 3: testing
+
+Current status: model overfitting severly while training offline. The overfitting is visible in the new validation set (recorded with auxd instead of BA).
+
+TODO: new set of experiments with higher dropout, weightdecay and potentially starting from Imgnet.
 
