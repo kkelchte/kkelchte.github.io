@@ -56,3 +56,10 @@ The variance can also be due to severe overfitting. In that case a super simple 
 
 The models learned from scratch over 80 episodes converge to a loss of 0.3 while the loss of the model initialized with imagenet converges to 0.17. This might explain the bad performance of all the models except the imagenet initialized model. Redo experiments with training for 160 instead of 80 episodes the models that are trained from scratch. 
 
+
+### Gridsearch over reference model to see how much results can improve:
+
+**Different learning rates vs weight decay vs dropout keep probability**
+
+TODO: check convergence over different parameter settings
+TODO: get scatterplots over results
