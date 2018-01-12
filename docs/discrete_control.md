@@ -60,9 +60,16 @@ ValueError: Can not squeeze dim[3] expected a dimension of 1, got 29 for MobileV
 
 As a side note: NHWC did not show the acceleration it used to. This might be due to new versions of nvidia/tensorflow/contrib.
 
-## step 3: testing
+## step 3: testing on forest
 
 Current status: model overfitting severly while training offline. The overfitting is visible in the new validation set (recorded with auxd instead of BA).
 
-TODO: new set of experiments with higher dropout, weightdecay and potentially starting from Imgnet.
+Trained on forest which has a more gaussian distributed control over the range of -1 to 1. 
+The validation loss is not overfitting in the way it was with canyon training. 
+Though the online performance of all the models resulted in a bump which makes to believe that the discrete control setting is still not optimal.
+It might be that the strong regularization avoids overfitting but makes training impossible.
+A gridsearch over hyperparameters for this setting is required.
 
+Gridsearch on regularization and learning rate parameters, did not reveal any hyperparameter combination that could train a network successfully on the canyon task.
+
+TODO train online.

@@ -77,6 +77,26 @@ The different basic models, starting from same seed, all successfully flew throu
 | redo_in_diff_canyons_6 | 44.7808028844 | 
 | redo_in_diff_canyons_7 | 44.752506359 |
 
+### Going over different models
+
+| model | success rate|
+|-|-|
+|ref|10/10|
+|auxd|7/7|
+|n_fc|4/4|
+|imgnet|3/3|
+|auxdn|3/3|
+|can_for_sac|62.86%|
+
+The last one is trained on the canyon forest and sandbox. And the two models that succeeded had an average success rate of around 60%.
+
+This is worrying as it seems to introduce a lot of variance once models are trained on different tasks simultaneously.
+
+REDO can_for_san experiment. Train longer...
+
+
+
+
 ### Redo doshico challenge with better evaluation
 
 ```
@@ -87,3 +107,12 @@ for i in $(seq 0 49) ; do
 done
 ```
 
+Unfortunately, this turned out to work not so well:
+
+|model|average distance|
+|-|-|
+|1-fc|3.600332783|
+|naux|3.895112222|
+|auxd|6.662699795|
+
+Using multiple frames (n-fc) and auxiliary depth improves the average flying distance. The performance is still very low.

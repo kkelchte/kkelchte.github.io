@@ -133,14 +133,14 @@ gridsearch_15 |  0.007  | 44.7442175556 | citrine
 
 It is clear from model 1, 2 and 3 that a high learning rate ( 0.5 ) in combination with a large batchsize ( >32 ) results in bad online performance. Unfortunately this is still not visible in the offline validation unfortunately. The use of the new set of validation data did not improve the representation of the validation loss for the online performance. 
 
+Redoing 2 and 3 ended without any success in online performance which supports previous findings.
+
 The graph shows that model 0 and model 6 saturate after 1h of offline training. Indicating that those two hyperparameters might be most interesting in time efficiency: ( LR:0.5 BS:16 ) or ( LR:0.1 BS:64)
 
 ![Offline validation]({{ "/imgs/18-01-05-gridsearch_offline_graph.png" | absolute_url }})
 ![Offline validation]({{ "/imgs/18-01-05-gridsearch_offline_legend.png" | absolute_url }})
 
 
-The next question is to see how robust this model handles different canyons. If a model succeeds in one canyon, does that mean it succeeds in all canyons?
-TODO
 
 
 
