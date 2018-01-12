@@ -56,10 +56,71 @@ The variance can also be due to severe overfitting. In that case a super simple 
 
 The models learned from scratch over 80 episodes converge to a loss of 0.3 while the loss of the model initialized with imagenet converges to 0.17. This might explain the bad performance of all the models except the imagenet initialized model. Redo experiments with training for 160 instead of 80 episodes the models that are trained from scratch. 
 
-
 ### Gridsearch over reference model to see how much results can improve:
 
 **Different learning rates vs weight decay vs dropout keep probability**
 
 TODO: check convergence over different parameter settings
 TODO: get scatterplots over results
+=======
+The variance seemed to be killed by: seeding from the same seed during offline training, evaluating in only **1 canyon**, ensuring that all models successfully trained over the **max number of episodes**. (The overwrite check often killed the offline training too early)
+
+I trained 10 offline models with parameters (lr 0.1, bs 32). The offline training and validation loss were very similar. Varying over a range of 0.2 to 0.4, which corresponds to the variance 1 run experiences over different episodes. The variance in the online performance was due to **different delays on different physical machines**. Running all the 10 models on garnet (average delay of 0.007) made them fly 20 times successfully through the canyon.
+
+**Online evaluation is now solely done on machine with very low delay: citrine, pyrite, opal, kunzite, iolite, hematite, amethyst, nickeline, garnet**
+
+### Different validation canyons
+
+The different basic models, starting from same seed, all successfully flew through different canyons.
+
+| model | distance |
+|-|-|
+| redo_in_diff_canyons_0 | 44.7619722459 | 
+| redo_in_diff_canyons_1 | 44.752768864 | 
+| redo_in_diff_canyons_2 | 44.7220505948 | 
+| redo_in_diff_canyons_3 | 44.729201301 | 
+| redo_in_diff_canyons_4 | 44.7254554614 | 
+| redo_in_diff_canyons_5 | 44.7355742225 | 
+| redo_in_diff_canyons_6 | 44.7808028844 | 
+| redo_in_diff_canyons_7 | 44.752506359 |
+
+### Going over different models
+
+| model | success rate|
+|-|-|
+|ref|10/10|
+|auxd|7/7|
+|n_fc|4/4|
+|imgnet|3/3|
+|auxdn|3/3|
+|can_for_sac|62.86%|
+
+The last one is trained on the canyon forest and sandbox. And the two models that succeeded had an average success rate of around 60%.
+
+This is worrying as it seems to introduce a lot of variance once models are trained on different tasks simultaneously.
+
+REDO can_for_san experiment. Train longer...
+
+
+
+
+### Redo doshico challenge with better evaluation
+
+```
+for i in $(seq 0 49) ; do
+	WT=$(( 3*60*60*4 ))
+	ME=$(( 3*5*100 ))
+	./condor_task_offline.sh -q $WT -t doshico_auxd/doshico_$i -m mobilenet_025 -e true -n 20 -w "esat_v1 esat_v2" -p "--batch_size 64 --max_episodes $ME --learning_rate 0.1 --dataset overview --random_seed $(( 3000*$i+1539)) --n_fc True --auxiliary_depth True" 
+done
+```
+
+Unfortunately, this turned out to work not so well:
+
+|model|average distance|
+|-|-|
+|1-fc|3.600332783|
+|naux|3.895112222|
+|auxd|6.662699795|
+
+Using multiple frames (n-fc) and auxiliary depth improves the average flying distance. The performance is still very low.
+
