@@ -156,10 +156,12 @@ badguys:
 
 Main reason was the following: decide to leave those 5 machines in blacklist.
 
-```'Job disconnected, attempting to reconnect
+```Job disconnected, attempting to reconnect
     Socket between submit and execute hosts closed unexpectedly
-    Trying to reconnect to'
+    Trying to reconnect to
 ```
+--> job disconnected is due to CUDA 8 for tf 1.4. 
+TODO: install tensorflow 1.6 over 2 months OR get Tom's tf wheel that handles CUDA9.1 so i don't have to get this library over the net causing job disconnections...
 
 goodguys:
 
