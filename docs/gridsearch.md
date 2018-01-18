@@ -168,3 +168,113 @@ goodguys:
 both good and bad: 
 
 >emerald, vega, amethyst, wasat
+
+
+#### Further gridsearch for the forest and sandbox setting
+
+The last one is trained on the canyon forest and sandbox. And the two models that succeeded had an average success rate of around 60%.
+
+This is worrying as it seems to introduce a lot of variance once models are trained on different tasks simultaneously.
+
+Doing a gridsearch for both forest and sandbox shows following parameters:
+Sandbox generator and forest evaluation world generator are seeded to produce one world model.
+
+| i | LR | BS |
+|-|-|-|
+| 0 | 0.5 | 16 | 0.25 |
+| 1 | 0.5 | 16 | 0.5 |
+| 2 | 0.5 | 16 | 0.75 |
+| 3 | 0.5 | 32 | 0.25 |
+| 4 | 0.5 | 32 | 0.5 |
+| 5 | 0.5 | 32 | 0.75 |
+| 6 | 0.5 | 64 | 0.25 |
+| 7 | 0.5 | 64 | 0.5 |
+| 8 | 0.5 | 64 | 0.75 |
+| 9 | 0.1 | 16 | 0.25 |
+| 10 | 0.1 | 16 | 0.5 |
+| 11 | 0.1 | 16 | 0.75 |
+| 12 | 0.1 | 32 | 0.25 |
+| 13 | 0.1 | 32 | 0.5 |
+| 14 | 0.1 | 32 | 0.75 |
+| 15 | 0.1 | 64 | 0.25 |
+| 16 | 0.1 | 64 | 0.5 |
+| 17 | 0.1 | 64 | 0.75 |
+| 18 | 0.05 | 16 | 0.25 |
+| 19 | 0.05 | 16 | 0.5 |
+| 20 | 0.05 | 16 | 0.75 |
+| 21 | 0.05 | 32 | 0.25 |
+| 22 | 0.05 | 32 | 0.5 |
+| 23 | 0.05 | 32 | 0.75 |
+| 24 | 0.05 | 64 | 0.25 |
+| 25 | 0.05 | 64 | 0.5 |
+| 26 | 0.05 | 64 | 0.75 |
+
+| Model trained on Forest | average distance | success rate
+|-|-|-|
+| gridsearch_for_0 | 50 | 9/12 |
+| gridsearch_for_1 | 22 | 5/22 |
+| gridsearch_for_3 | 6 | 0/7 |
+| gridsearch_for_4 | 5 | 0/4 |
+| gridsearch_for_6 | 2 | 0/1 |
+| gridsearch_for_7 | 3 | 0/3 |
+| gridsearch_for_9 | 51 | 10/17 |
+| gridsearch_for_10 | 38 | 2/3 |
+| **gridsearch_for_11** | 55 | 16/20 |
+| gridsearch_for_12 | 48 | 11/15 |
+| gridsearch_for_13 | 48 | 9/12 |
+| gridsearch_for_17 | 20 | 1/1 |
+| **gridsearch_for_20** | 55 | 15/20 |
+| gridsearch_for_21 | 40 | 2/3 |
+| gridsearch_for_22 | 50 | 15/20 |
+| **gridsearch_for_23** | 55 | 16/20 |
+| gridsearch_for_25 | 52 | 12/20 |
+| gridsearch_for_26 | 52 | 14/20 |
+
+
+| Model trained on Sandbox | average distance | success rate
+|-|-|-|
+| gridsearch_san_0 | 3 | 1/2 |
+| gridsearch_san_1 | 1 | 0/1 |
+| gridsearch_san_3 | 2 | 0/23 |
+| gridsearch_san_5 | 2 | 0/11 |
+| gridsearch_san_7 | 5 | 0/23 |
+| gridsearch_san_11 | 5 | 0/19 |
+| **gridsearch_san_12** | 10 | 3/20 |
+| gridsearch_san_13 | 3 | 0/20 |
+| gridsearch_san_16 | 2 | 0/8 |
+| gridsearch_san_17 | 5 | 0/17 |
+| gridsearch_san_18 | 3 | 0/20 |
+| gridsearch_san_19 | 6 | 1/20 |
+| gridsearch_san_20 | 5 | 0/20 |
+| gridsearch_san_22 | 6 | 0/20 |
+| gridsearch_san_23 | 6 | 1/20 |
+| gridsearch_san_24 | 5 | 0/20 |
+| gridsearch_san_25 | 4 | 0/20 |
+| gridsearch_san_26 | 4 | 0/20 |
+
+It is clear that in the current setting we fail to train a model that successfully flies through **1 sandbox**.
+
+>If some hyperparameters should be taken for the combination of sandbox - forest - canyon the recommendation is number 12: 
+* learning rate 0.1 
+* batch size 32 
+* dropout keep probability 0.25
+
+Note that the gridsearch was done with gradient multiplier 1 and training from scratch. Optimal parameters might be different in the setting of imagenet initialization and lower gradient multipliers.
+
+Todo: redo gridsearch for the setting with gradient multipliers:
+
+* GM 0. 0.01 0.1
+* BS: 32
+* LR: 0.5, 0.1, 0.05
+* DO: 0.75, 0.5, 0.25, 0.0
+
+```
+# evaluate in bash with complex for loops:
+$ for d in gridsearch_san_* ; do \
+if [ $(ls $d | wc -l) -gt 2 ] ; then \
+dis=$(echo "$(cat $d/*_eval/tf_log | grep furthest | cut -d , -f 2 | cut -d : -f 2)" | awk '{ SUM += $1} END { print int(SUM) }'); \
+tot=$(cat $d/*_eval/tf_log | wc -l); \
+echo "| $d | $((dis/tot)) | $(cat $d/*_eval/log | grep succes | wc -l)/$(cat $d/*_eval/log | wc -l) |"; fi; done
+```
+
+

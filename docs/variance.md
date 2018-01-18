@@ -33,22 +33,22 @@ done
 
 First test is checking whether doshico performs the same as during summer. In green you see the NAUX model and in blue the AUXD. The performance seems to be a bit worse than over the population in the paper, though the auxiliary depth is again a clear overall improvement.
 
-![Doshico variance]({{ "/imgs/17-12-20-doshico_auxd_naux.png" | absolute_url }})
+\![Doshico variance]({{ "/imgs/17-12-20-doshico_auxd_naux.png" | absolute_url }})
 
 The first results on different parameters as mentioned above with the color indicating what kind of model. It is remarkable to see that changing over different seeds seems to have a positive influence on the variance. Which does not make sense. The models of the different seeds where also evaluated on different condor machines resulting in different delays while the reference models were all evaluated on the same machine.
 
 It is also remarkable to see how the imagenet pretrained weights has an overall good influence on the performance though a very bad impact on the variance.
 
-![Performance over population]({{ "/imgs/17-12-20-performance_over_population.png" | absolute_url }})
+\![Performance over population]({{ "/imgs/17-12-20-performance_over_population.png" | absolute_url }})
 
-![Variance in histograms]({{ "/imgs/17-12-20-variance_in_histograms.png" | absolute_url }})
+\![Variance in histograms]({{ "/imgs/17-12-20-variance_in_histograms.png" | absolute_url }})
 
 
 ### Flying throught 1 type of canyon
 
 By Seeding both the canyon generator and the OUNoise file to a fixed number, we can make sure that the same canyon is generated. The experiment of above is repeated but with more models per parameter and only 1 canyon to fly through. Comparing the different trajectories in the same canyon might give a better intuition over the vairance of the different models.
 
-![the canyon for evaluation]({{ "/imgs/17-12-20-canyon.png" | absolute_url }})
+\![the canyon for evaluation]({{ "/imgs/17-12-20-canyon.png" | absolute_url }})
 
 The variance can also be due to severe overfitting. In that case a super simple model with only 3 conv layers might improve the stability a lot.
 
@@ -88,14 +88,8 @@ The different basic models, starting from same seed, all successfully flew throu
 |auxdn|3/3|
 |can_for_sac|62.86%|
 
-The last one is trained on the canyon forest and sandbox. And the two models that succeeded had an average success rate of around 60%.
 
-This is worrying as it seems to introduce a lot of variance once models are trained on different tasks simultaneously.
-
-REDO can_for_san experiment. Train longer...
-
-
-
+Taking a side track with a gridsearch for each training task.
 
 ### Redo doshico challenge with better evaluation
 
@@ -116,3 +110,16 @@ Unfortunately, this turned out to work not so well:
 |auxd|6.662699795|
 
 Using multiple frames (n-fc) and auxiliary depth improves the average flying distance. The performance is still very low.
+
+Using lower gradient multiplies, decreasing the learning rate for the imagenet-initialized feature extracting layers seems to be a good direction for generalization.
+
+
+Difference from this summer: --> maybe this batchnorm fixing **did** help.
+* no_batchnorm_learning True (TODO: implement)
+* depth_weight 0.99 (TODO: implement)
+* control_weight 0.01 (TODO: implement)
+* lr 0.5
+* do 0.5
+* bs 16
+
+
