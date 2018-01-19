@@ -98,6 +98,37 @@ The different basic models, starting from same seed, all successfully flew throu
 
 Taking a side track with a gridsearch for each training task.
 
+The gridsearch ended with these hyperparameters for the n_fc 3 architecture (naux):
+
+* learning rate: 0.5
+* batch size: 32
+* drop out keep prob: 0.5
+* gradient multiplier: 0.01
+
+The variance over the success rate of models with different seeding is not resolved yet. The variance can be due to suboptimality of the hyperparameters, which can be due to strong overfitting. It does not relate to delays as for all forest and sandbox runs the average delays were 0.014, 0.015, 0.016, 0.017. Although in the forest case this might have lead to very different trajectories of which some resulted in a bump.
+
+None of the networks were overfitting on the validation set.
+
+| -----san  | success rate |
+| variance_san_0 | 10 / 20 |
+| variance_san_1 | 14 / 20 |
+| variance_san_2 | 17 / 17 |
+| variance_san_4 | 10 / 20 |
+| -----for  | success rate |
+| variance_for_0 | 15 / 20 |
+| variance_for_2 | 9 / 11  |
+| variance_for_4 | 17 / 20 |
+| -----can  | success rate |
+| variance_can_0 | 20 / 20 |
+| variance_can_3 | 20 / 20 |
+| variance_can_4 | 20 / 20 |
+
+Redo with new hyperparameters specific to the environment:
+sandbox: LR 0.1, BS 32, DO 0.75, GM 0.
+forest: LR 0.5, BS 32, DO 0.25, GM 0.
+Note that both are not training end-to-end anymore due to gradient multiplier 0.
+
+
 ### Redo doshico challenge with better evaluation
 
 ```
