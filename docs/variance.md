@@ -130,7 +130,16 @@ None of the networks were overfitting on the validation set.
 
 Redo with new hyperparameters specific to the environment:
 sandbox: LR 0.1, BS 32, DO 0.75, GM 0.
+
+ * variance_san_0 12 / 20
+ * variance_san_3 20 / 20
+ * variance_san_4 13 / 20
+ 
 forest: LR 0.5, BS 32, DO 0.25, GM 0.
+
+* variance_for_3 11 / 20
+* variance_for_4 18 / 20
+
 Note that both are not training end-to-end anymore due to gradient multiplier 0.
 
 
