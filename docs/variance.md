@@ -109,16 +109,21 @@ The variance over the success rate of models with different seeding is not resol
 
 None of the networks were overfitting on the validation set.
 
-| -----san  | success rate |
+| san  | success rate |
+|-|-|
 | variance_san_0 | 10 / 20 |
 | variance_san_1 | 14 / 20 |
 | variance_san_2 | 17 / 17 |
 | variance_san_4 | 10 / 20 |
-| -----for  | success rate |
+
+| for  | success rate |
+|-|-|
 | variance_for_0 | 15 / 20 |
 | variance_for_2 | 9 / 11  |
 | variance_for_4 | 17 / 20 |
-| -----can  | success rate |
+
+| can  | success rate |
+|-|-|
 | variance_can_0 | 20 / 20 |
 | variance_can_3 | 20 / 20 |
 | variance_can_4 | 20 / 20 |
