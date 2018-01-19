@@ -163,7 +163,7 @@ Job disconnected, attempting to reconnect
 ```
 
 --> job disconnected is due to CUDA 8 for tf 1.4. 
-TODO: install tensorflow 1.6 over 2 months OR get Tom's tf wheel that handles CUDA9.1 so i don't have to get this library over the net causing job disconnections...
+**TODO: install tensorflow 1.6 over 2 months OR get Tom's tf wheel that handles CUDA9.1 so i don't have to get this library over the net causing job disconnections...**
 
 goodguys:
 
@@ -265,20 +265,83 @@ It is clear that in the current setting we fail to train a model that successful
 
 Note that the gridsearch was done with gradient multiplier 1 and training from scratch. Optimal parameters might be different in the setting of imagenet initialization and lower gradient multipliers.
 
-Todo: redo gridsearch for the setting with gradient multipliers:
+### Redo gridsearch for the setting with gradient multipliers:
 
 * GM 0. 0.01 0.1
 * BS: 32
 * LR: 0.5, 0.1, 0.05
 * DO: 0.75, 0.5, 0.25, 0.0
 
-```
-# evaluate in bash with complex for loops:
+evaluate in bash with complex for loops:
+
+```bash
 $ for d in gridsearch_san_* ; do \
 if [ $(ls $d | wc -l) -gt 2 ] ; then \
-dis=$(echo "$(cat $d/*_eval/tf_log | grep furthest | cut -d , -f 2 | cut -d : -f 2)" | awk '{ SUM += $1} END { print int(SUM) }'); \
+dis=$(echo "$(cat $d/*_eval/tf_log | grep furthest | cut -d , -f 2 | cut -d : -f 2)" | awk '{ SUM += $1} END { print int( SUM ) }'); \
 tot=$(cat $d/*_eval/tf_log | wc -l); \
-echo "| $d | $((dis/tot)) | $(cat $d/*_eval/log | grep succes | wc -l)/$(cat $d/*_eval/log | wc -l) |"; fi; done
+if [ $tot -gt 0 ] ; then echo "| $d | $(( dis/tot )) | $(cat $d/*_eval/log | grep succes | wc -l)/$(cat $d/*_eval/log | wc -l) |"; fi; fi; done
 ```
 
+Results:
 
+| Model trained on Canyon | average distance | success rate
+|-|-|-|
+| gridsearch_can_0 | 41 | 20/20 |
+| gridsearch_can_3 | 43 | 40/40 |
+| gridsearch_can_6 | 43 | 20/20 |
+| gridsearch_can_9 | 43 | 20/20 |
+| **gridsearch_can_12** | 42 | 28/28 |
+| gridsearch_can_15 | 42 | 13/13 |
+
+| Model trained on Sandbox | average distance | success rate
+|-|-|-|
+| gridsearch_san_0 | 14 | 13/20 |
+| gridsearch_san_1 | 3 | 8/47 |
+| gridsearch_san_3 | 7 | 21/51 |
+| gridsearch_san_4 | 6 | 13/20 |
+| gridsearch_san_6 | 9 | 39/40 |
+| gridsearch_san_7 | 12 | 20/20 |
+| gridsearch_san_9 | 6 | 20/20 |
+| **gridsearch_san_12** | 11 | 20/20 |
+| gridsearch_san_15 | 8 | 6/20 |
+
+| Model trained on Forest | average distance | success rate
+|-|-|-|
+| gridsearch_for_0 | 59 | 20/20 |
+| gridsearch_for_3 | 60 | 19/20 |
+| gridsearch_for_6 | 51 | 33/40 |
+| gridsearch_for_9 | 38 | 8/20 |
+| **gridsearch_for_12** | 61 | 20/20 |
+| gridsearch_for_15 | 54 | 18/20 |
+
+|i|LR|BS|DO|GM|
+|-|-|-|-|-|
+|0|0.5|32|0.25|0.| 
+|1|0.1|32|0.25|0.| 
+|2|0.05|32|0.25|0.| 
+|3|0.5|32|0.5|0.| 
+|4|0.1|32|0.5|0.| 
+|5|0.05|32|0.5|0.| 
+|6|0.5|32|0.75|0.| 
+|7|0.1|32|0.75|0.| 
+|8|0.05|32|0.75|0.| 
+|9|0.5|32|0.25|0.01| 
+|10|0.1|32|0.25|0.01| 
+|11|0.05|32|0.25|0.01| 
+|12|0.5|32|0.5|0.01| 
+|13|0.1|32|0.5|0.01| 
+|14|0.05|32|0.5|0.01| 
+|15|0.5|32|0.75|0.01| 
+|16|0.1|32|0.75|0.01| 
+|17|0.05|32|0.75|0.01| 
+|18|0.5|32|0.25|0.1| 
+|19|0.1|32|0.25|0.1| 
+|20|0.05|32|0.25|0.1| 
+|21|0.5|32|0.5|0.1| 
+|22|0.1|32|0.5|0.1| 
+|23|0.05|32|0.5|0.1| 
+|24|0.5|32|0.75|0.1| 
+|25|0.1|32|0.75|0.1| 
+|26|0.05|32|0.75|0.1| 
+
+Conclusion: option 12 seems a good setting for the 3 types of environments: LR: 0.5, BS: 32, DO: 0.5, GM: 0.01.
