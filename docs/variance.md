@@ -3,8 +3,7 @@ title: Variance
 layout: default
 ---
 
-# Variance research on Canyon task
-
+# Variance research 
 It is impossible to draw conclusions in the setting where variance is cluttering all the results.
 Some variance on performance can be due to which machine it is running. Delays in tensorflow are different at different machines depending on graphics card, RAM, ... .
 
@@ -142,6 +141,38 @@ forest: LR 0.5, BS 32, DO 0.25, GM 0.
 
 Note that both are not training end-to-end anymore due to gradient multiplier 0.
 
+### Variance over forest and sandbox 
+
+Variance of models trained with **same seeding** but evaluated on **different environments**.
+
+|Different environment gens| avg dis|successrate|delays|
+|-|-|-|-|
+| variance_for_0 | 47 | 18/20 |  0.015  |
+| variance_for_1 | 44 | 18/22 |  0.014  |
+| variance_for_3 | 47 | 16/20 |  0.013  |
+| variance_for_4 | 45 | 16/20 |  0.013  |
+| variance_san_0 | 7 | 13/20 |  0.018  |
+| variance_san_1 | 7 | 15/20 |  0.014  |
+| variance_san_2 | 10 | 16/20 |  0.014  |
+| variance_san_3 | 9 | 15/20 |  0.015  |
+| variance_san_4 | 7 | 14/20 |  0.021  |
+
+
+
+Variance of models trained with **different seeding** and evaluated on **different environments**.
+
+|Different environment gens| avg dis|successrate|delays|
+|-|-|-|-|
+| variance_for_difsd_0 | 46 | 16/20 |  0.015  |
+| variance_for_difsd_1 | 47 | 15/20 |  0.013  |
+| variance_for_difsd_3 | 47 | 15/20 |  0.017  |
+| variance_for_difsd_4 | 45 | 19/20 |  0.013  |
+| variance_san_difsd_0 | 6 | 13/20 |  0.013  |
+| variance_san_difsd_1 | 6 | 11/20 |  0.016  |
+| variance_san_difsd_2 | 6 | 17/24 |  0.017  |
+| variance_san_difsd_3 | 7 | 17/20 |  0.013  |
+
+Variance over different seeding and different models is as big as when keeping these both fixed. This implies that the current variance is probably computer related and very hard to deal with...
 
 ### Redo doshico challenge with better evaluation
 
