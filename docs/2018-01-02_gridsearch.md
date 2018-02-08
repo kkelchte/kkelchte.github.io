@@ -345,3 +345,39 @@ Results:
 |26|0.05|32|0.75|0.1| 
 
 Conclusion: option 12 seems a good setting for the 3 types of environments: LR: 0.5, BS: 32, DO: 0.5, GM: 0.01.
+
+### Gridsearch for sandbox and forest with overlapping hyperparameters:
+
+Got following results for following hyperparameters:
+
+|param | value |
+|-|-|
+| WT | "$((60*60*30))" |
+| ME | "$((150*5))" |
+| GM | 0.0 |
+| DO | 0.75 |
+| BS | 32 |
+| WD | 4 |
+| LR | 0.1 |
+
+
+| model (different seed) | avg dis | success rate | eval computer|
+|-|-|-|-|
+| variance_for_0 | 53 | 14/20 | hematite |
+| variance_for_1 | 61 | 18/20 | hematite |
+| variance_for_2 | 56 | 16/20 | kunzite |
+| variance_for_3 | 60 | 18/20 | hematite |
+| variance_for_4 | 61 | 17/20 | kunzite |
+| variance_san_0 | 6 | 18/20 | hematite |
+| variance_san_1 | 6 | 20/20 | hematite |
+| variance_san_2 | 3 | 3/20 | nickeline |
+| variance_san_3 | 6 | 20/20 | garnet |
+| variance_san_4 | 6 | 19/20 | hematite |
+
+--> set Nickeline on black list.
+Results are good enough to agree that model succeeds at training with these hyperparams through same evaluation model.
+
+**Different evaluation environments**
+
+
+
