@@ -8,9 +8,9 @@ In the experimental section we first derive the feasibility of the use of a cont
 Ensure there is a fair difference in delay between evaluating the depth maps (max(min(depth))) and taking the minimum collision.
 Therefore it seems best to evaluate the different delays. 
 
+|-|-|-|
 | Average delay with coll_q_net  | qayd: 0.013s | nereid: 0.025s |
-| Average delay with depth_q_net | qayd: 0.014s | |
-
+| Average delay with depth_q_net | qayd: 0.014s |  |
 
 For both settings we make a small gridsearch over hyperparameters and use all computers online except the ones on the black list.
 For the final experiments it is best to use solely the computers on the greenlist as they come with small delays.
@@ -24,6 +24,28 @@ Note that the labels for the coll_q_net (1 incase of collision within 10 frames)
 
 TODO:
 Find hyperparameters: learning rate, weight decay, dropout, batchsize, batchnormalization, ... on offline dataset 'canyon_explored'
+
+Quickly view of gridsearch 
+on **coll_q_net**: very different training duration. Probably will have to put some wall time to maximum.
+Bad ones: 23, 4, 19, 13, 2
+Better ones: 26, 8, 5
+Very noisy ones: 3, 6
+
+The training loss decreases (0.3 --> 0.06) for 3, 5, 6, 19 but for most of the other models it increased (0.3 --> 0.5).
+
+on **depth_q_net**:
+Promissing ones: 10, 1 --> sharp increase in average distance
+Stagnating ones: 2,5,8
+Bad ones: 2 --> decaying average distance
+
+Keeping epsilon to zero makes the model train up until a certain distance after which it stays but never improves. This is therefor not an interesting path to go. It seems to be a good idea to work with a decaying epsilon.
+
+Learning 0.5 seems too high. Will work with 0.05 or 0.005. Epsilon is best 0.01 during the first 10 epochs and 0 afterwards.
+
+REDO with decaying epsilon and different buffersizes and 2 learning rates: 0.5 and 0.05.
+
+TODO:
+check influence of buffersize.
 
 TODO:
 Give performance measures of gridsearch online with variance over 3 models.
