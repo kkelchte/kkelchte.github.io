@@ -2,6 +2,8 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
+#### [08-02-2018: Experiments on Depth Q Learning](./docs/2018-02-14_settingupturtlebot.md)
+
 #### [08-02-2018: Experiments on Depth Q Learning](./docs/2018-02-08_depth_q_learning.md)
 
 #### [02-01-2018: Gridsearch results](./docs/2018-01-02_gridsearch.md)
