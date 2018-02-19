@@ -42,4 +42,23 @@ sudo apt-get update
 sudo apt-get install ros-kinetic-turtlebot ros-kinetic-turtlebot-apps ros-kinetic-turtlebot-interactions ros-kinetic-turtlebot-simulator ros-kinetic-kobuki-ftdi ros-kinetic-ar-track-alvar-msgs
 ```
 
+Create alias for sourcing environment:
 
+`alias turtle='export ROS_MASTER_URI=http://10.42.0.1:11311 && export ROS_HOSTNAME=10.42.0.203'`
+
+Test by running roscore at turtlebot and checking on alienware: `$ turtle && rostopic list`
+
+Install chrony, `sudo apt-get install chrony`, for synchronisation.
+
+## 3. Start robot
+
+Todo: check launchfile and readin lidar data, raspbery pi, start node with console,
+
+```
+(alienware)$ ssh turtlebot@10.42.0.1
+(turtlebot)$ roslaunch turtlebot3_bringup turtlebot3_robot.launch
+(turtlebot)$ roslaunch turtlebot3_bringup turtlebot3_remote.launch
+(turtlebot)$ roslaunch raspicam_node camerav2_410x308_10fps.launch
+
+(alienware)$ roslaunch turtlebot_rviz_launchers view_robot.launch --screen
+```
