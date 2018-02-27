@@ -93,6 +93,9 @@ RUN apt-get update && apt-get install -y \
     ros-kinetic-hector-gazebo-plugins \
     ros-kinetic-hector-sensors-description \
     ros-kinetic-hector-sensors-gazebo \
+    ros-kinetic-turtlebot-description \
+    ros-kinetic-turtle \
+    ros-kinetic-turtlebot-gazebo \
     python-pip vim less 
 
 
