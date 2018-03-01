@@ -178,17 +178,17 @@ Pip versions:
 Put the Dockerfile in an empty folder and go to this folder from the command line and put online.
 
 ```bash
-$ sudo docker build -t kkelchte/test_image .
+$ sudo docker build -t kkelchte/ros_gazebo_tensorflow .
 # install xorg manually and commit changes
-$ sudo nvidia-docker run -it --rm --name rgt kkelchte/test_image bash
+$ sudo nvidia-docker run -it --rm --name rgt kkelchte/ros_gazebo_tensorflow bash
 $$ apt-get install xorg xserver-xorg-video-dummy xpra
 > 29
 > 1
 # from a different window while container is still running
-$ sudo docker commit rgt kkelchte/test_image:latest
+$ sudo docker commit rgt kkelchte/ros_gazebo_tensorflow:latest
 # --current size: 6.92GB
 $ sudo docker login
-$ sudo docker push kkelchte/test_image:latest
+$ sudo docker push kkelchte/ros_gazebo_tensorflow:latest
 ```
 
 
@@ -197,14 +197,14 @@ $ sudo docker push kkelchte/test_image:latest
 
 ```bash
 $ cd /esat/qayd/kkelchte/singularity_images
-$ singularity build ros_gazebo_tensorflow.img docker://kkelchte/test_image:latest
+$ singularity build ros_gazebo_tensorflow.img docker://kkelchte/ros_gazebo_tensorflow:latest
 ```
 
 ### Test image in singularity and create new clean build of github packages
 
 
 ```bash
-$ singularity shell --nv kkelchte/test_image:latest
+$ singularity shell --nv kkelchte/ros_gazebo_tensorflow:latest
 $$ source /opt/ros/$ROS_DISTRO/setup.bash
 $$ source $HOME/simsup_ws/devel/setup.bash --extend
 $$ source $HOME/drone_ws/devel/setup.bash --extend
@@ -225,16 +225,16 @@ Add you as a user and update the image.
 ```bash
 $ id
 uid=1000(klaas) gid=1000(klaas) groups=1000(klaas)
-$ sudo nvidia-docker run -it --rm --name my_container -u root kkelchte/test_image bash
+$ sudo nvidia-docker run -it --rm --name my_container -u root kkelchte/ros_gazebo_tensorflow bash
 $$ adduser --uid 1000 --gid 1000 klaas
 # from different terminal window
-$ sudo docker commit my_container kkelchte/test_image
+$ sudo docker commit my_container kkelchte/ros_gazebo_tensorflow
 ```
 
 Stop the running container and start a container as normal user with your homedir mounted and graphic session in order to **test ros and gazebo**:
 
 ```
-$ sudo nvidia-docker run -it --rm --name my_container -v /tmp/.X11-unix:/tmp/.X11-unix -v /home/klaas:/home/klaas -u klaas kkelchte/test_image bash
+$ sudo nvidia-docker run -it --rm --name my_container -v /tmp/.X11-unix:/tmp/.X11-unix -v /home/klaas:/home/klaas -u klaas kkelchte/ros_gazebo_tensorflow bash
 $$ export DISPLAY=:0
 $$ export LD_LIBRARY_PATH=''
 # test ros & gazebo
@@ -247,7 +247,7 @@ $$ gzclient
 Stop the running container and start a container as normal user with your homedir mounted to in order **test xpra**:
 
 ```
-$ sudo nvidia-docker run -it --rm --name my_container -v /home/klaas:/home/klaas -u klaas kkelchte/test_image bash
+$ sudo nvidia-docker run -it --rm --name my_container -v /home/klaas:/home/klaas -u klaas kkelchte/ros_gazebo_tensorflow bash
 $$ export HOME=/home/klaas
 $$ XAUTHORITY=$HOME/.Xauthority
 $$ export DISPLAY=:$((1 + RANDOM % 254))
