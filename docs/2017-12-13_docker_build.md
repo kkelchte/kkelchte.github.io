@@ -93,18 +93,21 @@ RUN apt-get update && apt-get install -y \
     ros-kinetic-hector-gazebo-plugins \
     ros-kinetic-hector-sensors-description \
     ros-kinetic-hector-sensors-gazebo \
-    ros-kinetic-turtlebot-description \
-    ros-kinetic-turtle \
+    ros-kinetic-turtlebot \
     ros-kinetic-turtlebot-gazebo \
-    python-pip vim less 
+    python-pip vim less wget
 
+# install gazebo extra (to get 7.7 instead of 7.0)
+RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list 
+RUN wget http://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
+RUN	apt-get update && apt-get install -y gazebo7 libgazebo7-dev
 
 #-- current size: 3.09G (old)
 
 # install cuda 8 
-WORKDIR /usr/local
-RUN apt-get update && apt-get install -y wget
-RUN wget http://homes.esat.kuleuven.be/~kkelchte/lib/cuda-linux64-rel-8.0.61-21551265.run && \
+WORKDIR /usr/local 
+RUN apt-get update && \
+	wget http://homes.esat.kuleuven.be/~kkelchte/lib/cuda-linux64-rel-8.0.61-21551265.run && \
 	chmod 700 cuda-linux64-rel-8.0.61-21551265.run && \
 	./cuda-linux64-rel-8.0.61-21551265.run -noprompt && rm -r cuda-linux64-*
 
@@ -149,7 +152,11 @@ RUN pip install pyyaml \
 
 #-- current size: 6.97GB
 
-# TODO: apt-get install -y openbox xorg xserver-xorg-video-dummy xpra
+
+# Stuff before xpra
+RUN apt-get install -y openbox xserver-xorg-video-dummy xpra
+
+# TODO: apt-get install -y xorg
 
 
 ```
