@@ -154,9 +154,9 @@ RUN pip install pyyaml \
 
 
 # Stuff before xpra
-RUN apt-get install -y openbox xserver-xorg-video-dummy xpra
+RUN apt-get install -y openbox 
 
-# TODO: apt-get install -y xorg
+# TODO: apt-get install -y xorg xserver-xorg-video-dummy xpra
 
 
 ```
@@ -181,7 +181,7 @@ Put the Dockerfile in an empty folder and go to this folder from the command lin
 $ sudo docker build -t kkelchte/test_image .
 # install xorg manually and commit changes
 $ sudo nvidia-docker run -it --rm --name rgt kkelchte/test_image bash
-../# apt-get install xorg
+../# apt-get install xorg xserver-xorg-video-dummy xpra
 > 29
 > 1
 # from a different window while container is still running
