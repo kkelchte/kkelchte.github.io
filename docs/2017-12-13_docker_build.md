@@ -76,6 +76,10 @@ LABEL "com.nvidia.volumes.needed"="nvidia_driver"
 
 ENV TERM dumb
 
+# Setup european timezone:
+ENV TZ 'Europe/Brussels'
+RUN echo $TZ > /etc/timezone
+
 # install ros packages
 RUN apt-get update && apt-get install -y \
     ros-kinetic-desktop \
