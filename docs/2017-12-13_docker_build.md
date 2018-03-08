@@ -76,10 +76,6 @@ LABEL "com.nvidia.volumes.needed"="nvidia_driver"
 
 ENV TERM dumb
 
-# Setup european timezone:
-ENV TZ 'Europe/Brussels'
-RUN echo $TZ > /etc/timezone
-
 # install ros packages
 RUN apt-get update && apt-get install -y \
     ros-kinetic-desktop \
@@ -108,27 +104,27 @@ RUN	apt-get update && apt-get install -y gazebo7 libgazebo7-dev
 
 #-- current size: 3.09G (old)
 
-# install cuda 8 
+# install cuda 9.1 
 WORKDIR /usr/local 
 RUN apt-get update && \
-	wget http://homes.esat.kuleuven.be/~kkelchte/lib/cuda-linux64-rel-8.0.61-21551265.run && \
-	chmod 700 cuda-linux64-rel-8.0.61-21551265.run && \
-	./cuda-linux64-rel-8.0.61-21551265.run -noprompt && rm -r cuda-linux64-*
+	wget http://homes.esat.kuleuven.be/~kkelchte/lib/cuda-linux.9.1.85-23083092.run && \
+	chmod 700 cuda-linux.9.1.85-23083092.run && \
+	./cuda-linux.9.1.85-23083092.run -noprompt && rm -r cuda-linux*
 
 #-- current size: 5.19G (old)
 
-# install cudnn 6 by pulling it from esat homes.
+# install cudnn 7.0 by pulling it from esat homes.
 WORKDIR /
-RUN wget http://homes.esat.kuleuven.be/~kkelchte/lib/cudnn-8.0-linux-x64-v6.0.tgz && \
- 	tar -xvzf cudnn-8.0-linux-x64-v6.0.tgz && \
+RUN wget http://homes.esat.kuleuven.be/~kkelchte/lib/cudnn-9.1-linux-x64-v7.tgz && \
+ 	tar -xvzf cudnn-9.1-linux-x64-v7.tgz && \
 	mv cuda /usr/local/cudnn && \
-	rm cudnn-8.0-linux-x64-v6.0.tgz
+	rm cudnn-9.1-linux-x64-v7.tgz
 
 #-- current size: 5.48GB (old)
 
-# install pip packages including tensorflow (1.4)
+# install pip packages including tensorflow (1.5)
 WORKDIR /
-RUN pip install --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.4.0-cp27-none-linux_x86_64.whl
+RUN pip install --upgrade http://homes.esat.kuleuven.be/~kkelchte/lib/tensorflow-1.4.0-cp27-cp27mu-linux_x86_64.whl
 
 #-- current size: 6.42GB (old)
 
@@ -160,9 +156,7 @@ RUN pip install pyyaml \
 # Stuff before xpra
 RUN apt-get install -y openbox 
 
-# TODO: apt-get install -y xorg xserver-xorg-video-dummy xpra
-
-
+# TODO: apt-get install -y xorg xpra xserver-xorg-video-dummy 
 ```
 
 Pip versions:
