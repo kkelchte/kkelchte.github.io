@@ -11,10 +11,10 @@ This is a guide to build docker images from a dockerfile.
 | Ubuntu         |  16.04  |
 | ROS            | Kinetic |
 | Gazebo         |   7.07  |
-| CUDA           |  8      |
-| CudNN          |  6      |
+| CUDA           |  9.0    |
+| CudNN          |  7      |
 | nvidia-docker  |  1      |
-| tensorflow     |  1.4    |
+| tensorflow     |  1.6    |
 
 ### Preparation
 
@@ -25,24 +25,24 @@ $ mkdir -p ~/docker/ros_gz_tf
 $ cd ~/docker/ros_gz_tf
 ```
 
-Prepare the installation of cuda and cudnn by downloading the required files in you docker directory. This is not required for cuda version 8 and cudnn version 6 as they are inside the homes.esat.kuleuven.be/~kkelchte/lib folder.
+Prepare the installation of cuda and cudnn by downloading the required files in you docker directory. This is not required for cuda version 9 and cudnn version 7 as they are inside the homes.esat.kuleuven.be/~kkelchte/lib folder.
 
 For different versions it is recommended to perform the following steps inside the users/visics/kkelchte/public_home/lib folder so wget can pull the libraries inside your image.
 
 
 ```
-$ wget https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_375.26_linux-run
-$ chmod +x cuda_8.0.61_375.26_linux-run
-$ ./cuda_8.0.61_375.26_linux-run --extract=$PWD
-$ rm cuda-samples-linux-8.0.61-21551265.run
-$ rm NVIDIA-Linux-x86_64-375.26.run
-$ rm cuda_8.0.61_375.26_linux-run
+$ wget wget https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run
+$ chmod +x cuda_9.0.176_384.81_linux-run
+$ ./cuda_9.0.176_384.81_linux-run --extract=$PWD
+$ rm cuda-samples-linux-*
+$ rm NVIDIA-Linux-*
+$ rm cuda_*_linux-run
 ```
 
-Download in your browser cudnn 6 from [here](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v6/prod/8.0_20170307/cudnn-8.0-linux-x64-v6.0-tgz).
+Download in your browser cudnn 7 from [here](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v7.0.5/prod/9.0_20171129/cudnn-9.0-linux-x64-v7).
 
 ```
-$ mv ~/Downloads/cudnn-8.0-linux-x64-v6.0.tgz .
+$ mv ~/Downloads/cudnn-9.0-linux-x64-v7.0.tgz .
 ```
 
 Add pip requirements list from tensorflow:
