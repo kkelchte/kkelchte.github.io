@@ -11,10 +11,10 @@ This is a guide to build docker images from a dockerfile.
 | Ubuntu         |  16.04  |
 | ROS            | Kinetic |
 | Gazebo         |   7.07  |
-| CUDA           |  8      |
-| CudNN          |  6      |
+| CUDA           |  9.0    |
+| CudNN          |  7      |
 | nvidia-docker  |  1      |
-| tensorflow     |  1.4    |
+| tensorflow     |  1.6    |
 
 ### Preparation
 
@@ -25,24 +25,24 @@ $ mkdir -p ~/docker/ros_gz_tf
 $ cd ~/docker/ros_gz_tf
 ```
 
-Prepare the installation of cuda and cudnn by downloading the required files in you docker directory. This is not required for cuda version 8 and cudnn version 6 as they are inside the homes.esat.kuleuven.be/~kkelchte/lib folder.
+Prepare the installation of cuda and cudnn by downloading the required files in you docker directory. This is not required for cuda version 9 and cudnn version 7 as they are inside the homes.esat.kuleuven.be/~kkelchte/lib folder.
 
 For different versions it is recommended to perform the following steps inside the users/visics/kkelchte/public_home/lib folder so wget can pull the libraries inside your image.
 
 
 ```
-$ wget https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_375.26_linux-run
-$ chmod +x cuda_8.0.61_375.26_linux-run
-$ ./cuda_8.0.61_375.26_linux-run --extract=$PWD
-$ rm cuda-samples-linux-8.0.61-21551265.run
-$ rm NVIDIA-Linux-x86_64-375.26.run
-$ rm cuda_8.0.61_375.26_linux-run
+$ wget wget https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run
+$ chmod +x cuda_9.0.176_384.81_linux-run
+$ ./cuda_9.0.176_384.81_linux-run --extract=$PWD
+$ rm cuda-samples-linux-*
+$ rm NVIDIA-Linux-*
+$ rm cuda_*_linux-run
 ```
 
-Download in your browser cudnn 6 from [here](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v6/prod/8.0_20170307/cudnn-8.0-linux-x64-v6.0-tgz).
+Download in your browser cudnn 7 from [here](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v7.0.5/prod/9.0_20171129/cudnn-9.0-linux-x64-v7).
 
 ```
-$ mv ~/Downloads/cudnn-8.0-linux-x64-v6.0.tgz .
+$ mv ~/Downloads/cudnn-9.0-linux-x64-v7.0.tgz .
 ```
 
 Add pip requirements list from tensorflow:
@@ -93,32 +93,38 @@ RUN apt-get update && apt-get install -y \
     ros-kinetic-hector-gazebo-plugins \
     ros-kinetic-hector-sensors-description \
     ros-kinetic-hector-sensors-gazebo \
-    python-pip vim less 
+    ros-kinetic-turtlebot \
+    ros-kinetic-turtlebot-gazebo \
+    python-pip vim less wget
 
+# install gazebo extra (to get 7.7 instead of 7.0)
+RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list 
+RUN wget http://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
+RUN	apt-get update && apt-get install -y gazebo7 libgazebo7-dev
 
 #-- current size: 3.09G (old)
 
-# install cuda 8 
-WORKDIR /usr/local
-RUN apt-get update && apt-get install -y wget
-RUN wget http://homes.esat.kuleuven.be/~kkelchte/lib/cuda-linux64-rel-8.0.61-21551265.run && \
-	chmod 700 cuda-linux64-rel-8.0.61-21551265.run && \
-	./cuda-linux64-rel-8.0.61-21551265.run -noprompt && rm -r cuda-linux64-*
+# install cuda 9.0 
+WORKDIR /usr/local 
+RUN apt-get update && \
+	wget http://homes.esat.kuleuven.be/~kkelchte/lib/cuda-linux.9.0.176-22781540.run && \
+	chmod 700 cuda-linux.9.0.176-22781540.run && \
+	./cuda-linux.9.0.176-22781540.run -noprompt && rm -r cuda-linux*
 
 #-- current size: 5.19G (old)
 
-# install cudnn 6 by pulling it from esat homes.
+# install cudnn 7.0 by pulling it from esat homes.
 WORKDIR /
-RUN wget http://homes.esat.kuleuven.be/~kkelchte/lib/cudnn-8.0-linux-x64-v6.0.tgz && \
- 	tar -xvzf cudnn-8.0-linux-x64-v6.0.tgz && \
+RUN wget http://homes.esat.kuleuven.be/~kkelchte/lib/cudnn-9.0-linux-x64-v7.tgz && \
+ 	tar -xvzf cudnn-9.0-linux-x64-v7.tgz && \
 	mv cuda /usr/local/cudnn && \
-	rm cudnn-8.0-linux-x64-v6.0.tgz
+	rm cudnn-9.0-linux-x64-v7.tgz
 
 #-- current size: 5.48GB (old)
 
-# install pip packages including tensorflow (1.4)
+# install pip packages including tensorflow (1.5)
 WORKDIR /
-RUN pip install --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.4.0-cp27-none-linux_x86_64.whl
+RUN pip install --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.6.0-cp27-none-linux_x86_64.whl
 
 #-- current size: 6.42GB (old)
 
@@ -146,9 +152,11 @@ RUN pip install pyyaml \
 
 #-- current size: 6.97GB
 
-# TODO: apt-get install -y openbox xorg xserver-xorg-video-dummy xpra
 
+# Stuff before xpra
+RUN apt-get install -y openbox 
 
+# TODO: apt-get install -y xorg xpra xserver-xorg-video-dummy 
 ```
 
 Pip versions:
@@ -168,17 +176,17 @@ Pip versions:
 Put the Dockerfile in an empty folder and go to this folder from the command line and put online.
 
 ```bash
-$ sudo docker build -t kkelchte/test_image .
+$ sudo docker build -t kkelchte/ros_gazebo_tensorflow .
 # install xorg manually and commit changes
-$ sudo nvidia-docker run -it --rm --name rgt kkelchte/test_image bash
-../# apt-get install xorg
+$ sudo nvidia-docker run -it --rm --name rgt kkelchte/ros_gazebo_tensorflow bash
+$$ apt-get install xorg xserver-xorg-video-dummy xpra
 > 29
 > 1
 # from a different window while container is still running
-$ sudo docker commit rgt kkelchte/test_image:latest
+$ sudo docker commit rgt kkelchte/ros_gazebo_tensorflow:latest
 # --current size: 6.92GB
 $ sudo docker login
-$ sudo docker push kkelchte/test_image:latest
+$ sudo docker push kkelchte/ros_gazebo_tensorflow:latest
 ```
 
 
@@ -187,14 +195,14 @@ $ sudo docker push kkelchte/test_image:latest
 
 ```bash
 $ cd /esat/qayd/kkelchte/singularity_images
-$ singularity build ros_gazebo_tensorflow.img docker://kkelchte/test_image:latest
+$ singularity build ros_gazebo_tensorflow.img docker://kkelchte/ros_gazebo_tensorflow:latest
 ```
 
 ### Test image in singularity and create new clean build of github packages
 
 
 ```bash
-$ singularity shell --nv kkelchte/test_image:latest
+$ singularity shell --nv kkelchte/ros_gazebo_tensorflow:latest
 $$ source /opt/ros/$ROS_DISTRO/setup.bash
 $$ source $HOME/simsup_ws/devel/setup.bash --extend
 $$ source $HOME/drone_ws/devel/setup.bash --extend
@@ -215,16 +223,16 @@ Add you as a user and update the image.
 ```bash
 $ id
 uid=1000(klaas) gid=1000(klaas) groups=1000(klaas)
-$ sudo nvidia-docker run -it --rm --name my_container -u root kkelchte/test_image bash
+$ sudo nvidia-docker run -it --rm --name my_container -u root kkelchte/ros_gazebo_tensorflow bash
 $$ adduser --uid 1000 --gid 1000 klaas
 # from different terminal window
-$ sudo docker commit my_container kkelchte/test_image
+$ sudo docker commit my_container kkelchte/ros_gazebo_tensorflow
 ```
 
 Stop the running container and start a container as normal user with your homedir mounted and graphic session in order to **test ros and gazebo**:
 
 ```
-$ sudo nvidia-docker run -it --rm --name my_container -v /tmp/.X11-unix:/tmp/.X11-unix -v /home/klaas:/home/klaas -u klaas kkelchte/test_image bash
+$ sudo nvidia-docker run -it --rm --name my_container -v /tmp/.X11-unix:/tmp/.X11-unix -v /home/klaas:/home/klaas -u klaas kkelchte/ros_gazebo_tensorflow bash
 $$ export DISPLAY=:0
 $$ export LD_LIBRARY_PATH=''
 # test ros & gazebo
@@ -237,7 +245,7 @@ $$ gzclient
 Stop the running container and start a container as normal user with your homedir mounted to in order **test xpra**:
 
 ```
-$ sudo nvidia-docker run -it --rm --name my_container -v /home/klaas:/home/klaas -u klaas kkelchte/test_image bash
+$ sudo nvidia-docker run -it --rm --name my_container -v /home/klaas:/home/klaas -u klaas kkelchte/ros_gazebo_tensorflow bash
 $$ export HOME=/home/klaas
 $$ XAUTHORITY=$HOME/.Xauthority
 $$ export DISPLAY=:$((1 + RANDOM % 254))
