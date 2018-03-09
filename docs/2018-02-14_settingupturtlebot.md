@@ -52,7 +52,6 @@ Install chrony, `sudo apt-get install chrony`, for synchronisation.
 
 ## 3. Start robot
 
-Todo: check launchfile and readin lidar data, raspbery pi, start node with console,
 
 ```
 (alienware)$ ssh turtlebot@10.42.0.1
@@ -60,5 +59,12 @@ Todo: check launchfile and readin lidar data, raspbery pi, start node with conso
 (turtlebot)$ roslaunch turtlebot3_bringup turtlebot3_remote.launch
 (turtlebot)$ roslaunch raspicam_node camerav2_410x308_10fps.launch
 
+(alienware)$ turtle
 (alienware)$ roslaunch turtlebot_rviz_launchers view_robot.launch --screen
+(alienware)$ roslaunch simulation_supervised_demo turtleot.launch
 ```
+
+## 4. Create autopilot
+
+File depth_heuristic.py in simulation_supervised_control.
+
