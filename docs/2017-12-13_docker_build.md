@@ -104,27 +104,27 @@ RUN	apt-get update && apt-get install -y gazebo7 libgazebo7-dev
 
 #-- current size: 3.09G (old)
 
-# install cuda 9.1 
+# install cuda 9.0 
 WORKDIR /usr/local 
 RUN apt-get update && \
-	wget http://homes.esat.kuleuven.be/~kkelchte/lib/cuda-linux.9.1.85-23083092.run && \
-	chmod 700 cuda-linux.9.1.85-23083092.run && \
-	./cuda-linux.9.1.85-23083092.run -noprompt && rm -r cuda-linux*
+	wget http://homes.esat.kuleuven.be/~kkelchte/lib/cuda-linux.9.0.176-22781540.run && \
+	chmod 700 cuda-linux.9.0.176-22781540.run && \
+	./cuda-linux.9.0.176-22781540.run -noprompt && rm -r cuda-linux*
 
 #-- current size: 5.19G (old)
 
 # install cudnn 7.0 by pulling it from esat homes.
 WORKDIR /
-RUN wget http://homes.esat.kuleuven.be/~kkelchte/lib/cudnn-9.1-linux-x64-v7.tgz && \
- 	tar -xvzf cudnn-9.1-linux-x64-v7.tgz && \
+RUN wget http://homes.esat.kuleuven.be/~kkelchte/lib/cudnn-9.0-linux-x64-v7.tgz && \
+ 	tar -xvzf cudnn-9.0-linux-x64-v7.tgz && \
 	mv cuda /usr/local/cudnn && \
-	rm cudnn-9.1-linux-x64-v7.tgz
+	rm cudnn-9.0-linux-x64-v7.tgz
 
 #-- current size: 5.48GB (old)
 
 # install pip packages including tensorflow (1.5)
 WORKDIR /
-RUN pip install --upgrade http://homes.esat.kuleuven.be/~kkelchte/lib/tensorflow-1.4.0-cp27-cp27mu-linux_x86_64.whl
+RUN pip install --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.6.0-cp27-none-linux_x86_64.whl
 
 #-- current size: 6.42GB (old)
 
