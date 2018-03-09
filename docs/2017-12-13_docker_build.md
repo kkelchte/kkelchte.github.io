@@ -11,10 +11,10 @@ This is a guide to build docker images from a dockerfile.
 | Ubuntu         |  16.04  |
 | ROS            | Kinetic |
 | Gazebo         |   7.07  |
-| CUDA           |  9.0    |
-| CudNN          |  7      |
+| CUDA           |  9.1    |
+| CudNN          |  7.0      |
 | nvidia-docker  |  1      |
-| tensorflow     |  1.6    |
+| tensorflow     |  1.5    |
 
 ### Preparation
 
@@ -31,18 +31,18 @@ For different versions it is recommended to perform the following steps inside t
 
 
 ```
-$ wget wget https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run
-$ chmod +x cuda_9.0.176_384.81_linux-run
-$ ./cuda_9.0.176_384.81_linux-run --extract=$PWD
+$ wget https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_387.26_linux
+$ chmod +x cuda_9.1.85_387.26_linux
+$ ./cuda_9.1.85_387.26_linux --extract=$PWD
 $ rm cuda-samples-linux-*
 $ rm NVIDIA-Linux-*
-$ rm cuda_*_linux-run
+$ rm cuda_*_linux
 ```
 
-Download in your browser cudnn 7 from [here](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v7.0.5/prod/9.0_20171129/cudnn-9.0-linux-x64-v7).
+Download in your browser cudnn 7 from [here](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v7.0.5/prod/9.1_20171129/cudnn-9.1-linux-x64-v7).
 
 ```
-$ mv ~/Downloads/cudnn-9.0-linux-x64-v7.0.tgz .
+$ mv ~/Downloads/cudnn-9.1-linux-x64-v7.0.tgz .
 ```
 
 Add pip requirements list from tensorflow:
@@ -107,24 +107,24 @@ RUN	apt-get update && apt-get install -y gazebo7 libgazebo7-dev
 # install cuda 9.0 
 WORKDIR /usr/local 
 RUN apt-get update && \
-	wget http://homes.esat.kuleuven.be/~kkelchte/lib/cuda-linux.9.0.176-22781540.run && \
-	chmod 700 cuda-linux.9.0.176-22781540.run && \
-	./cuda-linux.9.0.176-22781540.run -noprompt && rm -r cuda-linux*
+	wget http://homes.esat.kuleuven.be/~kkelchte/lib/cuda-linux.9.1.85-23083092.run && \
+	chmod 700 cuda-linux.9.1.85-23083092.run && \
+	./cuda-linux.9.1.85-23083092.run -noprompt && rm -r cuda-linux*
 
 #-- current size: 5.19G (old)
 
 # install cudnn 7.0 by pulling it from esat homes.
 WORKDIR /
-RUN wget http://homes.esat.kuleuven.be/~kkelchte/lib/cudnn-9.0-linux-x64-v7.tgz && \
- 	tar -xvzf cudnn-9.0-linux-x64-v7.tgz && \
+RUN wget http://homes.esat.kuleuven.be/~kkelchte/lib/cudnn-9.1-linux-x64-v7.tgz && \
+ 	tar -xvzf cudnn-9.1-linux-x64-v7.tgz && \
 	mv cuda /usr/local/cudnn && \
-	rm cudnn-9.0-linux-x64-v7.tgz
+	rm cudnn-9.1-linux-x64-v7.tgz
 
 #-- current size: 5.48GB (old)
 
-# install pip packages including tensorflow (1.5)
+# install pip packages including tensorflow (1.5) with compute capability 3.5
 WORKDIR /
-RUN pip install --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.6.0-cp27-none-linux_x86_64.whl
+RUN pip install --upgrade http://homes.esat.kuleuven.be/~kkelchte/lib/tensorflow-1.4.0-cp27-cp27mu-linux_x86_64.whl
 
 #-- current size: 6.42GB (old)
 
