@@ -124,7 +124,7 @@ RUN wget http://homes.esat.kuleuven.be/~kkelchte/lib/cudnn-9.1-linux-x64-v7.tgz 
 
 # install pip packages including tensorflow (1.5) with compute capability 3.5
 WORKDIR /
-RUN pip install --upgrade http://homes.esat.kuleuven.be/~kkelchte/lib/tensorflow-1.4.0-cp27-cp27mu-linux_x86_64.whl
+RUN pip install --upgrade http://homes.esat.kuleuven.be/~kkelchte/lib/tensorflow-1.5.0-cp27-cuda91-cudnn70-computecap35-linux_x86_64.whl
 
 #-- current size: 6.42GB (old)
 
