@@ -17,7 +17,9 @@ The DNN needed to learn to find the safest control while these strange turbulenc
 Adding random noise to a control is a rather drastic and naive approach to mimic attitude inaccuracies. Better would be to use a set of different settings of drones that all very slightly on mass/inertia/friction/responsiveness/... . In this case the possible set of turbulences is much smaller and more relevant. 
 I see this short coming of understanding as one of the major flaws of my current setup.
 
-![Naive incremental noise adding]({{ "/imgs/18-05-25_noisy_control.png"|absolute_url}} =250x)
+<img src="/imgs/18-05-25_noisy_control.png" alt="Naive incremental noise adding" style="width: 200px;"/>
+
+<!-- ![Naive incremental noise adding]({{ "/imgs/18-05-25_noisy_control.png"|absolute_url}} =250x) -->
 
 It makes sense to abstract from this part and assume that if the agent gives understandable steering commands, the controller should take care of the attitude and navigation.
 This is however not the case due to a too realistic drone model in simulation that drifts and react with delays as well as a rather sloppy bebop drone that fails to fly stable indoors.
@@ -25,7 +27,14 @@ At least this unfair assumption resulted in poorer simulated performances especi
 
 Having this tricky controller behavior that acts slightly different every simulation could also explain the high dependency on small latencies due to different physical machines resulting in a large variation.
 
-It is however unclear how we best deal with this problem and whether it is our problem. If we want to ignore the problem or at least identify the problem we should at least run the doshico experiment with a floating camera object that acts perfectly stable. Or we can test it with the turtlebot. 
+It is however unclear how we best deal with this problem and whether it is our problem. 
+
+If we want to **ignore the problem** or at least identify the problem we should at least run the doshico experiment with a floating camera object that acts perfectly stable. Or we can test it with the turtlebot. 
+Alternatively we could try to **generalize** over the different control parameters as defined above.
+A final and most attractive strategy might be to **learn to adapt** to the dynamics of the control in an unsupervised fashion. For this last strategy there are number of interesting tools to use:
+
+* 
+
 
 
 
