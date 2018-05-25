@@ -15,6 +15,7 @@ An alternative approach could be the use of randomization or generalization over
 I partially played around with this by adding translational and orientational noise to the drone so it would act weird. 
 The DNN needed to learn to find the safest control while these strange turbulence would apply.
 Adding random noise to a control is a rather drastic and naive approach to mimic attitude inaccuracies. Better would be to use a set of different settings of drones that all very slightly on mass/inertia/friction/responsiveness/... . In this case the possible set of turbulences is much smaller and more relevant. 
+I see this short coming of understanding as one of the major flaws of my current setup.
 
 ![Naive incremental noise adding]({{ "/imgs/18-05-25_noisy_control.png" | absolute_url }})
 
