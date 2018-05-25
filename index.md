@@ -2,6 +2,8 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
+#### [25-05-2018: Structuring ideas after SIMPAR-ICRA](./docs/2018-05-25_structuring_ideas.md)
+
 #### [08-02-2018: Setting up Turtlebot](./docs/2018-02-14_settingupturtlebot.md)
 
 #### [08-02-2018: Experiments on Depth Q Learning](./docs/2018-02-08_depth_q_learning.md)
