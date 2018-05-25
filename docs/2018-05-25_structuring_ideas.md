@@ -17,7 +17,7 @@ The DNN needed to learn to find the safest control while these strange turbulenc
 Adding random noise to a control is a rather drastic and naive approach to mimic attitude inaccuracies. Better would be to use a set of different settings of drones that all very slightly on mass/inertia/friction/responsiveness/... . In this case the possible set of turbulences is much smaller and more relevant. 
 I see this short coming of understanding as one of the major flaws of my current setup.
 
-![Naive incremental noise adding]({{ "/imgs/18-05-25_noisy_control.png" | absolute_url }} =250x)
+![Naive incremental noise adding]({{ "/imgs/18-05-25_noisy_control.png"|absolute_url}} =250x)
 
 It makes sense to abstract from this part and assume that if the agent gives understandable steering commands, the controller should take care of the attitude and navigation.
 This is however not the case due to a too realistic drone model in simulation that drifts and react with delays as well as a rather sloppy bebop drone that fails to fly stable indoors.
