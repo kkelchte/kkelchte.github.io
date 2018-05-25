@@ -3,11 +3,13 @@ title: Structuring Ideas
 layout: default
 ---
 
-At SIMPAR and ICRA I realized the complexity of the task of control prediction with DRL trained end-to-end. 
+_At SIMPAR and ICRA I realized the complexity of the task of control prediction with DRL trained end-to-end namely the influence of the dynamics of the model. This is discussed in 1. 
+Besides this main control concern, I was having some other new insides I would like to keep in mind and are listed in section 2 and 3._
 
+### 1 don't just ignore the influence of a bad attitude controller
 ```Damn you, attitude control and system dynamics!```
 
-One of the main aspects of the problem I was disregarding was the difficulty and influence of the attitude controller.
+One of the main aspects of the problem I was disregarding was the difficulty and influence of the attitude controller or the dynamics of the drone.
 It is not specifically hard to fly a drone in simulation or the real world if it has a stable attitude controller and you're speed stays reasonably low.
 The tricky parts pops in when you train a neural network. 
 You'll see that if the network has some temporal aspect for instance with an LSTM or 3D-CNN, the neural network will overfit towards this specific controller. 
@@ -42,15 +44,52 @@ Though both methods seem valid, they both are not specially exciting research di
 As a side note I want to refer to Mario Henrique Cruz Torrez that recommended me to work with the angular velocity as control rather than linear velocity. This is something I always ignored because I was only steering in yaw but I guess I could start worrying on that part to see if I can improve the predictiveness and stability of applied control.
 
 
+### 2 Drones Playing Hide-and-seek: a proof of concept for end-to-end DRL
+```Time to get ambitious again to boost up the energy```
+I have been focussing on this low level collision avoidance for quite some time with the idea that a simple reactive control is a proper place to start.
+Now that I assume that the struggle of the progress so far is mainly due to bad attitude controllers (which I should check by performing Doshico on turtlebot), I do think it is time to go back again to a higher abstraction level and aim for more complex tasks.
+Some more difficult tasks would for instance be a hide-and-seek implementation where a drone should learn to scan an area in search for something. This task includes remembering what areas are already screened, what parts of the scenery is occluded so should be discovered further, ... . Whether the AI learns to do a depth-first search or screens areas more thoroughly on the fly, is open for the AI to learn. 
+From a game point of view, it would as well be cool if the previous AI can be learned, to get a second AI controller in there that learns to hide from the first as an adversarial. 
+
+This hide-and-seek game can be implemented both with drones as well as turtlebot. It will be important to start off from a high abstraction level, very game-like, to shape the reward, to see the influence of imitation learning, ... .
+Maybe a gridworld example with a full state-space can already be interesting to start from and apply TRPO-GAE to or another state-of-the-art RL algorithm. The fun comes in when the adversarial agent is learned simultaneously. 
+The next step would be going from a small dimensional fully-observable state-space to a more partially observable state space by occluding parts of the gridworld.
+Once this seems to work, it is time to go to a turtlebot in an empty room with one red object that is the target to get to as a goal state. 
+
+In order to simplify the training procedure you could add the current goal location as input of which gradually noise is added so the networks learns to ignore it.
+
+The task can be made more difficult by cluttering the environment and gradually taking the goal object more and more out of view. 
+Currently probably learning becomes already surprisingly hard and techniques to find proper pretraining are required or other ways to put prior knowledge in the network. 
+This is when prior knowledge will have to simplify the search to good model parameters, as is discussed in the next section.
+
+The next step would than be to make the environment gradually more and more complex, hiding the goal object in different rooms. 
+This is maybe also the point where training needs to be split up in different concepts:
+
+* a subnetwork for recognizing the goal object and going towards it (which we should already have)
+* a subnetwork for screening an indoor environment (which can be learned by making the drone free from collision)
+* a subnetwork for obstacle avoidance (which can be learned seperately)
+* a meta network should than combine the different outputs as well as feature representations to learn which part of the controller becomes most important
+
+If I succeed at doing all this, which would be incredibly amazing, it is time to make the goal object a separate agent. 
+It might be able to learn how to hide and in that sense that it learns to stand still or move quickly or maybe lurk behind the predator.
+I am however very sceptible in how this all scales. 
+
+In order to dive deeper into to benefits of having everything learned and approximated with deep neural networks, 
+I could make the same thing with SLAM and tweaking and see which one can find the goal faster.
+
+* obstacle avoidance < SLAM-based path-planning
+* screening indoor scene < SLAM-based discovering
+* go towards the goal < detect the goal and place it in the SLAM-build map
+* have a heuristic or meta-controller that weights the different behaviors
+
+Though on the other hand, it is discussible where the real benefits of end-to-end learning lies. 
+Ideally you could gradually go from a hand-crafted algorithm to an end-to-end DNN, evaluating the pros and cons of each block in a DNN fashion.
+The main benefit of having it all in a learning fashion seems to me the potential to generalize to a more wide set of environments while I would guess that the heuristic metacontroller will always be suboptimal unless it is tweaked for very specific environments.
 
 
 
-
-
-
-
-
-
+### 3 'what prior knowledge is there to explore for autonomous navigation'
+```Learn only what matters and not also everything that doesn't matter```
 
 General research question could be: what are the strongest features to use for indoor collision avoidance with drones given both a perceptual domain and a control range shift. 
 
