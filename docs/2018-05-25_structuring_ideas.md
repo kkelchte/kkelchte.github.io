@@ -4,7 +4,7 @@ layout: default
 ---
 
 _At SIMPAR and ICRA I realized the complexity of the task of control prediction with DRL trained end-to-end namely the influence of the dynamics of the model. This is discussed in 1. 
-Besides this main control concern, I was having some other new insides I would like to keep in mind and are listed in section 2 and 3._
+Besides this main control concern, I was having some other new insights I would like to keep in mind and are listed in section 2 and 3._
 
 ### 1 don't just ignore the influence of a bad attitude controller
 
@@ -47,7 +47,7 @@ As a side note I want to refer to Mario Henrique Cruz Torrez that recommended me
 
 ### 2 Drones Playing Hide-and-seek: a proof of concept for end-to-end DRL in robotics applications
 
-```Time to get ambitious again to boost up the energy```
+```Time to get ambitious again to boost energy and research relevance```
 
 I have been focussing on this low level collision avoidance for quite some time with the idea that a simple reactive control is a proper place to start.
 Now that I assume that the struggle of the progress so far is mainly due to bad attitude controllers (which I should check by performing Doshico on turtlebot), I do think it is time to go back again to a higher abstraction level and aim for more complex tasks.
