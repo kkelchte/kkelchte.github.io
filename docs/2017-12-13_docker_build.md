@@ -95,6 +95,7 @@ RUN apt-get update && apt-get install -y \
     ros-kinetic-hector-sensors-gazebo \
     ros-kinetic-turtlebot \
     ros-kinetic-turtlebot-gazebo \
+    ros-kinetic-turtlebot3 \
     python-pip vim less wget
 
 # install gazebo extra (to get 7.7 instead of 7.0)
@@ -215,6 +216,12 @@ $$ cd simsup_ws
 $$ catkin_make
 ```
 
+### Put singularity image on gluster
+
+Ask bert to place new image on gluster.
+```bash
+$ cp /esat/opal/kkelchte/singularity_images/new_image.img /gluster/visics/singularity/
+```
 
 ### (OPTIONAL) Test the image in docker
 
