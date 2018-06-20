@@ -2,6 +2,8 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
+#### [14-06-2018: Unit tests simulation supervised](./docs/2018-06-14_unit_tests_simulation_supervised.md)
+
 #### [06-06-2018: Domain Free Collision Avoidance](./docs/2018-06-06_domain_free_collision_avoidance.md)
 
 #### [25-05-2018: Structuring ideas after SIMPAR-ICRA](./docs/2018-05-25_structuring_ideas.md)
