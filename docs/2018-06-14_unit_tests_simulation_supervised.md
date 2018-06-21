@@ -86,20 +86,20 @@ $ roslaunch simulation_supervised_demo turtle_sim.launch world_name:=canyon fsm_
 
 Play with parameters: 
 
-| tag | parameter |
-|-|-|
-| -t | log tag |
-| -n | number of flights |
-| -g | graphics |
-| -ds | create dataset |
-| -p | param file loaded with tensorflow |
-| --robot | specify robot config file |
-| -pe | specify python environment |
-| -pp | specify python project |
-| -w | canyon |
-| -w | forest |
-| --fsm | load the correct fsm configuration |
-| -e | evaluate so no training of the network |
+| tag | parameter | note |
+|-|-|-|
+| -t | log tag |  |
+| -n | number of flights |  |
+| -g | graphics | fails due to animation object not shutting down |
+| -ds | create dataset |  |
+| -p | param file loaded with tensorflow |  |
+| --robot | specify robot config file |  |
+| -pe | specify python environment |  |
+| -pp | specify python project |  |
+| -w | canyon |  |
+| -w | forest |  |
+| --fsm | load the correct fsm configuration |  |
+| -e | evaluate so no training of the network |  |
 
 ```bash
 $ roscd simulation_supervised/python
@@ -107,3 +107,21 @@ $ roscd simulation_supervised/python
 $ echo "epsilon: 1" > params.yaml
 $ python run_simulation_script.py -t test_createds -n 5 -ds -p params.yaml --robot turtle_sim -pe virtualenv -pp q-learning/pilot -w canyon -w forest --fsm nn_turtle_fsm -e
 ```
+
+## 6. Test previous call from run_simulation_script.py within singularity on fedora
+
+In case of failure:
+- ensure to load the sing environment
+- if the robot fails to load probably a ros package is missing from the singularity image
+```bash
+# alias for next command: start_sing
+$ cd /esat/opal/kkelchte/docker_home && singularity shell --nv /esat/opal/kkelchte/singularity_images/ros_gazebo_tensorflow.img
+$ source .entrypoint_graph # or .entrypoint_xpra
+$ roscd simulation_supervised/python
+# add tensorflow parameters in extra params.yaml
+$ echo "epsilon: 1" > params.yaml
+# note that the python environment (-pe) is changed to sing
+$ python run_simulation_script.py -t test_createds -n 5 -ds -p params.yaml --robot turtle_sim -pe sing -pp q-learning/pilot -w canyon -w forest --fsm nn_turtle_fsm -e
+```
+
+

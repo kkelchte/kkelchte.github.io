@@ -95,6 +95,7 @@ RUN apt-get update && apt-get install -y \
     ros-kinetic-hector-sensors-gazebo \
     ros-kinetic-turtlebot \
     ros-kinetic-turtlebot-gazebo \
+    ros-kinetic-turtlebot3 \
     python-pip vim less wget
 
 # install gazebo extra (to get 7.7 instead of 7.0)
@@ -216,6 +217,7 @@ $$ catkin_make
 ```
 ### 7 (Alternative) Add package to docker container and rebuild singularity
 
+<<<<<<< HEAD
 In this example we add the turtlbot3 package to the ros_gazebo_tensorflow docker image.
 ```bash
 $ sudo nvidia-docker run -it --rm --name rgt kkelchte/ros_gazebo_tensorflow:latest bash
@@ -232,6 +234,13 @@ $ sudo docker commit rgt kkelchte/ros_gazebo_tensorflow:latest
 $ sudo docker login
 $ sudo docker push kkelchte/ros_gazebo_tensorflow:latest
 # repeat step 5
+=======
+### Put singularity image on gluster
+
+Ask bert to place new image on gluster.
+```bash
+$ cp /esat/opal/kkelchte/singularity_images/new_image.img /gluster/visics/singularity/
+>>>>>>> c6ec09fe80f774e7d207f7778c7c00dc4c600665
 ```
 
 ### 8 (OPTIONAL) Test the image in docker
