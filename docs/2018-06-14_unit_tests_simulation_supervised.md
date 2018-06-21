@@ -105,5 +105,5 @@ Play with parameters:
 $ roscd simulation_supervised/python
 # add tensorflow parameters in extra params.yaml
 $ echo "epsilon: 1" > params.yaml
-$ python run_simulation_script.py -t test_createds -n 5 -g -ds -p params.yaml --robot turtle_sim -pe virtualenv -pp q-learning/pilot -w canyon -w forest --fsm nn_turtle_fsm -e
+$ python run_simulation_script.py -t test_createds -n 5 -ds -p params.yaml --robot turtle_sim -pe virtualenv -pp q-learning/pilot -w canyon -w forest --fsm nn_turtle_fsm -e
 ```
