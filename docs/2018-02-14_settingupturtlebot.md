@@ -50,8 +50,30 @@ Test by running roscore at turtlebot and checking on alienware: `$ turtle && ros
 
 Install chrony, `sudo apt-get install chrony`, for synchronisation.
 
+There are two ways of setting up the environment depending on where roscore is running.
+In case of **ROSMASTER on alienware** the following settings apply:
+
+|machine|environment variable|value|
+|-|-|-|
+|alienware|ROS_MASTER_URI|http://10.42.0.203:11311|
+|alienware|ROS_HOSTNAME|10.42.0.203|
+|turtlebot|ROS_MASTER_URI|http://10.42.0.203:11311|
+|turtlebot|ROS_HOSTNAME|10.42.0.1|
+
+In case of **ROSMASTER on alienware** the following settings apply:
+
+|machine|environment variable|value|
+|-|-|-|
+|alienware|ROS_MASTER_URI|http://10.42.0.1:11311|
+|alienware|ROS_HOSTNAME|10.42.0.203|
+|turtlebot|ROS_MASTER_URI|http://10.42.0.203:11311|
+|turtlebot|ROS_HOSTNAME|10.42.0.1|
+
+
+
 ## 3. Start robot
 
+pw: esat
 
 ```
 (alienware)$ ssh turtlebot@10.42.0.1
@@ -64,7 +86,38 @@ Install chrony, `sudo apt-get install chrony`, for synchronisation.
 (alienware)$ roslaunch simulation_supervised_demo turtleot.launch
 ```
 
-## 4. Create autopilot
+## 4. Create scan based oracle
 
 File depth_heuristic.py in simulation_supervised_control.
+
+## 5. Visualize topi
+
+```
+$ rosrun image_view image_view image:=/raspicam_node/image/ _image_transport:=compressed
+```
+
+## 6. Scan range
+
+I measured at 10cm and 1m a camera field of view from -52degrees to 52 degrees.
+The field of view slightly increased at 1m (54degrees). 
+This means that camera ahead of the lazer but as the difference is so small and the hardware is at its limit I decide to continue with this setting.
+
+The field of view is taken as 104 degrees.
+
+The wide-angle camera is adapted in the turtlebot model in simulation.
+
+```
+(alienware)$ export ROS_MASTER_URI=http://10.42.0.203:11311 && export ROS_HOSTNAME=10.42.203
+(alienware)$ roscore&
+(alienware)$ ssh turtlebot@10.42.0.1
+(turtlebot)$ roslaunch turtlebot3_bringup turtlebot3_robot.launch
+(turtlebot)$ roslaunch turtlebot3_bringup turtlebot3_remote.launch
+(turtlebot)$ roslaunch raspicam_node camerav2_410x308_10fps.launch
+# new screen
+(alienware)$ export ROS_MASTER_URI=http://10.42.0.203:11311 && export ROS_HOSTNAME=10.42.203
+(alienware)$ roslaunch simulation_supervised_demo turtle_real.launch full:=true graphics:=true
+# new screen
+(alienware)$ export ROS_MASTER_URI=http://10.42.0.203:11311 && export ROS_HOSTNAME=10.42.203
+(alienware)$ rosrun image_view image_view image:=/raspicam_node/image/ _image_transport:=compressed
+```
 

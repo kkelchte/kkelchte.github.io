@@ -2,7 +2,7 @@
 title: Dockerfile
 layout: default
 ---
-### Intro
+### 1 Intro
 
 This is a guide to build docker images from a dockerfile. 
 
@@ -16,7 +16,7 @@ This is a guide to build docker images from a dockerfile.
 | nvidia-docker  |  1      |
 | tensorflow     |  1.5    |
 
-### Preparation
+### 2 Preparation
 
 Create a working dir.
 
@@ -64,7 +64,7 @@ sklearn
 CTR+D
 ```
 
-### Defining a Docker File
+### 3 Defining a Docker File
 
 Paste the following in a Dockerfile.
 
@@ -172,7 +172,7 @@ Pip versions:
 * rospkg-modules (1.1.4)
 * matplotlib (1.5.1)
 
-### Build and push the image
+### 4 Build and push the image
 
 Put the Dockerfile in an empty folder and go to this folder from the command line and put online.
 
@@ -191,7 +191,7 @@ $ sudo docker push kkelchte/ros_gazebo_tensorflow:latest
 ```
 
 
-### Build a singularity image from the docker image
+### 5 Build a singularity image from the docker image
 
 
 ```bash
@@ -199,7 +199,7 @@ $ cd /esat/qayd/kkelchte/singularity_images
 $ singularity build ros_gazebo_tensorflow.img docker://kkelchte/ros_gazebo_tensorflow:latest
 ```
 
-### Test image in singularity and create new clean build of github packages
+### 6 Test image in singularity and create new clean build of github packages
 
 
 ```bash
@@ -215,15 +215,35 @@ $$ catkin_make
 $$ cd simsup_ws
 $$ catkin_make
 ```
+### 7 (Alternative) Add package to docker container and rebuild singularity
 
+<<<<<<< HEAD
+In this example we add the turtlbot3 package to the ros_gazebo_tensorflow docker image.
+```bash
+$ sudo nvidia-docker run -it --rm --name rgt kkelchte/ros_gazebo_tensorflow:latest bash
+$# source /opt/ros/$ROS_DISTRO/setup.bash
+# load in list
+$# apt-get update 
+# find your package with apt list (!apt-get list dont work!)
+$# apt list | grep ros-kinetic | grep turtlebot3
+# install packages you need
+$# apt install ros-kinetic-turtlebot3
+# --> In other window, without closing previous one: commit changes <--
+$ sudo docker commit rgt kkelchte/ros_gazebo_tensorflow:latest
+# --current size: 6.92GB
+$ sudo docker login
+$ sudo docker push kkelchte/ros_gazebo_tensorflow:latest
+# repeat step 5
+=======
 ### Put singularity image on gluster
 
 Ask bert to place new image on gluster.
 ```bash
 $ cp /esat/opal/kkelchte/singularity_images/new_image.img /gluster/visics/singularity/
+>>>>>>> c6ec09fe80f774e7d207f7778c7c00dc4c600665
 ```
 
-### (OPTIONAL) Test the image in docker
+### 8 (OPTIONAL) Test the image in docker
 
 Add you as a user and update the image.
 
