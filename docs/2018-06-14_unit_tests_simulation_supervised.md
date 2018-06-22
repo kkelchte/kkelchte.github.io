@@ -131,7 +131,7 @@ $ python run_script.py -t test_createds -n 5 -ds -p params.yaml --robot turtle_s
 Requirements: 
 
 - test fsm config in simulation: `$ roslaunch simulation_supervised_demo turtle_sim.launch fsm_config:=console_nn_db_turtle_fsm full:=true graphics:=true`
-- test run_script with nn with number_of_runs 1 (no interupt after 5min): `$ python run_script.py -t test_3state_fsm -n 1 -p params.yaml -ds --robot turtle_sim -pe virtualenv -pp q-learning/pilot -w objects --fsm console_nn_db_turtle_fsm -e`
+- test run_script with nn with number_of_runs 1 (no interupt after 5min): `$ python run_script.py -t test_3state_fsm -p random_slow.yaml -ds --robot turtle_sim -pe virtualenv -pp q-learning/pilot -w maze --fsm console_nn_db_turtle_fsm -e -n 1 -g`
 - run on real turtlebot
 
 ```
