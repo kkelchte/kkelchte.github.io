@@ -121,7 +121,7 @@ $ roscd simulation_supervised/python
 # add tensorflow parameters in extra params.yaml
 $ echo "epsilon: 1" > params.yaml
 # note that the python environment (-pe) is changed to sing
-$ python run_simulation_script.py -t test_createds -n 5 -ds -p params.yaml --robot turtle_sim -pe sing -pp q-learning/pilot -w canyon -w forest --fsm nn_turtle_fsm -e
+$ python run_simulation_script.py -t test_createds -n 3 -ds -p params.yaml --robot turtle_sim -pe sing -pp q-learning/pilot -w canyon --fsm nn_turtle_fsm -e
 ```
 
 
