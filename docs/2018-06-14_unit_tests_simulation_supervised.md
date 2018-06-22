@@ -126,7 +126,7 @@ $ echo "epsilon: 1" > params.yaml
 $ python run_script.py -t test_createds -n 5 -ds -p params.yaml --robot turtle_sim -pe sing -pp q-learning/pilot -w canyon -w forest --fsm nn_turtle_fsm -e
 ```
 
-## 7. Create dataset with turtlebot
+## 7. Create dataset with real turtlebot
 
 Requirements: 
 
@@ -135,6 +135,10 @@ Requirements:
 - run on real turtlebot
 
 ```
+# setup correct environment
+$ export ROS_MASTER_URI=http://10.42.0.203:11311 && export ROS_HOSTNAME=10.42.203
+$ roscd simulation_supervised/python
+$ python run_script_real_turtle.py -t test_real_turtle -n 1 -ds -p random_slow.yaml --fsm console_nn_db_turtle_fsm -e -g
 
 ```
 
