@@ -82,7 +82,7 @@ $ python main.py --checkpoint mobilenet_025 --online --log_tag test_createds/tf 
 $ roslaunch simulation_supervised_demo turtle_sim.launch world_name:=canyon fsm_config:=nn_turtle_fsm log_folder:=test_createds save_images:=true
 ```
 
-## 6. Test previous call from run_simulation_script.py loading params from local params.yaml file
+## 6. Test previous call from run_script.py loading params from local params.yaml file
 
 Play with parameters: 
 
@@ -105,14 +105,16 @@ Play with parameters:
 $ roscd simulation_supervised/python
 # add tensorflow parameters in extra params.yaml
 $ echo "epsilon: 1" > params.yaml
-$ python run_simulation_script.py -t test_createds -n 5 -ds -p params.yaml --robot turtle_sim -pe virtualenv -pp q-learning/pilot -w canyon -w forest --fsm nn_turtle_fsm -e
+$ python run_script.py -t test_createds -n 5 -ds -p params.yaml --robot turtle_sim -pe virtualenv -pp q-learning/pilot -w canyon -w forest --fsm nn_turtle_fsm -e
 ```
 
-## 6. Test previous call from run_simulation_script.py within singularity on fedora
+## 6. Test previous call from run_script.py within singularity on fedora
 
 In case of failure:
+
 - ensure to load the sing environment
 - if the robot fails to load probably a ros package is missing from the singularity image
+
 ```bash
 # alias for next command: start_sing
 $ cd /esat/opal/kkelchte/docker_home && singularity shell --nv /esat/opal/kkelchte/singularity_images/ros_gazebo_tensorflow.img
@@ -121,7 +123,18 @@ $ roscd simulation_supervised/python
 # add tensorflow parameters in extra params.yaml
 $ echo "epsilon: 1" > params.yaml
 # note that the python environment (-pe) is changed to sing
-$ python run_simulation_script.py -t test_createds -n 5 -ds -p params.yaml --robot turtle_sim -pe sing -pp q-learning/pilot -w canyon -w forest --fsm nn_turtle_fsm -e
+$ python run_script.py -t test_createds -n 5 -ds -p params.yaml --robot turtle_sim -pe sing -pp q-learning/pilot -w canyon -w forest --fsm nn_turtle_fsm -e
 ```
 
+## 7. Create dataset with turtlebot
+
+Requirements: 
+
+- test fsm config in simulation: `$ roslaunch simulation_supervised_demo turtle_sim.launch fsm_config:=console_nn_db_turtle_fsm full:=true graphics:=true`
+- test run_script with nn with number_of_runs 1 (no interupt after 5min): `$ python run_script.py -t test_3state_fsm -n 1 -p params.yaml -ds --robot turtle_sim -pe virtualenv -pp q-learning/pilot -w objects --fsm console_nn_db_turtle_fsm -e`
+- run on real turtlebot
+
+```
+
+```
 
