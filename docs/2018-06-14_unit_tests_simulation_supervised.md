@@ -142,3 +142,31 @@ $ python run_script_real_turtle.py -t test_real_turtle -n 1 -ds -p random_slow.y
 
 ```
 
+## 8. Train and evaluate model on data
+
+Train depth_q_net model with reference parameters: 
+
+```
+$ python --log_tag depth_q_net/ref --dataset canyon_turtle_scan
+```
+
+Evaluate in canyon:
+
+```
+# in singularity
+$ python run_script.py -pe sing -p eva_params.yaml -n 10 -e -w canyon --fsm nn_turtle_fsm -m depth_q_net/ref -t depth_q_net/ref_eva
+```
+
+
+## 9. Create data in simulated maze but with driveback service
+
+```
+$ start_sing
+$ source .entrypoint_xpra
+$ roscd simulation_supervised/python
+$ python run_script.py -t maze_simulated -n 1 -ds -p random_slow.yaml --fsm console_nn_db_turtle_fsm -e -w maze
+# from new terminal and when everything is running
+$ start_sing
+$ source /opt/ros/$ROS_DISTRO/setup.bash
+$ rostopic pub /go std_msgs/Empty "{}"
+```

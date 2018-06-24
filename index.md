@@ -2,6 +2,8 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
+#### [23-06-2018: Evaluation Depth Prediction](./docs/2018-06-23_evaluation_depth_prediction.md)
+
 #### [14-06-2018: Unit tests simulation supervised](./docs/2018-06-14_unit_tests_simulation_supervised.md)
 
 #### [06-06-2018: Domain Free Collision Avoidance](./docs/2018-06-06_domain_free_collision_avoidance.md)
