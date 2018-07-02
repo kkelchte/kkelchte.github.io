@@ -5,14 +5,13 @@ layout: default
 
 # Evaluation Depth Prediction
 
-## Step 1: Hyperparameter tuning on big simulated dataset in canyon for depth Q net and coll Q net
+## Continue online training of pretrained depth_q_net on real_maze dataset:
 
-Possible parameters to tune:
+Trained networks:
 
-- learning rate
-- batch size
-- weight decay
-- loss function
-- 
-
-
+```
+$ turtle
+$ roscd simulation_supervised/python
+$ python run_script_real_turtle.py -ds -p cont_slow.yaml -m depth_q_net_real/scratch_0_lr09_e2e -t depth_q_net_real/scratch_cont_train
+# visualize depth prediction
+```
