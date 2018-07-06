@@ -67,15 +67,16 @@ Start the image:
 
 ```
 $ singularity shell --nv ros_gazebo_tensorflow_depth_q_net.img
-$> cd /home/user
-$> source .entrypoint_graph
+$> cd /esat/opal/kkelchte/docker_home
+$> source /code/.entrypoint_graph
 ```
 
 Test offline training from dataset mounted at /esat/opal/kkelchte/docker_home/pilot_data and log directory at /esat/opal/kkelchte/docker_home/tensorflow/log.
 
 ```
-$> cd tensorflow/q-learning/pilot
-$> python main.py --data_root /esat/opal/kkelchte/docker_home/pilot_data --summary_dir /esat/opal/kkelchte/docker_home/tensorflow/log -t my_new_model
+$> cd /code/tensorflow/q-learning/pilot
+$> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cudnn/lib64
+$> python main.py --data_root /esat/opal/kkelchte/docker_home/pilot_data --summary_dir /esat/opal/kkelchte/docker_home/tensorflow/log/ --log_tag my_new_model
 ```
 
 Evaluate trained network online in a canyon.
