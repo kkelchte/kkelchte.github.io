@@ -74,33 +74,33 @@ $> source /code/.entrypoint_graph
 Test offline training from dataset mounted at /esat/opal/kkelchte/docker_home/pilot_data and log directory at /esat/opal/kkelchte/docker_home/tensorflow/log.
 
 ```
-$> cd /code/tensorflow/q-learning/pilot
+$> cd /code/tensorflow/pilot/pilot
 $> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cudnn/lib64
 $> python main.py --data_root /esat/opal/kkelchte/docker_home/pilot_data --summary_dir /esat/opal/kkelchte/docker_home/tensorflow/log/ --log_tag my_new_model
 ```
 
-Evaluate trained network online in a canyon.
+Evaluate trained network online in a canyon. [NOT WORKING]
 
 ```
 $> roscd simulation_supervised/python
-$> python run_script.py -pp pilot/pilot -pe sing -p eva_params.yaml -m my_new_model
+$> python run_script.py -pp pilot/pilot -pe sing -p eva_params.yaml -m my_new_model --summary_dir /esat/opal/kkelchte/docker_home/tensorflow/log --data_root /esat/opal/kkelchte/docker_home/pilot_data -t test_sing 
 ```
 
 Train model on real-world data without collision.
 
 ```
-$> cd tensorflow/q-learning/pilot
+$> cd tensorflow/pilot/pilot
 $> python main.py --data_root /esat/opal/kkelchte/docker_home/pilot_data -t my_new_model_on_real_data --dataset real_maze_coll_free
 ```
 
-Evaluate on real turtlebot (after connecting to turtlebots Hotspot). 
+Evaluate on real turtlebot (after connecting to turtlebots Hotspot). [NOT WORKING]
 Change your ip address according to the hotspot from 10.42.0.203 to 10.42.0.xxx.
 Connect also the joystick.
 
 ```
 $> export ROS_MASTER_URI=http://10.42.0.203:11311 && export ROS_HOSTNAME=10.42.0.203
 $> roscd simulation_supervised/python
-$> python run_script_real_turtle.py -pe sing -m my_new_model_on_real_data -e -g 
+$> python run_script_real_turtle.py -pe sing -m my_new_model_on_real_data -e -g --summary_dir /esat/opal/kkelchte/docker_home/tensorflow/log --data_root /esat/opal/kkelchte/docker_home/pilot_data -t test_sing_real
 # let nn steer by pressing traingle on joystick.
 # if you dont have a joystick start the evaluation by publishing /go 
 $> rostopic pub go std_msgs/Empty "{}"
