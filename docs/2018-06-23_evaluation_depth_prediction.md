@@ -83,7 +83,7 @@ Evaluate trained network online in a canyon.
 
 ```
 $> roscd simulation_supervised/python
-$> python run_script.py -pe sing -p eva_params.yaml -m my_new_model
+$> python run_script.py -pp pilot/pilot -pe sing -p eva_params.yaml -m my_new_model
 ```
 
 Train model on real-world data without collision.
