@@ -2,7 +2,11 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
-#### [23-06-2018: Evaluation Depth Prediction](./docs/2018-06-23_evaluation_depth_prediction.md)
+#### [10-07-2018: DoShiCo revisited](./docs/2018-07-10_doshico_revisited.md)
+
+#### [03-07-2018: Increasing influence of action at input side of value function](./docs/2018-07-03_increase_action_influence.md)
+
+#### [23-06-2018: All-in-one Singularity image for depth-q-net results](./docs/2018-06-23_all_in_one_singularity.md)
 
 #### [14-06-2018: Unit tests simulation supervised](./docs/2018-06-14_unit_tests_simulation_supervised.md)
 

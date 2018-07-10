@@ -1,5 +1,5 @@
 ---
-title: Depth-Q-Net: Future Depth Prediction as Value Function
+title: Creating a All-In-One Singularity Image to Reproduce Results
 layout: default
 ---
 # Creating a Singularity Image to Reproduce Results
@@ -106,6 +106,7 @@ $> python run_script_real_turtle.py -pe sing -m my_new_model_on_real_data -e -g 
 $> rostopic pub go std_msgs/Empty "{}"
 ```
 
+*NOT WORKING YET: STUCK AT WAITING TENSORFLOW TO WRITE /logfolder/tf_log*
 
 # Extra examples
 
