@@ -22,5 +22,8 @@ Test interactively performance of behavior arbitration on drone and prepare cond
 
 ```bash
 $ roscd simulation_supervised/python
-$ python run_script.py -w canyon -w forest -w sandbox --robot drone_sim --fsm oracle_drone_fsm -n 3 -g -pe virtualenv -p params.yaml -ds
+# incase of alienware add "-pe virtualenv" in the end
+$ python run_script.py -w canyon -w forest -w sandbox --robot drone_sim --fsm oracle_drone_fsm -n 3 -g --paramfile params.yaml -ds -pe sing
+# or on condor
+python condor_online.py -t test_online --not_nice --wall_time $((60*60)) -w canyon -w forest -w sandbox --robot drone_sim --fsm oracle_drone_fsm -n 3 --paramfile params.yaml -ds 
 ```
