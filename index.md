@@ -2,6 +2,8 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
+#### [13-08-2018: Debug Condor](./docs/2018-08-13_debug_ros_gazebo_on_condor.md)
+
 #### [10-07-2018: DoShiCo revisited](./docs/2018-07-10_doshico_revisited.md)
 
 #### [03-07-2018: Increasing influence of action at input side of value function](./docs/2018-07-03_increase_action_influence.md)
