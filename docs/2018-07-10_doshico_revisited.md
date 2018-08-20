@@ -126,5 +126,3 @@ Can't rely on synchronous slow down of gazebo ros and other processes on condor 
 Pausing Gazebo at frame level would probably introduce major overhead delays so this seems to be a bad idea.
 **In order to still be able to run on a machine with 12cpu cores it is best to work at 10FPS and demand for 11cpus.**
 
-### Cleanup created dataset
-
