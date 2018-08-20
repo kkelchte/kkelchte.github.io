@@ -1,67 +1,3 @@
----
-title: Dockerfile
-layout: default
----
-### 1 Intro
-
-This is a guide to build docker images from a dockerfile. 
-
-| Specifications | Version |
-| -------------  | ------- |
-| Ubuntu         |  16.04  |
-| ROS            | Kinetic |
-| Gazebo         |   7.07  |
-| CUDA           |  9.1    |
-| CudNN          |  7.0      |
-| nvidia-docker  |  1      |
-| tensorflow     |  1.5    |
-
-### 2 Preparation
-
-Create a working dir.
-
-```
-$ mkdir -p ~/docker/ros_gz_tf
-$ cd ~/docker/ros_gz_tf
-```
-
-Prepare the installation of cuda and cudnn by downloading the required files in you docker directory. This is not required for cuda version 9 and cudnn version 7 as they are inside the homes.esat.kuleuven.be/~kkelchte/lib folder.
-For different versions it is recommended to perform the following steps inside the users/visics/kkelchte/public_home/lib folder so wget can pull the libraries inside your image.
-
-
-```
-$ wget https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_387.26_linux
-$ chmod +x cuda_9.1.85_387.26_linux
-$ ./cuda_9.1.85_387.26_linux --extract=$PWD
-$ rm cuda-samples-linux-*
-$ rm NVIDIA-Linux-*
-$ rm cuda_*_linux
-```
-
-Download in your browser cudnn 7 from [here](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v7.0.5/prod/9.1_20171129/cudnn-9.1-linux-x64-v7).
-
-```
-$ mv ~/Downloads/cudnn-9.1-linux-x64-v7.0.tgz .
-```
-
-Add pip requirements list from tensorflow:
-
-```
-$ cp ~/tensorflow/requirements.txt .
-# OR
-$ cat > requirements.txt
-pyyaml
-rospy
-rospkg
-scipy
-pillow
-scikit-image
-matplotlib
-pyinotify
-lxml
-sklearn
-CTR+D
-```
 
 ### 3 Defining a Docker File
 
@@ -102,9 +38,8 @@ RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_releas
 RUN wget http://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
 RUN	apt-get update && apt-get install -y gazebo7 libgazebo7-dev
 
-#-- current size: 3.09G (old)
 
-# install cuda 9.0 
+# install cuda 9.1 
 WORKDIR /usr/local 
 RUN apt-get update && \
 	wget http://homes.esat.kuleuven.be/~kkelchte/lib/cuda-linux.9.1.85-23083092.run && \
@@ -113,20 +48,18 @@ RUN apt-get update && \
 
 #-- current size: 5.19G (old)
 
-# install cudnn 7.0 by pulling it from esat homes.
+# install cudnn 7.1 by pulling it from esat homes.
 WORKDIR /
-RUN wget http://homes.esat.kuleuven.be/~kkelchte/lib/cudnn-9.1-linux-x64-v7.tgz && \
- 	tar -xvzf cudnn-9.1-linux-x64-v7.tgz && \
+RUN wget http://homes.esat.kuleuven.be/~kkelchte/lib/cudnn-9.1-linux-x64-v7.1.tgz && \
+ 	tar -xvzf cudnn-9.1-linux-x64-v7.1.tgz && \
 	mv cuda /usr/local/cudnn && \
-	rm cudnn-9.1-linux-x64-v7.tgz
+	rm cudnn-9.1-linux-x64-v7.1.tgz
 
 #-- current size: 5.48GB (old)
 
-# install pip packages including tensorflow (1.5) with compute capability 3.5
+# install pip packages including tensorflow (1.8) with compute capability >3.5
 WORKDIR /
-RUN pip install --upgrade http://homes.esat.kuleuven.be/~kkelchte/lib/tensorflow-1.4.0-cp27-cp27mu-linux_x86_64.whl
-
-#-- current size: 6.42GB (old)
+RUN pip install --upgrade http://homes.esat.kuleuven.be/~kkelchte/lib/tensorflow-1.8.0-cp27-cp27mu-linux_x86_64.whl
 
 # rospy rospkg matplotlib are already pulled with tensorflow or ros
 #COPY requirements.txt /tmp
@@ -137,7 +70,7 @@ RUN pip install --upgrade pip
 RUN pip install pyyaml \
 	scipy pillow \
 	scikit-image pyinotify \
-    lxml sklearn
+    lxml sklearn h5py
 
 # Versions:
 # scipy (1.0.0)
@@ -196,25 +129,26 @@ $ sudo docker push kkelchte/ros_gazebo_tensorflow:latest
 ```bash
 $ cd /esat/qayd/kkelchte/singularity_images
 $ singularity build ros_gazebo_tensorflow.img docker://kkelchte/ros_gazebo_tensorflow:latest
+# You could try to build it writable (but requires sudo)
+$ sudo singularity build --writable ros_gazebo_tensorflow_writable.img docker://kkelchte/ros_gazebo_tensorflow
+$ scp ros_gazebo_tensorflow_writable.img kkelchte@ssh.esat.kuleuven.be:/esat/opal/kkelchte/singularity_images
 ```
 
-### 6 Test image in singularity and create new clean build of github packages
+### 6 (Alternative to clean build) Add package to singularity image if it is build writable
 
+Note that this requires sudo permission.
 
 ```bash
-$ singularity shell --nv kkelchte/ros_gazebo_tensorflow:latest
-$$ source /opt/ros/$ROS_DISTRO/setup.bash
-$$ source $HOME/simsup_ws/devel/setup.bash --extend
-$$ source $HOME/drone_ws/devel/setup.bash --extend
-$$ export export ROS_PACKAGE_PATH=$HOME/drone_ws/src:$HOME/simsup_ws/src:/opt/ros/kinetic/share
-$$ export PYTHONPATH=$PYTHONPATH:$HOME/tensorflow/pilot
-$$ export GAZEBO_MODEL_PATH=$HOME/simsup_ws/src/simulation_supervised/simulation_supervised_demo/models
-$$ cd drone_ws
-$$ catkin_make
-$$ cd simsup_ws
-$$ catkin_make
+$ cd singularity_images
+$ scp kkelchte@ssh.esat.kuleuven.be:/esat/opal/kkelchte/singularity_images/ros_gazebo_tensorflow_writable.img .
+$ sudo singularity shell --nv --writable ros_gazebo_tensorflow_writable.img
+$# apt-get update
+$# apt-get install ...
+CTR+D
+$ scp ros_gazebo_tensorflow_writable.img kkelchte@ssh.esat.kuleuven.be:/esat/opal/kkelchte/singularity_images
 ```
-### 7 (Alternative) Add package to docker container and rebuild singularity
+
+### 7 (Alternative to clean build) Add package to docker container and rebuild singularity
 
 In this example we add the turtlbot3 package to the ros_gazebo_tensorflow docker image.
 ```bash
@@ -240,6 +174,22 @@ Ask bert to place new image on gluster.
 $ cp /esat/opal/kkelchte/singularity_images/new_image.img /gluster/visics/singularity/
 ```
 
+### 6 Test image in singularity and create new clean build of github packages
+
+
+```bash
+$ singularity shell --nv kkelchte/ros_gazebo_tensorflow:latest
+$$ source /opt/ros/$ROS_DISTRO/setup.bash
+$$ source $HOME/simsup_ws/devel/setup.bash --extend
+$$ source $HOME/drone_ws/devel/setup.bash --extend
+$$ export export ROS_PACKAGE_PATH=$HOME/drone_ws/src:$HOME/simsup_ws/src:/opt/ros/kinetic/share
+$$ export PYTHONPATH=$PYTHONPATH:$HOME/tensorflow/pilot
+$$ export GAZEBO_MODEL_PATH=$HOME/simsup_ws/src/simulation_supervised/simulation_supervised_demo/models
+$$ cd drone_ws
+$$ catkin_make
+$$ cd simsup_ws
+$$ catkin_make
+```
 ### 8 (OPTIONAL) Test the image in docker
 
 Add you as a user and update the image.
