@@ -136,7 +136,7 @@ $ scp ros_gazebo_tensorflow_writable.img kkelchte@ssh.esat.kuleuven.be:/esat/opa
 
 ### 6 (Alternative to clean build) Add package to singularity image if it is build writable
 
-Note that this requires sudo permission.
+Note that this requires sudo permission. In case you want to update the drone_ws in /code, you first copy the drone_ws to /root with sudo as only /root is loaded in the image shell for sudo user.
 
 ```bash
 $ cd singularity_images
