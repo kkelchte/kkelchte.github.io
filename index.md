@@ -2,7 +2,7 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
-#### [16-08-2018: Visualize Activations](./docs/2018-08-16_visualize_activations.md)
+#### [28-08-2018: Factoring Control](./docs/2018-08-28_factoring_control.md)
 
 #### [13-08-2018: Debug Condor](./docs/2018-08-13_debug_ros_gazebo_on_condor.md)
 
