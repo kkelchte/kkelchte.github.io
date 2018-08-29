@@ -24,6 +24,7 @@ The model trained in a factorized fashion is referred to as **fact model**.
 <img src="/imgs/18-08-28_gz.jpg" alt="Corridor Model Outsied" style="width: 200px;"/>
 <img src="/imgs/18-08-28_gz_1.jpg" alt="Corridor Model Inside" style="width: 200px;"/>
 <img src="/imgs/18-08-28_gz_2.jpg" alt="Empty model with poster" style="width: 200px;"/>
+<img src="/imgs/18-08-28_gz_3.jpg" alt="Full corridor" style="width: 200px;"/>
 
 ## Grouping corridor settings
 
