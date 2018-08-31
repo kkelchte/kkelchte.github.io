@@ -75,3 +75,54 @@ $ python run_script.py -p params.yaml -n 2 -g --fsm oracle_drone_fsm -pe virtual
 $ python run_script.py -p params.yaml -n 2 -g --fsm oracle_drone_fsm -pe virtualenv --evaluation --robot drone_sim -t test_different_corridor -w different_corridor --reuse_default_world
 ```
 
+The factored controls are spread over different datasets:
+radiator, poster, corridor, ceiling, arc, doorway, blocked_hole and floor.
+
+The drone spawns in the first tile with some variance over its initial positions:
+
+| normal  |  P | Uniform(-V:+V)  |
+|---------|----|-----------------|
+|x        | 0  | 0.5             |
+|y        | 0  | 0.7             |
+|z        | 1.5| 0.5             |
+|yaw      |1.57| 0.523 or 30degr |
+
+| left    |  P | Uniform(-V:+V)  |
+|---------|----|-----------------|
+|x        |-.2 | 0.25            |
+|y        |0.3 | 1.0             |
+|z        |1.5 | 0.5             |
+|yaw      |2.09| 0.523 or 30degr |
+
+| right   |  P | Uniform(-V:+V)  |
+|---------|----|-----------------|
+|x        |0.2 | 0.25            |
+|y        |0.3 | 1.0             |
+|z        |1.5 | 0.5             |
+|yaw      |1.05| 0.523 or 30degr |
+
+For each factor of control a dataset is collected of 100 runs for training and 10 for test and validation.
+Some datasets have to be collected in different groups due to different settings.
+
+Some are objects left and right each requiring 60 successfull runs:
+
+* radiator
+* poster
+* blocked hole
+
+Other types of extensions are divided according to straight vs bended corridors
+
+* corridor
+* ceiling
+* floor
+
+Or some types don't require any division
+
+* arc
+* doorway
+
+Initial test:
+
+- bended corridor
+- poster right
+- doorway
