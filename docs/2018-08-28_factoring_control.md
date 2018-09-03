@@ -82,23 +82,23 @@ The drone spawns in the first tile with some variance over its initial positions
 
 | normal  |  P | Uniform(-V:+V)  |
 |---------|----|-----------------|
-|x        | 0  | 0.5             |
-|y        | 0  | 0.7             |
-|z        | 1.5| 0.5             |
+|x        |0   | 0.5             |
+|y        |0   | 0.7             |
+|z        |1.5 | 0.3             |
 |yaw      |1.57| 0.523 or 30degr |
 
 | left    |  P | Uniform(-V:+V)  |
 |---------|----|-----------------|
 |x        |-.2 | 0.25            |
 |y        |0.3 | 1.0             |
-|z        |1.5 | 0.5             |
+|z        |1.5 | 0.3             |
 |yaw      |2.09| 0.523 or 30degr |
 
 | right   |  P | Uniform(-V:+V)  |
 |---------|----|-----------------|
 |x        |0.2 | 0.25            |
 |y        |0.3 | 1.0             |
-|z        |1.5 | 0.5             |
+|z        |1.5 | 0.3             |
 |yaw      |1.05| 0.523 or 30degr |
 
 For each factor of control a dataset is collected of 100 runs for training and 10 for test and validation.
@@ -121,8 +121,41 @@ Or some types don't require any division
 * arc
 * doorway
 
-Initial test:
+The segmented dataset in numbers:
 
-- bended corridor
-- poster right
-- doorway
+```bash
+$ cdpilotdata
+$ for world in combined_corridor ; do echo "| $world | $(while read l ; do echo $l ; done < $world/train_set.txt | wc -l) | $(while read l ; do ls $l/RGB ; done < $world/train_set.txt | wc -l) | "; done
+```
+
+| name | runs (train) | rgb (train) | 
+|-|-|-|
+| ceiling_bended | 34 | 1059 | 
+| ceiling_straight | 36 | 1389 | 
+| ceiling_total | 70 | 2448 | 
+|-|-|-|
+| corridor_bended | 120 | 14882 | 
+| corridor_straight | 86 | 13276 | 
+| corridor_total | 206 | 28158 | 
+|-|-|-|
+| floor_bended | **11** | **264** | 
+| floor_straight | 36 | 966 | 
+| floor_total | 47 | 1230 | 
+|-|-|-|
+| radiator_right | 54 | 1022 | 
+| radiator_left | 54 | 971 | 
+| radiator_total | 108 | 1993 | 
+|-|-|-|
+| poster_right | 54 | 844 | 
+| poster_left | 54 | 867 | 
+| poster_total | 108 | 1711 | 
+|-|-|-|
+| blocked_hole_right | 54 | 1096 | 
+| blocked_hole_left | 54 | 1049 | 
+| blocked_hole_total | 108 | 2145 | 
+|-|-|-|
+| arc | 48 | 1309 | 
+| doorway | 48 | 1296 |
+|-|-|-|
+| combined_corridor | 976 | 285058 |
+
