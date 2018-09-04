@@ -4,7 +4,7 @@ layout: default
 ---
 
 
-# This blog describes a primal experiment of control factorization
+# This blog describes the experimental part of control factorization
 
 The goal is fly through a corridor of length 10m, width 3m, height 3m and 5 bends. 
 The corridor is decorated with radiators (3) and posters (5) of grey and blue color respectively.
@@ -26,7 +26,7 @@ The model trained in a factorized fashion is referred to as **fact model**.
 <img src="/imgs/18-08-28_gz_2.jpg" alt="Empty model with poster" style="width: 200px;"/>
 <img src="/imgs/18-08-28_gz_3.jpg" alt="Full corridor" style="width: 200px;"/>
 
-## Grouping corridor settings
+## Grouping corridor settings and defining fragmented datasets
 
 The radiator and poster objects are spawned in a corridor with one segment on left or right wall. 
 The extension config is defined for both left and right in order adjust the variations in yaw, xpos and ypos of the oracle.
@@ -37,15 +37,15 @@ The width, height and bends of the variance corridor are kept the same as the ha
  
 | type of corridor | corridor_length | corridor_bends | corridor_width | corridor_height | corridor_type | extension_config | lights          | texture         |
 |------------------|-----------------|----------------|----------------|-----------------|---------------|------------------|-----------------|-----------------|
-| Goal corridor    |              10 |              5 |              3 |               3 |       normal  |      primal_exp  | default_light   | Gazebo/Grey     |
-|Different corridor|              10 |              5 |            2.5 |               2 |       normal  |      primal_exp  | default_light   | Gazebo/Grey     |
-| Straight         |               1 |              0 |              3 |               3 |       normal  |      empty       | default_light   | Gazebo/Grey     | 
-| Bend             |               1 |              1 |              3 |               3 |       normal  |      empty       | default_light   | Gazebo/Grey     |
-| Radiator_right   |               1 |              0 |              3 |               3 |       empty   | radiator_right   | default_light   | Gazebo/Grey     |
-| Radiator_left    |               1 |              0 |              3 |               3 |       empty   | radiator_left    | default_light   | Gazebo/Grey     |
-| Poster_right     |               1 |              0 |              3 |               3 |       empty   | poster_right     | default_light   | Gazebo/Grey     |
-| Poster_left      |               1 |              0 |              3 |               3 |       empty   | poster_left      | default_light   | Gazebo/Grey     |
-| Variance corridor|              10 |              5 |              3 |               3 |       normal  | vary_primal_exp  | default_light,  | Gazebo/Grey,    |
+| Goal corridor    |              10 |              5 |              3 |               3 |       normal  |      primal_exp  | default_light   | Gazebo/White    |
+|Different corridor|              10 |              5 |            2.5 |               2 |       normal  |      primal_exp  | default_light   | Gazebo/White    |
+| Straight         |               1 |              0 |              3 |               3 |       normal  |      empty       | default_light   | Gazebo/White    | 
+| Bend             |               1 |              1 |              3 |               3 |       normal  |      empty       | default_light   | Gazebo/White    |
+| Radiator_right   |               1 |              0 |              3 |               3 |       empty   | radiator_right   | default_light   | Gazebo/White    |
+| Radiator_left    |               1 |              0 |              3 |               3 |       empty   | radiator_left    | default_light   | Gazebo/White    |
+| Poster_right     |               1 |              0 |              3 |               3 |       empty   | poster_right     | default_light   | Gazebo/White    |
+| Poster_left      |               1 |              0 |              3 |               3 |       empty   | poster_left      | default_light   | Gazebo/White    |
+| Variance corridor|              10 |              5 |              3 |               3 |       normal  | vary_primal_exp  | default_light,  | Gazebo/White,   |
 |                  |                 |                |                |                 |               |                  | diffuse_light,  |Gazebo/White,    |
 |                  |                 |                |                |                 |               |                  | spot_light,     | Gazebo/Red,     |
 |                  |                 |                |                |                 |               |                  |directional_light|Gazebo/Black,    |
@@ -130,17 +130,17 @@ $ for world in combined_corridor ; do echo "| $world | $(while read l ; do echo 
 
 | name | runs (train) | rgb (train) | 
 |-|-|-|
-| ceiling_bended | 34 | 1059 | 
 | ceiling_straight | 36 | 1389 | 
+| ceiling_bended | 34 | 1059 | 
 | ceiling_total | 70 | 2448 | 
 |-|-|-|
-| corridor_bended | 120 | 14882 | 
-| corridor_straight | 86 | 13276 | 
-| corridor_total | 206 | 28158 | 
+| corridor_straight | 36 | 1352 | 
+| corridor_bended | 72 | 2712 | 
+| corridor | 108 | 4064 |
 |-|-|-|
-| floor_bended | **11** | **264** | 
 | floor_straight | 36 | 966 | 
-| floor_total | 47 | 1230 | 
+| floor_bended | 212 | 5006 | 
+| floor | 107 | 2574 | 
 |-|-|-|
 | radiator_right | 54 | 1022 | 
 | radiator_left | 54 | 971 | 
@@ -158,4 +158,9 @@ $ for world in combined_corridor ; do echo "| $world | $(while read l ; do echo 
 | doorway | 48 | 1296 |
 |-|-|-|
 | combined_corridor | 976 | 285058 |
+
+
+currently training: blocked_hole, doorway, ceiling, combined_corridor
+
+### Comparing architectures for solving the combined corridor task
 
