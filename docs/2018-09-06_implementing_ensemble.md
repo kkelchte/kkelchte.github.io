@@ -91,6 +91,21 @@ _Implementation steps_
 3. adjust target according to factor (data.py)
 4. extract final control at test time (model.py)
 
+_Test current setup_
+
+1. Train ensemble on radiator dataset (corresponding to one factor) if it saturates, compare online performance to original model trained on radiator. [ongoing]
+2. Train ensemble on radiator and poster and see if performance is better or worse than radiator solely --> indicating potential of ensemble
+
+_Extension_
+
+`--single_loss_training`
+
+In the previous ensemble the different experts are trained to predict zero when it is not their expertise. 
+This however might be confusing as 1 out of 8 gradients make the network predict 0. 
+It might be better to have a loss that only calculates gradients for the output of the correct expert.
+This is triggered with the `--single_loss_training` flag.
+It weights all the losses of the outputs from the non-experts to zero for each sample in the batch.
+
 
 ### Ensemble V1
 
