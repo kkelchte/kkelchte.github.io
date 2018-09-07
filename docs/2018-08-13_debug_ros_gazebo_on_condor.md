@@ -207,6 +207,24 @@ $ for d in ? ; do echo "| $d  | $(cat $d/condor/*.out | grep HOSTNAME | cut -d '
 
 Currently errors occur always together, both the controller spawner as the baddrawable, but around the same time (11/40).
 
+### Debugging Network Issues and Speeding up Offline training
+
+If data fits in RAM it is definetely worth it to try ! `--load_data_in_ram` and monitor with `dstat --mem-adv`.
+In case the dataset is too big, there are two options:
+
+1. Get data while training one image at a time from opal [default]. This is good if dataset is very big and network is not too slow.
+2. Copy data at the start over the network and save it in /tmp with the `--copy_dataset` option. This introduces a large overhead at the start of the job, which will slowdown also the beginning of training but if the dataset is not too big and the training is long (>100 epochs) and the network is saturated, it is probably worth it.
+
+Option 2 is not faster than option 1 in the case the network is not saturated because reading data from the hard drive is almost as fast as asgart.
+
+As a side note, you can compress (loseless) your dataset with `jpegoptim` with a relative improvement of around 8%:
+
+```bash
+$ jpegoptim -s your_data_set
+```
+
+In case the network is really saturated, the main winner is probably to save your dataset in hdf5, copy it to the /tmp. This copy will take less than a minute as most of the time of copying a large dataset goes to checking if adres is free, claiming address,... 
+And reading your data from the shuffled hdf5 file. This might be something for in the future if large (>10G) datasets are required.
  
 
 
