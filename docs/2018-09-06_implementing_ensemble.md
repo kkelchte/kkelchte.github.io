@@ -86,9 +86,9 @@ At test time there are some ensemble options (statically) on how to extract the 
 
 _Implementation steps_
 
-1. extract factors from dataset (data.py)
-2. increase number of outputs (model.py)
-3. adjust target according to factor (data.py)
+1. extract factors from dataset (data.py): `run_dir.split('/')[-2].split('_')`
+2. increase number of outputs (model.py, main.py): `--n_factors 8`
+3. adjust target according to factor (model.py): `factor_offsets={'radiator':0,'corridor':FLAGS.action_quantity, ...}`
 4. extract final control at test time (model.py)
 
 
