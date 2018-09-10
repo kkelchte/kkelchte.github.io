@@ -106,6 +106,37 @@ It might be better to have a loss that only calculates gradients for the output 
 This is triggered with the `--single_loss_training` flag.
 It weights all the losses of the outputs from the non-experts to zero for each sample in the batch.
 
+This single loss training appeared to be a bad idea in the end. 
+If an expert sees something during training that it predicts totally wrong it is not punished.
+This means that at test time probably the largest outputs corresponds to the most wrong experts, which is of cours not what we want.
+Besides the fact that having a separate softmax for each expert is not very convenient to implement.
+
+_Research Thought_
+
+The selection of activations in the output layer is also not so trivial. There are 4 popular options, I list my thought for each one of them:
+
+1. _No activation_ layer has the benefit that it does not pushes any hard prior to the network and allows it to learn anything. The disadvantage is that the one control-decision layer becomes linear which might be a strong restriction. The latter could be countered with an extra output layer.
+2. _Tanh_ layer is ideal for the regression case where each expert should pick a value between -1 and 1. This is a correct hard prior that will probably speed up the training.
+3. _Sigmoid_ layer squeezes the logits between 0 and 1 which makes comparison of different outputs from different experts easier while being non-linear. If an expert becomes very wrong by outputting a very large value, this will not be visible for the final decision layer.
+4. _ReLu_ layer is very popular within the network, it however only is non-linear on '0' so does not really make the control decision that 'non-linear'. It does enforce a hard prior that the outputs should be positive which makes sense in the discrete case. But besides that there is not much influence over 'no activation'. Thinking further on clipping at zero, this might not be a good idea in my setup. Actually each expert learn collision avoidance. This means that over the different possible controls, the expert should become good at knowing which control _not_ to take. Therefore extreme negative values are actually informative. Clipping them away might be a loss of crucial information.
+
+Conclusion, for the continuous control case I prefer the tanh layer. 
+In the discrete case I will use _no activation_.
+
+In the discrete case it is unclear whether it makes sense to use a softmax cross-entropy loss over all experts. 
+The softmax normally makes from logits, probabilities by squeezing them between 0 and 1. 
+Each expert should in theory predict a probability for picking a certain control. 
+However if an expert is uncertain for each direction it is preferred that this expert predicts a low probability for all control values. 
+In that case you want each expert to output a large value solely when it is certain. 
+Looking from this point of view, having a loss that enforces this quiteness over uncertain experts and only enforcing one expert to predict the correct value with a _softmax cross-entropy loss_ can be a good idea.
+Whether the output is normalized between 0 and 1 or 0 and number_of_factors does not matter as at test time the values are extracted in a discrete manner so the scaling is lost.
+
+As an alternative you could maybe make all non-expers perdict -1 while the correct expert predicts 0 or 1, or the other way around.
+Make all non-experts predict 0 as a neutral value, and the expert predict 1 or -1 as it is certain to go in that direction and certain to not-go in the other directions.
+Although I think this latter tweaking will not improve the results that much.
+
+_primal_test_results_
+
 
 ### Ensemble V1
 
