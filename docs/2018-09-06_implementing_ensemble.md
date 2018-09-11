@@ -136,6 +136,8 @@ Make all non-experts predict 0 as a neutral value, and the expert predict 1 or -
 Although I think this latter tweaking will not improve the results that much.
 
 _primal_test_results_
+One network trained with mse-loss, pushing all non-experts to zero and evaluating with max over experts could succeed in the corridor.
+With the extension to evaluate over the mean there was not much improvement.
 
 
 ### Ensemble V1
