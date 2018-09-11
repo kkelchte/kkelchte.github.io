@@ -98,7 +98,7 @@ _Test current setup_
 
 _Extension_
 
-`--single_loss_training`
+`--non_expert_weight 0.1`
 
 In the previous ensemble the different experts are trained to predict zero when it is not their expertise. 
 This however might be confusing as 1 out of 8 gradients make the network predict 0. 
@@ -109,7 +109,12 @@ It weights all the losses of the outputs from the non-experts to zero for each s
 This single loss training appeared to be a bad idea in the end. 
 If an expert sees something during training that it predicts totally wrong it is not punished.
 This means that at test time probably the largest outputs corresponds to the most wrong experts, which is of cours not what we want.
-Besides the fact that having a separate softmax for each expert is not very convenient to implement.
+Besides the fact that having a separate softmax for each expert is not very convenient to implement. However implementing and testing did not show a big difference in results.
+
+`--combine_factor_outputs max` or `weighted_output`
+
+Max is defaults and listens only to the max output from all different experts. Weighted_output sums all 'left', 'right' and 'straight' together giving more weight to the experts that are more certain. Evaluating a primal model did not show any significant difference in online performance.
+
 
 _Research Thought_
 
@@ -137,8 +142,27 @@ Although I think this latter tweaking will not improve the results that much.
 
 _primal_test_results_
 
+One model succeed in flying through corridor number 2 which is  already promissing. Validation accuracy remains too low in general (70percent). 
+
 
 ### Ensemble V1
+
+branched from v0
+
+Go from static expert selection to dynamic. 
+This means that it depends on the input image by training a gating function.
+The discriminator is a small meta network that takes as input the image/embedding and outputs for each expert a weight.
+This is trained as a classifier.
+
+1. add discriminator net (model.py)
+2. add discriminator loss (model.py)
+3. add discriminator targets in batch (model.py)
+4. adjust forward pass with discriminator weights (model.py)
+
+_Extension_
+Make an option to use all activations as input for discriminator.
+
+### Ensemble V2
 
 branched from v0
 
@@ -147,19 +171,7 @@ branched from v0
 3. In the backward pass only the loss of that factor is invokes. (model.py)
 4. at test time see v0
 
-### Ensemble V2
 
-branched from v1
-
-Go from static expert selection to dynamic. 
-This means that it depends on the input image by training a gating function.
-The discriminator is a small meta network that takes as input the image/embedding at outputs for each expert a weight.
-This is trained as a classifier.
-
-1. add discriminator net (model.py)
-2. add discriminator loss (model.py)
-3. add discriminator targets in batch (data.py)
-4. adjust forward pass with discriminator weights (model.py)
 
 ### Ensemble V3
 
