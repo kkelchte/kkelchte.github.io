@@ -162,5 +162,21 @@ $ for world in combined_corridor ; do echo "| $world | $(while read l ; do echo 
 
 currently training: blocked_hole, doorway, ceiling, combined_corridor
 
-### Comparing architectures for solving the combined corridor task
+### Testing network in the real-world
 
+
+On Alienware:
+
+```bash
+$ update_git
+$ sshfsopal
+$ cp -r opal/docker_home/tensorflow/log/varied_corridor/mobile tensorflow/log/varied_corridor
+$ cd tensorflow/log/varied_corridor
+$ cat checkpoint
+$ sed -i 's/esat\/opal\/kkelchte\/docker_home\/tensorflow\/log\/varied_corridor\/mobile/home\/klaas\/tensorflow\/log\/varied_corridor/' checkpoint
+# try on alienware itself within gazebo environment
+$ roscd simulation_supervised/python
+$ python run_script.py -t test_online -g -e -p eva_params.yaml --robot drone_sim -m varied_corridor -pe virtualenv -w esatv1 --fsm console_interactive_fsm
+```
+
+Seems like drivers of nvidia are too old.
