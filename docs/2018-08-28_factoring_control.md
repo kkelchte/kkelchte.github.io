@@ -157,7 +157,11 @@ $ for world in combined_corridor ; do echo "| $world | $(while read l ; do echo 
 | arc | 48 | 1309 | 
 | doorway | 48 | 1296 |
 |-|-|-|
+| factorized_corridor | 705 | 16188 |
 | combined_corridor | 976 | 285058 |
+| small_combined_corridor | 55 | 17406 |
+| varied_corridor | 1156 | 337756 |
+| small_varied_corridor | 56 | 16270 |
 
 
 currently training: blocked_hole, doorway, ceiling, combined_corridor
@@ -165,7 +169,7 @@ currently training: blocked_hole, doorway, ceiling, combined_corridor
 ### Testing network in the real-world
 
 
-On Alienware:
+Initial plan on Alienware:
 
 ```bash
 $ update_git
@@ -180,3 +184,31 @@ $ python run_script.py -t test_online -g -e -p eva_params.yaml --robot drone_sim
 ```
 
 Seems like drivers of nvidia are too old.
+
+Switch to Sagarmatha with the aid of Bert. This runs fedora and mounts your own asgard home directory. Therefor the commands remain the same though now you are on a laptop with wifi to the drone.
+Extra benefit is that the GPU has compute capability of 5 so it does not requires a tensorflow version compiled specifically for a slower gpu with compute capability 3.5.
+A small note is that it does require you to manually activate the wifi from your keyboard (f2).
+
+Because everything can run on ESAT you don't require two places for logging, two versions of your code, ... .
+
+It however only has 4 cpu cores which makes running gazebo totally unfeasible, so only for testing on the real drone.
+
+```bash
+$ start_sing
+$ source .entrypoint_graph
+$ roscd simulation_supervised/python
+$ python run_script.py -t test_online -g -e -p eva_params.yaml --robot drone_real -m varied_corridor/mobile -pe sing --fsm key_nn_fsm -n 1
+
+```
+
+### Experimental results
+
+It is so far unclear how good we can get with the ensemble v1 (dynamic) over different architectures. Therefore I group the results here:
+
+Possible architectures mobile_imgnet, mobile_scratch, squeeze_v1, squeeze_v3, tiny, alex_v4. 
+Each model is trained with 3 different seeds.
+
+Now the models are trained with feature discriminator input and no action normalization.
+
+For the best architecture the models are retrained with action normalization and potentially image discriminator input (this only fits now in tiny and mobile architecture).
+
