@@ -159,6 +159,14 @@ This is trained as a classifier.
 3. add discriminator targets in batch (model.py)
 4. adjust forward pass with discriminator weights (model.py)
 
+_Adjustment_
+The discriminator loss initially just urged to discriminator to predict the correct data factor (radiator -> weight 1 for radiator-expert and 0 for all other experts).
+This was changed to taking the weighted sum over the experts and punish a different in target output. 
+The benefit of doing this, is that the discriminator might learn that the poster expert has some valuable output besides the radiator output. 
+This makes the discriminator learn to value different experts according to the feature/input and seen outputs of these experts rather than solely predicting something impossible.
+Having a clear radiator while an unclear arc passway might mean that the expert of arc passway should have more decision power than the radiator expert.
+As the current test results are better than the primal test results, it seems that this adjustment was a good idea.
+
 _Extension_
 Make an option to use all activations as input for discriminator.
 
