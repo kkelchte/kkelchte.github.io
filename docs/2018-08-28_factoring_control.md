@@ -197,7 +197,7 @@ It however only has 4 cpu cores which makes running gazebo totally unfeasible, s
 $ start_sing
 $ source .entrypoint_graph
 $ roscd simulation_supervised/python
-$ python run_script.py -t test_online -g -e -p eva_params.yaml --robot drone_real -m varied_corridor/mobile -pe sing --fsm key_nn_fsm -n 1
+$ python run_script.py -t real_world_test -g -e -p eva_params_slow.yaml --robot drone_real -m varied_corridor/mobile -pe sing --fsm key_nn_fsm -n 1
 
 ```
 
