@@ -42,6 +42,10 @@ $ grep 'tensorflow/pilot' *.py *.sh
 $ for f in *.py *.sh ; do echo $f; sed -i 's/tensorflow\/pilot/tensorflow\/ensemble_v0/' $f; done
 # test
 $ grep 'tensorflow/pilot' *.py *.sh
+# change all occurences in shell and python files
+$ for f in *.py *.sh ; do echo $f; sed -i 's/pilot\/scripts/ensemble_v0\/scripts/' $f; done
+# test
+$ grep 'pilot/scripts' *.py *.sh
 
 ```
 

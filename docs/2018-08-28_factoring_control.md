@@ -212,3 +212,38 @@ Now the models are trained with feature discriminator input and no action normal
 
 For the best architecture the models are retrained with action normalization and potentially image discriminator input (this only fits now in tiny and mobile architecture).
 
+Summarizing the results
+
+__Offline results: accuracy test__
+
+| architecture | Naive ensemble | Static ensemble | Dynamic Ensemble |
+|--------------|----------------|-----------------|------------------|
+|Mobile Scratch| 80%            | 75%             | 79%              |
+|Mobile Imgnet | 86%            | 86%             | 88.5%            |
+|Tiny          | 80%            | 79.5%           | 82%              |
+|Alex_v4       | 85%            | 67%             | 84%              |
+|Squeeze_v1    |                | 72%             | 80%              |
+|Squeeze_v3    |                | 68%             | 70%              |
+
+
+__Online results: corridor distance__
+
+| architecture | Naive ensemble | Static ensemble | Dynamic Ensemble |
+|--------------|----------------|-----------------|------------------|
+|Mobile Scratch| 5.3            | 5.49            | 5.65             |
+|Mobile Imgnet | 7.45           | 5.4             | 4.74             |
+|Tiny          | 9.17           | 9.34            | 9.74             |
+|Alex_v4       | 5.55           | 3.15            | 9.05             |
+|Squeeze_v1    |                | 4.27            | 7.15             |
+|Squeeze_v3    |                | 4.87            | 7                |
+
+__Online results: esat distance__
+
+| architecture | Naive ensemble | Static ensemble | Dynamic Ensemble |
+|--------------|----------------|-----------------|------------------|
+|Mobile Scratch| 12             | 11              | 9                |
+|Mobile Imgnet | 18.4           | 17              | 13.99            |
+|Tiny          | 20.74          | 27.9            | 17.33            |
+|Alex_v4       | 23.4           | 7.16            | 10.8             |
+|Squeeze_v1    |                | 3               | 14.4             |
+|Squeeze_v3    |                | 3.94            | 17.2             |
