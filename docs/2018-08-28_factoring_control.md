@@ -138,9 +138,9 @@ $ for world in combined_corridor ; do echo "| $world | $(while read l ; do echo 
 | corridor_bended | 72 | 2712 | 
 | corridor | 108 | 4064 |
 |-|-|-|
-| floor_straight | 36 | 966 | 
-| floor_bended | 212 | 5006 | 
-| floor | 107 | 2574 | 
+| floor_straight | 12 | 1360 | 
+| floor_bended | 105 | 2056 | 
+| floor | 117 | 3416 | 
 |-|-|-|
 | radiator_right | 54 | 1022 | 
 | radiator_left | 54 | 971 | 

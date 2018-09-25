@@ -179,10 +179,10 @@ Make an option to use all activations as input for discriminator.
 branched from v0
 
 1. For each factor a different network is defined. (model.py)
-2. A batch is dedicated to a certain network. (data.py)
-3. In the backward pass only the loss of that factor is invokes. (model.py)
-4. at test time see v0
 
+Current status:   
+In continuous case loss and mse goes down.
+In discrete case loss loss goes down though accuracy and mse stagnates ==> something is wrong in how accuracy and mse is calculated.
 
 
 ### Ensemble V3
