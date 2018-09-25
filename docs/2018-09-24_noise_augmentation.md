@@ -17,7 +17,7 @@ The data is augmented for the following factors:
 
 
 
-<img src="/imgs/18-09-24_data_images.png" alt="Example image of data with noise background" style="width: 2000px;"/>
+<img src="/imgs/18-09-24_example_images.png" alt="Example image of data with noise background" style="width: 2000px;"/>
 
 ## 1. Masking fore- and background
 
