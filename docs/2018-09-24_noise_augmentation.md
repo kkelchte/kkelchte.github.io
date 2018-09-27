@@ -67,3 +67,33 @@ cp all_factors/test_set.txt all_factors_uni/
 python main.py --dataset all_factors_uni
 ```
 
+## 5. Primal results
+
+__naive ensemble__
+
+|dataset| offline test accuracy | online esat | online corridor |
+|-|-|-|-|
+|all_factors| 88 (2) | 13 (6.8) | 5 (2) |
+|all_factors_uni| 50 (15) | 11 (7) | 5.5 (2) |
+|all_factors_ou| 60 (15) | 10 (5) | 5.6 (2.4) |
+
+__static ensemble__
+
+|dataset| offline test accuracy | online esat | online corridor |
+|-|-|-|-|
+|all_factors| 85 (5) | 17 (8) | 5 (2) |
+|all_factors_uni| 73 (7) | 18.8 (7) | 7.8 (3) |
+|all_factors_ou| 70 (10) | 23.6 (2) | 6.2 (2.6) |
+
+
+
+__dynamic ensemble with static ensemble pretrained__
+
+|dataset| offline test accuracy | online esat | online corridor |
+|-|-|-|-|
+|all_factors| 60 (10) | 10.31 (6) | 6.29 (3.1) |
+|all_factors_uni| 75 (5) | 13.89 (8) | 6.35 (3) |
+|all_factors_ou| 68 (10) | 22.96 (4) | 7.30 (3) |
+
+
+
