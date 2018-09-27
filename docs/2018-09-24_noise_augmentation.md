@@ -73,9 +73,9 @@ __naive ensemble__
 
 |dataset| offline test accuracy | online esat | online corridor |
 |-|-|-|-|
-|all_factors| 88 (2) | 13 (6.8) | 5 (2) |
-|all_factors_uni| 50 (15) | 11 (7) | 5.5 (2) |
-|all_factors_ou| 60 (15) | 10 (5) | 5.6 (2.4) |
+|all_factors| 88 (2) | / | / |
+|all_factors_uni| 50 (15) | / | / |
+|all_factors_ou| 60 (15) | / | / |
 
 __static ensemble__
 
