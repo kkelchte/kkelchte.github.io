@@ -52,7 +52,7 @@ After which they are combined as background with the foreground.
 
 ```
 for d in arc blocked_hole ceiling doorway radiator floor ; do for t in train_set.txt val_set.txt test_set.txt ; do python augment_data.py --mother_dir $d --txt_set $t; done; done
-for t in train_set.txt val_set.txt test_set.txt ; do python augment_data.py --mother_dir poster --txt_set $t --gray_min 150 --gray_max 200; done
+for d in poster ; do for t in train_set.txt val_set.txt test_set.txt ; do python augment_data.py --mother_dir poster --txt_set $t --gray_min 150 --gray_max 200; done; done
 
 # for all_factors_uni and all_factors_ou
 mkdir all_factors_uni
@@ -97,3 +97,8 @@ __dynamic ensemble with static ensemble pretrained__
 
 
 
+## 6. Improvement: sample hyperparameters of OUNoise
+
+Randomly sample the hyperparameters of the OUNoise. 
+The pullback force, theta, is sampled from a beta distribution with alpha 2 and beta 2.
+The deviation force, sigma, is sampled from a beta distribution with alpha 1 and beta 3.

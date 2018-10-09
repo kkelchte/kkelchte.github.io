@@ -247,3 +247,9 @@ __Online results: esat distance__
 |Alex_v4       | 23.4           | 7.16            | 10.8             |
 |Squeeze_v1    |                | 3               | 14.4             |
 |Squeeze_v3    |                | 3.94            | 17.2             |
+
+
+### Extension on visualizations
+
+Add regularization by penalizing low attentions with weight minimization... for improving vizualizations?
+http://openaccess.thecvf.com/content_cvpr_2018/papers/Mascharka_Transparency_by_Design_CVPR_2018_paper.pdf
