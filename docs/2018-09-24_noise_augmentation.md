@@ -73,9 +73,12 @@ __naive ensemble__
 
 |dataset| offline test accuracy | online esat | online corridor |
 |-|-|-|-|
-|all_factors| 88 (2) | / | / |
+|all_factors| 88 (2) | 16.76 (8) | 6.41 (4) |
 |all_factors_uni| 50 (15) | / | / |
-|all_factors_ou| 60 (15) | / | / |
+|all_factors_ou_old| 60 (15) | / | / |
+|all_factors_ou| 50 (20) | 19.5(10) | 8 (5) |
+
+It is remarkable to note that some networks from the naive ensemble (not exactly an ensemble) are capable to fly successfully to the end of ESAT or the end of the corridor.
 
 __static ensemble__
 
@@ -83,7 +86,8 @@ __static ensemble__
 |-|-|-|-|
 |all_factors| 85 (5) | 17 (8) | 5 (2) |
 |all_factors_uni| 73 (7) | 18.8 (7) | 7.8 (3) |
-|all_factors_ou| 70 (10) | 23.6 (2) | 6.2 (2.6) |
+|all_factors_ou_old| 70 (10) | 23.6 (2) | 6.2 (2.6) |
+|all_factors_ou| 77 (10) | 26.23 (5) | 6.12 (2.6) |
 
 
 
@@ -93,7 +97,8 @@ __dynamic ensemble with static ensemble pretrained__
 |-|-|-|-|
 |all_factors| 60 (10) | 10.31 (6) | 6.29 (3.1) |
 |all_factors_uni| 75 (5) | 13.89 (8) | 6.35 (3) |
-|all_factors_ou| 68 (10) | 22.96 (4) | 7.30 (3) |
+|all_factors_ou_old| 68 (10) | 22.96 (4) | 7.30 (3) |
+|all_factors_ou| 70 (10) | 28.41 (4) | 5.78 (3) |
 
 
 
