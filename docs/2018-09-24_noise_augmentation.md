@@ -74,7 +74,7 @@ __naive ensemble__
 |dataset| offline test accuracy | online esat | online corridor |
 |-|-|-|-|
 |all_factors| 88 (2) | 16.76 (8) | 6.41 (4) |
-|all_factors_uni| 50 (15) | / | / |
+|all_factors_uni| 50 (30) | 24.42 (5.11) | 6.47 (3.37) |
 |all_factors_ou_old| 60 (15) | / | / |
 |all_factors_ou| 50 (20) | 19.5(10) | 8 (5) |
 
@@ -107,3 +107,6 @@ __dynamic ensemble with static ensemble pretrained__
 Randomly sample the hyperparameters of the OUNoise. 
 The pullback force, theta, is sampled from a beta distribution with alpha 2 and beta 2.
 The deviation force, sigma, is sampled from a beta distribution with alpha 1 and beta 3.
+
+
+<img src="/imgs/18-09-24_example_ou.jpg" alt="Example image with ou noise" style="width: 500px;"/>
