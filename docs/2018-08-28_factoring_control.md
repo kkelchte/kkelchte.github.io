@@ -138,9 +138,9 @@ $ for world in combined_corridor ; do echo "| $world | $(while read l ; do echo 
 | corridor_bended | 72 | 2712 | 
 | corridor | 108 | 4064 |
 |-|-|-|
-| floor_straight | 36 | 966 | 
-| floor_bended | 212 | 5006 | 
-| floor | 107 | 2574 | 
+| floor_straight | 12 | 1360 | 
+| floor_bended | 105 | 2056 | 
+| floor | 117 | 3416 | 
 |-|-|-|
 | radiator_right | 54 | 1022 | 
 | radiator_left | 54 | 971 | 
@@ -157,10 +157,99 @@ $ for world in combined_corridor ; do echo "| $world | $(while read l ; do echo 
 | arc | 48 | 1309 | 
 | doorway | 48 | 1296 |
 |-|-|-|
+| factorized_corridor | 705 | 16188 |
 | combined_corridor | 976 | 285058 |
+| small_combined_corridor | 55 | 17406 |
+| varied_corridor | 1156 | 337756 |
+| small_varied_corridor | 56 | 16270 |
 
 
 currently training: blocked_hole, doorway, ceiling, combined_corridor
 
-### Comparing architectures for solving the combined corridor task
+### Testing network in the real-world
 
+
+Initial plan on Alienware:
+
+```bash
+$ update_git
+$ sshfsopal
+$ cp -r opal/docker_home/tensorflow/log/varied_corridor/mobile tensorflow/log/varied_corridor
+$ cd tensorflow/log/varied_corridor
+$ cat checkpoint
+$ sed -i 's/esat\/opal\/kkelchte\/docker_home\/tensorflow\/log\/varied_corridor\/mobile/home\/klaas\/tensorflow\/log\/varied_corridor/' checkpoint
+# try on alienware itself within gazebo environment
+$ roscd simulation_supervised/python
+$ python run_script.py -t test_online -g -e -p eva_params.yaml --robot drone_sim -m varied_corridor -pe virtualenv -w esatv1 --fsm console_interactive_fsm
+```
+
+Seems like drivers of nvidia are too old.
+
+Switch to Sagarmatha with the aid of Bert. This runs fedora and mounts your own asgard home directory. Therefor the commands remain the same though now you are on a laptop with wifi to the drone.
+Extra benefit is that the GPU has compute capability of 5 so it does not requires a tensorflow version compiled specifically for a slower gpu with compute capability 3.5.
+A small note is that it does require you to manually activate the wifi from your keyboard (f2).
+
+Because everything can run on ESAT you don't require two places for logging, two versions of your code, ... .
+
+It however only has 4 cpu cores which makes running gazebo totally unfeasible, so only for testing on the real drone.
+
+```bash
+$ start_sing
+$ source .entrypoint_graph
+$ roscd simulation_supervised/python
+$ python run_script.py -t real_world_test -g -e -p eva_params_slow.yaml --robot drone_real -m varied_corridor/mobile -pe sing --fsm key_nn_fsm -n 1
+
+```
+
+### Experimental results
+
+It is so far unclear how good we can get with the ensemble v1 (dynamic) over different architectures. Therefore I group the results here:
+
+Possible architectures mobile_imgnet, mobile_scratch, squeeze_v1, squeeze_v3, tiny, alex_v4. 
+Each model is trained with 3 different seeds.
+
+Now the models are trained with feature discriminator input and no action normalization.
+
+For the best architecture the models are retrained with action normalization and potentially image discriminator input (this only fits now in tiny and mobile architecture).
+
+Summarizing the results
+
+__Offline results: accuracy test__
+
+| architecture | Naive ensemble | Static ensemble | Dynamic Ensemble |
+|--------------|----------------|-----------------|------------------|
+|Mobile Scratch| 80%            | 75%             | 79%              |
+|Mobile Imgnet | 86%            | 86%             | 88.5%            |
+|Tiny          | 80%            | 79.5%           | 82%              |
+|Alex_v4       | 85%            | 67%             | 84%              |
+|Squeeze_v1    |                | 72%             | 80%              |
+|Squeeze_v3    |                | 68%             | 70%              |
+
+
+__Online results: corridor distance__
+
+| architecture | Naive ensemble | Static ensemble | Dynamic Ensemble |
+|--------------|----------------|-----------------|------------------|
+|Mobile Scratch| 5.3            | 5.49            | 5.65             |
+|Mobile Imgnet | 7.45           | 5.4             | 4.74             |
+|Tiny          | 9.17           | 9.34            | 9.74             |
+|Alex_v4       | 5.55           | 3.15            | 9.05             |
+|Squeeze_v1    |                | 4.27            | 7.15             |
+|Squeeze_v3    |                | 4.87            | 7                |
+
+__Online results: esat distance__
+
+| architecture | Naive ensemble | Static ensemble | Dynamic Ensemble |
+|--------------|----------------|-----------------|------------------|
+|Mobile Scratch| 12             | 11              | 9                |
+|Mobile Imgnet | 18.4           | 17              | 13.99            |
+|Tiny          | 20.74          | 27.9            | 17.33            |
+|Alex_v4       | 23.4           | 7.16            | 10.8             |
+|Squeeze_v1    |                | 3               | 14.4             |
+|Squeeze_v3    |                | 3.94            | 17.2             |
+
+
+### Extension on visualizations
+
+Add regularization by penalizing low attentions with weight minimization... for improving vizualizations?
+http://openaccess.thecvf.com/content_cvpr_2018/papers/Mascharka_Transparency_by_Design_CVPR_2018_paper.pdf

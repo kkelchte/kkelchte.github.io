@@ -42,6 +42,10 @@ $ grep 'tensorflow/pilot' *.py *.sh
 $ for f in *.py *.sh ; do echo $f; sed -i 's/tensorflow\/pilot/tensorflow\/ensemble_v0/' $f; done
 # test
 $ grep 'tensorflow/pilot' *.py *.sh
+# change all occurences in shell and python files
+$ for f in *.py *.sh ; do echo $f; sed -i 's/pilot\/scripts/ensemble_v0\/scripts/' $f; done
+# test
+$ grep 'pilot/scripts' *.py *.sh
 
 ```
 
@@ -160,30 +164,31 @@ This is trained as a classifier.
 2. add discriminator loss (model.py)
 3. add discriminator targets in batch (model.py)
 4. adjust forward pass with discriminator weights (model.py)
+5. initialize model with experts trained first. Second the discriminator trained keeping the feature extraction part fixed.
 
 _Primal Results_
 The training of the discriminator is succesfull and reaches 100%. The overal accuracy remains around 40%.
-Next step: 
 
-5. initialize model with experts trained first. Second the discriminator trained keeping the feature extraction part fixed.
+_Adjustment_
+The discriminator loss initially just urged to discriminator to predict the correct data factor (radiator -> weight 1 for radiator-expert and 0 for all other experts).
+This was changed to taking the weighted sum over the experts and punish a different in target output. 
+The benefit of doing this, is that the discriminator might learn that the poster expert has some valuable output besides the radiator output. 
+This makes the discriminator learn to value different experts according to the feature/input and seen outputs of these experts rather than solely predicting something impossible.
+Having a clear radiator while an unclear arc passway might mean that the expert of arc passway should have more decision power than the radiator expert.
+As the current test results are better than the primal test results, it seems that this adjustment was a good idea.
 
-
-
-_Extension 1_
+_Extension_
 Make an option to use all activations as input for discriminator.
-
-_Extension 2_
-Make max selection in discriminator instead of weighted sum.
 
 ### Ensemble V2
 
 branched from v0
 
 1. For each factor a different network is defined. (model.py)
-2. A batch is dedicated to a certain network. (data.py)
-3. In the backward pass only the loss of that factor is invokes. (model.py)
-4. at test time see v0
 
+Current status:   
+In continuous case loss and mse goes down.
+In discrete case loss loss goes down though accuracy and mse stagnates ==> something is wrong in how accuracy and mse is calculated.
 
 
 ### Ensemble V3

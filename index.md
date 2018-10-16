@@ -2,6 +2,8 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
+#### [24-09-2018: Noise Augmentation](./docs/2018-09-24_noise_augmentation.md)
+
 #### [06-09-2018: Implementing Ensemble](./docs/2018-09-06_implementing_ensemble.md)
 
 #### [28-08-2018: Factoring Control](./docs/2018-08-28_factoring_control.md)
