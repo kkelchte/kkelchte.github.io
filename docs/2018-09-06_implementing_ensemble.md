@@ -161,8 +161,19 @@ This is trained as a classifier.
 3. add discriminator targets in batch (model.py)
 4. adjust forward pass with discriminator weights (model.py)
 
-_Extension_
+_Primal Results_
+The training of the discriminator is succesfull and reaches 100%. The overal accuracy remains around 40%.
+Next step: 
+
+5. initialize model with experts trained first. Second the discriminator trained keeping the feature extraction part fixed.
+
+
+
+_Extension 1_
 Make an option to use all activations as input for discriminator.
+
+_Extension 2_
+Make max selection in discriminator instead of weighted sum.
 
 ### Ensemble V2
 
