@@ -176,7 +176,7 @@ $ cat checkpoint
 $ sed -i 's/esat\/opal\/kkelchte\/docker_home\/tensorflow\/log\/varied_corridor\/mobile/home\/klaas\/tensorflow\/log\/varied_corridor/' checkpoint
 # try on alienware itself within gazebo environment
 $ roscd simulation_supervised/python
-$ python run_script.py -t test_online -g -e -p eva_params.yaml --robot drone_sim -m varied_corridor -pe virtualenv -w esatv1 --fsm console_interactive_fsm
+$ python run_script.py -t test_online -g -e -p eva_params.yaml --robot drone_sim -m varied_corridor -pe virtualenv -w esatv1 --fsm console_interactive_fs
 ```
 
-Seems like drivers of nvidia are too old.
+Seems like drivers of nvidia are downgraded by my colleague so small intermezzo of downgrading tensorflow to 1.4 with cuda 8 and cudnn 6. And downgrading code to tensorflow 1.4.
