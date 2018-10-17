@@ -2,6 +2,8 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
+#### [16-10-2018: Evaluation of ROS-openAI](./docs/2018-10-16_evaluation_of_ros_openai.md)
+
 #### [24-09-2018: Noise Augmentation](./docs/2018-09-24_noise_augmentation.md)
 
 #### [06-09-2018: Implementing Ensemble](./docs/2018-09-06_implementing_ensemble.md)
