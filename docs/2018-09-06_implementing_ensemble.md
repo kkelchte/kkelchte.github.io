@@ -145,6 +145,8 @@ Make all non-experts predict 0 as a neutral value, and the expert predict 1 or -
 Although I think this latter tweaking will not improve the results that much.
 
 _primal_test_results_
+One network trained with mse-loss, pushing all non-experts to zero and evaluating with max over experts could succeed in the corridor.
+With the extension to evaluate over the mean there was not much improvement.
 
 One model succeed in flying through corridor number 2 which is  already promissing. Validation accuracy remains too low in general (70percent). 
 
@@ -162,6 +164,10 @@ This is trained as a classifier.
 2. add discriminator loss (model.py)
 3. add discriminator targets in batch (model.py)
 4. adjust forward pass with discriminator weights (model.py)
+5. initialize model with experts trained first. Second the discriminator trained keeping the feature extraction part fixed.
+
+_Primal Results_
+The training of the discriminator is succesfull and reaches 100%. The overal accuracy remains around 40%.
 
 _Adjustment_
 The discriminator loss initially just urged to discriminator to predict the correct data factor (radiator -> weight 1 for radiator-expert and 0 for all other experts).
