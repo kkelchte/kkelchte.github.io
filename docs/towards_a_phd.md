@@ -16,6 +16,7 @@ These three regimes of design decisions are taken together in a final proof-of-c
 ## 1. Introduction
 
 _General drones and general DRL_
+
 Lightweight drones are becomming gradually more reliable and affordable. 
 
 As they are not restricted to flat terrain as drivable robots, they are more agile and applicable in a wider range situations.
@@ -35,6 +36,7 @@ In order to get usefull information from the high dimensional camera input, we r
 Neural networks have the benefit to be trainable with any objective function with a simple gradient descent algorithm. 
 
 _Autonomous Navigation split up_
+
 Autonomous navigation is a broad concept that can be split into different tasks. 
 Firstly collision avoidance makes the drone turn away from near obstacles like walls or chairs. 
 A second task consists of maintaining a direction despite deviations from turbulences or obstacles.
@@ -49,28 +51,70 @@ Our framework however is general enough to be applicable to the full autonomous 
 Because of the high amount of experiments required to finetune hyperparameters, it is best to start from one smaller task like collision avoidance.
 
 _ambiguity of collision avoidance_
+
 Although collision avoidance might seem straightforward and well defined, the task is surprisingly demanding.
 Due to the variety of types and appearances of obstacles, as well as the variety of possible paths to pass these obstacles, the required training data becomes immense.
 Only with the use of prior knowledge we are able to simplify this state space.
 
 
 _specifications_
+
 Bebop drone, turtlebot, singularity, ROS, gazebo, condor, ... 
 
-## 2. Background
+## 2. Background and Related Work
 
 _Drones and their dynamics for visual navigation_
 
+TODO: follow TUM course and write required system dynamics of a quadcopter
+It should contain:
+
+- general idea of movements linked with the different speeds of the rotors.
+- basic definition of low level PID controller?
+
 _Learning algorithms_
+
+- definition of general reinforcement learning
+- definition of policy value function and markov decision process
+- imitation learning (behavioral cloning, supervised learning)
 
 _Deep Learning_
 
+- Complex universal function approximators
+- Overview of popular architectures: mobilenet, inception, alexnet, ...
+- CNN and RNN nomenclature
 
+_Technical setup_
 
-
-
+- ROS - Gazebo - Tensorflow - Docker/Singularity - Xpra - Condor
 
 ## 3. Experimental Setup
+
+In the introduction I explained how we will focus on training a robot to avoid collisions with the assumption that the differences in training algorithms and architectural design will be applicable to more complex tasks. 
+
+There are two measures to define the difficulty of avoiding collisions in these environments. One is _traversability_ which corresponds to the average distance crossed before collision.
+The other one is _..._.
+
+
+__Collision Avoidance Environments__
+
+_the box_
+_the room_
+_ESAT corridor_
+_the canyon, forest and sandbox_
+_the corridor_
+
+__Performance Measures__
+
+_success rate_
+_collision free distance_
+_imitation accuracy_
+
+? more: minimum distance to an object ?
+
+__Visualizations__
+
+
+
 
 ## 4. Learning Algorithms
 
