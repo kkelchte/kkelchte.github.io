@@ -3,6 +3,19 @@ title: Turtlebot
 layout: default
 ---
 
+# Quick user guide
+
+To connect from small fedora-alienware laptop:
+
+Start turtlebot. If login is required type esat. 
+Turtlebot should start hotspot automatically which is accessible with pw turtlebot.
+
+```bash
+nmcli device wifi list
+nmcli device wifi connect Hotspot turtlebot
+ssh turtlebot@10.42.0.1
+#pw esat
+```
 
 # Setting up the turtlebot on alienware
 
