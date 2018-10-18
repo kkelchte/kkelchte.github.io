@@ -88,3 +88,9 @@ In order to make it work I had to explicitely define a type in the file:
 parrotdrone_goto.py: `self.observation_space = spaces.Box(low, high,dtype=numpy.float32)`
 
 For some reason the drone model would not load its mesh.
+
+Reward evolution while training for 20 hours. 
+There is a gradual increase in reward per episode though it is far from stable and 20 hours were not enough to reach the destination once.
+
+<img src="/imgs/18-10-16_reward_my_parrot.png" alt="Reward evolution while training for 20 hours" style="width: 200px;"/>
+
