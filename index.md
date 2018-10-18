@@ -2,6 +2,8 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
+#### [18-10-2018: Real World Life Long Learning](./docs/2018-10-18_real-world-lifelong-learning.md)
+
 #### [16-10-2018: Evaluation of ROS-openAI](./docs/2018-10-16_evaluation_of_ros_openai.md)
 
 #### [24-09-2018: Noise Augmentation](./docs/2018-09-24_noise_augmentation.md)
