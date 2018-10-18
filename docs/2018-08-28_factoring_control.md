@@ -180,9 +180,12 @@ $ cat checkpoint
 $ sed -i 's/esat\/opal\/kkelchte\/docker_home\/tensorflow\/log\/varied_corridor\/mobile/home\/klaas\/tensorflow\/log\/varied_corridor/' checkpoint
 # try on alienware itself within gazebo environment
 $ roscd simulation_supervised/python
-$ python run_script.py -t test_online -g -e -p eva_params.yaml --robot drone_sim -m varied_corridor -pe virtualenv -w esatv1 --fsm console_interactive_fsm
+$ python run_script.py -t test_online -g -e -p eva_params.yaml --robot drone_sim -m varied_corridor -pe virtualenv -w esatv1 --fsm console_interactive_fs
 ```
 
+<<<<<<< HEAD
+Seems like drivers of nvidia are downgraded by my colleague so small intermezzo of downgrading tensorflow to 1.4 with cuda 8 and cudnn 6. And downgrading code to tensorflow 1.4.
+=======
 Seems like drivers of nvidia are too old.
 
 Switch to Sagarmatha with the aid of Bert. This runs fedora and mounts your own asgard home directory. Therefor the commands remain the same though now you are on a laptop with wifi to the drone.
@@ -253,3 +256,4 @@ __Online results: esat distance__
 
 Add regularization by penalizing low attentions with weight minimization... for improving vizualizations?
 http://openaccess.thecvf.com/content_cvpr_2018/papers/Mascharka_Transparency_by_Design_CVPR_2018_paper.pdf
+>>>>>>> bc5ba7f072aabf58d822e3dffec2f15f63a991d3
