@@ -20,17 +20,17 @@ _general idea: lifelong learning in simulation_
 In a first set of experiments a neural networks learns to perform monocular collision avoidance in a simulated environment.
 The model gets correct steering angles from a heuristic based on a lidar range finder.
 
-In domain A the color of the barrel is yellow and the shape is cylindrical.
-In domain B the color of the barrel is carton-brown and the shape is a box.
+- In domain A the color of the barrel is yellow and the shape is cylindrical.
+- In domain B the color of the barrel is carton-brown and the shape is a box.
 
 A demonstration dataset for two domains are gathered upon which a feed-forward neural network is trained. 
 The network learns to clone the behavior of the heuristic.
 
 There are three baseline models that are compared:
 
-nn_A is trained in domain A and evaluated in A and B
-nn_A_B is trained in domain A afterwhich it is finetuned in domain B and evaluated in A and B
-nn_A_B_ll is trained in domain A afterwhich it is finetuned in domain B with lifelong learning and evaluated in A and B
+- nn_A is trained in domain A and evaluated in A and B
+- nn_A_B is trained in domain A afterwhich it is finetuned in domain B and evaluated in A and B
+- nn_A_B_ll is trained in domain A afterwhich it is finetuned in domain B with lifelong learning and evaluated in A and B
 
 We expect model nn_A to perform best is A in comparison to the other two models unless there is too few data.
 But more importantly, we hope to see a clear performance drop in domain A for model nn_A_B which is much less severe for model nn_A_B_ll.
@@ -40,10 +40,10 @@ _extension_
 
 The same idea can be taken further to different domain shifts in order to see the benefit of lifelong learning over different setups:
 
-domain C has a different color on the outer walls
-domain D has different texture and shape of outer walls
-domain E has different lighting in comparison to domain A
-domain F has a different camera location
+- domain C has a different color on the outer walls
+- domain D has different texture and shape of outer walls
+- domain E has different lighting in comparison to domain A
+- domain F has a different camera location
 
 We can gradually increase the domain shift and see whether the benefit of lifelong learning mainly applies in small or big variations.
 
@@ -71,10 +71,10 @@ Domain Ar corresponds to a yellow barrel and domain Br corresponds to a carton b
 
 The performance of the following models is compared:
 
-nn_A trained in domain A and evaluated in domain Ar
-nn_A_Ar trained in domain A and finetuned in Ar and evaluated in domain Ar and Br
-nn_A_Ar_Br trained in domain A and finetuned in Ar and finetuned in Br and evaluated in domain Ar and Br
-nn_A_Ar_Br_ll trained in domain A and finetuned in Ar and Br with lifelong learning and evaluated in domain Ar and Br
+- nn_A trained in domain A and evaluated in domain Ar
+- nn_A_Ar trained in domain A and finetuned in Ar and evaluated in domain Ar and Br
+- nn_A_Ar_Br trained in domain A and finetuned in Ar and finetuned in Br and evaluated in domain Ar and Br
+- nn_A_Ar_Br_ll trained in domain A and finetuned in Ar and Br with lifelong learning and evaluated in domain Ar and Br
 
 The first experiment is just to see how much of the pretraining in simulation is applicable to the real world.
 Potentially the finetuning to domain Ar is not necessary if the knowledge can be transferred directly.
