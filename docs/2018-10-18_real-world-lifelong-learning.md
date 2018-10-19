@@ -36,6 +36,13 @@ We expect model nn_A to perform best is A in comparison to the other two models 
 But more importantly, we hope to see a clear performance drop in domain A for model nn_A_B which is much less severe for model nn_A_B_ll.
 The performance drop of nn_A_B will probably depend on how long the model is trained, on how much data, and so on...
 
+
+<img src="/imgs/18-10-19_osb_yellow_barrel_world.jpg" alt="osb_yellow_barrel.world" style="width: 200px;"/>
+<img src="/imgs/18-10-19_osb_yellow_barrel_blue_world.jpg" alt="osb_yellow_barrel_blue.world" style="width: 200px;"/>
+<img src="/imgs/18-10-19_osb_carton_box_world.jpg" alt="osb_carton_box.world" style="width: 200px;"/>
+
+
+
 _extension_
 
 The same idea can be taken further to different domain shifts in order to see the benefit of lifelong learning over different setups:
@@ -78,11 +85,6 @@ The performance of the following models is compared:
 
 The first experiment is just to see how much of the pretraining in simulation is applicable to the real world.
 Potentially the finetuning to domain Ar is not necessary if the knowledge can be transferred directly.
-
-<img src="/imgs/18-10-19_osb_yellow_barrel_world.jpg" alt="osb_yellow_barrel.world" style="width: 200px;"/>
-<img src="/imgs/18-10-19_osb_yellow_barrel_blue_world.jpg" alt="osb_yellow_barrel_blue.world" style="width: 200px;"/>
-<img src="/imgs/18-10-19_osb_carton_box_world.jpg" alt="osb_carton_box.world" style="width: 200px;"/>
-
 
 ## Experiment 3: Online training
 
