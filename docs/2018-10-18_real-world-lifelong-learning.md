@@ -79,6 +79,11 @@ nn_A_Ar_Br_ll trained in domain A and finetuned in Ar and Br with lifelong learn
 The first experiment is just to see how much of the pretraining in simulation is applicable to the real world.
 Potentially the finetuning to domain Ar is not necessary if the knowledge can be transferred directly.
 
+<img src="/imgs/18-10-19_osb_yellow_barrel_world.jpg" alt="osb_yellow_barrel.world" style="width: 200px;"/>
+<img src="/imgs/18-10-19_osb_yellow_barrel_blue_world_1.jpg" alt="osb_yellow_barrel_blue.world" style="width: 200px;"/>
+<img src="/imgs/18-10-19_osb_carton_box_world.jpg" alt="osb_carton_box.world" style="width: 200px;"/>
+
+
 ## Experiment 3: Online training
 
 ## Notes on implementation
@@ -125,9 +130,9 @@ done
 Combine it in a clean dataset:
 
 ```
-$ python clean_dataset.py --startswith rec_barrel --destination domain_A
-$ python clean_dataset.py --startswith rec_box --destination domain_B
-$ python clean_dataset.py --startswith rec_blue_barrel --destination domain_C
+$ python clean_dataset.py --startswith rec_barrel --destination domain_A --val_len 1 --test_len 1 --min_distance 1
+$ python clean_dataset.py --startswith rec_box --destination domain_B --val_len 1 --test_len 1 --min_distance 1
+$ python clean_dataset.py --startswith rec_blue_barrel --destination domain_C --val_len 1 --test_len 1 --min_distance 1
 ```
 
 _Sidetrack for state-space shift_
