@@ -80,7 +80,7 @@ The first experiment is just to see how much of the pretraining in simulation is
 Potentially the finetuning to domain Ar is not necessary if the knowledge can be transferred directly.
 
 <img src="/imgs/18-10-19_osb_yellow_barrel_world.jpg" alt="osb_yellow_barrel.world" style="width: 200px;"/>
-<img src="/imgs/18-10-19_osb_yellow_barrel_blue_world_1.jpg" alt="osb_yellow_barrel_blue.world" style="width: 200px;"/>
+<img src="/imgs/18-10-19_osb_yellow_barrel_blue_world.jpg" alt="osb_yellow_barrel_blue.world" style="width: 200px;"/>
 <img src="/imgs/18-10-19_osb_carton_box_world.jpg" alt="osb_carton_box.world" style="width: 200px;"/>
 
 
