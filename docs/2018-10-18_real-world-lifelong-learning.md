@@ -165,6 +165,23 @@ $ python main.py -t test_nn_A_action_norm --dataset domain_A --discrete --speed 
 $ python main.py -t test_nn_B --dataset domain_B --discrete --speed 0.3 --action_bound 0.6 --learning_rate 0.1 --max_episodes 500
 $ python main.py -t test_nn_B_action_norm --dataset domain_B --discrete --speed 0.3 --action_bound 0.6 --learning_rate 0.1 --max_episodes 500
 ```
+Training curves in domain A (yellow barrel OSB) with and without action normalization:
+<img src="/imgs/18-10-20_training_curve_domain_A_with_and_without_action_norm.png" alt="offline training curves domain A" style="width: 200px;"/>
+
+There is no need for action normalization as the data is well spread over the different actions. There is also no need to train more than 300 epochs as the validation accuracy is well saturated.
+
+Evaluate model in simulation:
+
+```
+# within singularity
+$ python run_script.py -t testing -pe sing -pp pilot/pilot -m lifelonglearning/domain_A -w osb_yellow_barrel -p eva_params_slow.yaml -n 1 --robot turtle_sim --fsm nn_turtle_fsm -e -g --x_pos 0.45 --x_var 0.15 --yaw_var 1 --yaw_or 1.57 
+```
+
+Evaluate model in the real world:
+
+```
+
+```
 
 Try it all out on condor
 

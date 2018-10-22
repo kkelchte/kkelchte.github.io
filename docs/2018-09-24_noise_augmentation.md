@@ -157,3 +157,11 @@ The deviation force, sigma, is sampled from a beta distribution with alpha 1 and
 
 
 <img src="/imgs/18-09-24_example_ou.jpg" alt="Example image with ou noise" style="width: 500px;"/>
+
+## 7. Next step:
+
+The next would be to try this way of data augmentation out on a static dataset as for instance traffic sign recognition.
+In this case it would be interesting to see how much of the training data we can make obsolete if we augment the training data by extracting the traffic sign and adding noise to the background. I'll have to ask Davy for a proper traffic sign benchmark.
+
+
+
