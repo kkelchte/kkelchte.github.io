@@ -11,7 +11,37 @@ Training jointly however is often not feasible especially when you have a robot 
 You don't want your model to forget relevant parts of the first task when learning the second.
 If there happens to be a rainy day and the model actually gets better at driving a car autonomously, you obviously don't want it to start performing worse on a sunny day.
 
+
+The method is the following: it adds a regularization term in the loss that overcomes a large change in weights that were important in the first task. Each parameter/variable of the network receives an importance weight which is defined by looking at the gradients over all the data of domain A. 
+At starting to learn on domain B, the difference between the initial value and changed value for this parameter is weighted with its importance weight and added as a regularization. In other words it penalizes a strong variation of weight values that are important for domain A.
+
 In a primal experiment we look at how well lifelong learning can make the model robust to domain changes.
+
+## Implementation in tensorflow
+
+The implementation entails several steps:
+
+- add variables for the importance weights and save them with the model
+- calculate the importance weights on data of domain A based on the calculated gradients
+- save and load the importance weights with the model
+- get the initial weights of the 'optimal' values for domain A
+- add the regularization loss term corresponding to a weighted sum of the differents with original values.
+
+In order to calculate the regularization term in the loss the network needs one set of importance weights and a copy of the old variable weights.
+The importance weights are saved at the end of training in one domain and saved within the checkpoint.
+The set of 'old' variables correspond to the optimal variables of all previous domains and are copied at the beginning of training a model for a new task.
+The lifelong learning regularization loss term then punishes any differentiation from these optimal values in correspondence with the importance weight.
+
+At the end of training a new domain the importance weights are added to the earlier importance weights.
+They represent how much the capacity of the network is filled up while learning to perform in new domains.
+
+
+## Discussion on an online version 
+
+The power of inceremental learning is best visible in an online learning setting. 
+In this case the network is adapting towards a self-supervised learning task for instance video prediction or control prediction. Because it does not have access to all the data seen previously, it is best that it remembers things learned earlier. For example a robot learning to navigate within an office, afterwards it adapts to a corridor but without forgetting the navigation skills in the office.
+
+The hardest part in applying lifelong learning in an online setting is the split between different tasks. It is clear that when a network is learning, you don't want it to remember everything. There should be a period of adapting as good as possible to a new environment before it is seeing this adaptation as too important because in the last case you are actually regularizing to bad knowledge.
 
 ## Experiment 1: Circle around barrel in simulation
 
@@ -87,6 +117,13 @@ The first experiment is just to see how much of the pretraining in simulation is
 Potentially the finetuning to domain Ar is not necessary if the knowledge can be transferred directly.
 
 ## Experiment 3: Online training
+
+```
+exec_sing_train_pilot
+# or go into singularity simsup/python project to run script:
+python run_script.py -t test_train_online -pe sing -pp pilot/pilot -w osb_yellow_barrel -pe train_params.yaml -n 3 --robot turtle_sim --fsm nn_turtle_fsm -g --x_pos 0.45 --x_var 0.15 --yaw_var 1 --yaw_or 1.57 
+```
+
 
 ## Notes on implementation
 
@@ -186,8 +223,128 @@ Evaluate model in the real world:
 Try it all out on condor
 
 ```
-$ python dag_train_and_evaluate.py -t lifelonglearning/domain_A --wall_time_train $((3*60*60)) --wall_time_eva $((2*60*60)) --number_of_models 3 --loss mse --load_data_in_ram --learning_rate 0.1 --dataset domain_A --max_episodes 1000 --discrete --paramfile eva_params_slow.yaml --number_of_runs 3 -w osb_yellow_barrel --robot turtle_sim --fsm nn_turtle_fsm --evaluation --speed 0.3 --x_pos 0.45 --x_var 0.15 --yaw_var 1 --yaw_or 1.57 
+$ python dag_train_and_evaluate.py -t lifelonglearning/domain_A --wall_time_train $((3*60*60)) --wall_time_eva $((2*60*60)) --number_of_models 3 --load_data_in_ram --learning_rate 0.1 --dataset domain_A --max_episodes 1000 --discrete --paramfile eva_params_slow.yaml --number_of_runs 3 -w osb_yellow_barrel --robot turtle_sim --fsm nn_turtle_fsm --evaluation --speed 0.3 --x_pos 0.45 --x_var 0.15 --yaw_var 1 --yaw_or 1.57 
 ```
 
+See how finetuning forgets the previous domain:
+
+```
+cdpilotdata && mkdir domain_AB
+cp domain_B/train_set.txt domain_AB
+cp domain_A/val_set.txt domain_AB
+cdpilot && python main.py --dataset domain_AB --checkpoint_path lifelonglearning/domain_A --load_data_in_ram --log_tag lifelonglearning/domain_AB --continue_training --max_episodes 300 --discrete --learning_rate 0.1
+```
+
+Implement LLL
+
+_calculate importance weights on pretrained models_
+
+In order to allow the model trained withouth calculating importance weights,
+uncomment following line in __init__ function of model.py:
+list_to_exclude = ["Omega"]
+
+
+```
+python main.py --update_importance_weights --max_episodes 1 --checkpoint_path lifelonglearning/domain_A --dataset domain_A --log_tag lifelonglearning/domain_A_omega --continue_training --load_config --owr
+```
+
+_load pretrained model with importance weights and train in new domain with lifelonglearning_
+
+```
+python main.py --update_importance_weights --max_episodes 300 --checkpoint_path lifelonglearning/domain_A --dataset domain_A --log_tag lifelonglearning/domain_A_omega --continue_training --load_config --owr
+```
+
+
+_train models on domain A from scratch without batch normalization_
+
+
+
+```
+python main.py --update_importance_weights --network tiny --max_episodes 500 --dataset domain_A --log_tag lifelonglearning/domain_A_tiny_lr001 --discrete --speed 0.3 --action_bound 0.6 --learning_rate 0.01 --load_data_in_ram
+python main.py --update_importance_weights --network alex --max_episodes 500 --dataset domain_A --log_tag lifelonglearning/domain_A_alex --discrete --speed 0.3 --action_bound 0.6 --learning_rate 0.01 --load_data_in_ram
+```
+
+_finetune models in domain C (with validation from A) with and without LL_
+
+```
+python main.py --update_importance_weights --max_episodes 300 --dataset domain_AC --checkpoint_path lifelonglearning/domain_A_tiny --continue_training --load_config --log_tag lifelonglearning/domain_AC_tiny_LL --lifelonglearning
+python main.py --update_importance_weights --max_episodes 300 --dataset domain_AC --checkpoint_path lifelonglearning/domain_A_tiny --continue_training --load_config --log_tag lifelonglearning/domain_AC_tiny_noLL
+``` 
+
+It seems that LL has not really an impact on training a tiny network for domain A and than C.
+
+Debugging LLL :
+
+| Tiny Version 0||
+|---------------|-------------------------------|
+| conv_1/kernel | 34.4516143799 (1677.64331055) |
+| conv_1/bias | 56.5730171204 (3882.03662109) |
+| conv_2/kernel | 83.1608657837 (13948.9580078) |
+| conv_3/kernel | 0.488836139441 (0.681142449379) |
+| outputs/kernel | 30.3255310059 (1789.23754883) |
+
+Version 1:
+
+- adding biases at layer 2 and 3,
+- increasing conv3 from 20 to 60 channels from version 0.
+
+|Tiny Version 1 |||
+|---------------|-------------------------------|---|
+| conv_1/kernel | 13.4514789581 (314.933105469) | min: 0.0 max: 72.9205703735 |
+| conv_1/bias | 21.4636192322 (739.829956055) | min: 0.0 max: 89.7408294678 |
+| conv_2/kernel | 20.2254314423 (1781.6619873) | min: 0.0 max: 367.401062012 |
+| conv_2/bias | 27.6430358887 (648.143554688) | min: 0.0 max: 102.526069641 |
+| conv_3/kernel | 0.131326898932 (0.0408737957478) | min: 0.0 max: 2.49755930901 |
+| conv_3/bias | 1.16912293434 (0.789529025555) | min: 0.0 max: 2.80949091911 |
+| outputs/kernel | 5.87380933762 (38.5804977417) | min: 0.0 max: 28.9524116516 |
+
+All the importances has decreased with an increase in complexity of the network on average as well as the variance.
+The mean importance is dropped from 0.5 to 0.13 and the variance from 0.68 to 0.04.
+It is of course unclear how much of the decrease of importance is due to the increase of the channel and how much is due to adding the biases.
+
+Conv3 has 20x20 filters having 400 weights for all 60 channels. 
+On the contrary conv1 and conv2 have 6x6 or 3x3 filters that corresponds to 36 or 9 weights for 10 and 20 channels correspondingly.
+
+Version 2:
+
+- change third conv layer into fully connected
+
+|version 2|       | 1 %               | 50 %             | 100 %         |
+|----|---|-|-|
+| conv_1/kernel:0 | 0.000171526053746 | 6.16096901894    | 15.8702602386 | 
+| conv_1/bias:0   | 0.106992102483    | 6.36944532394    | 16.1871128082 | 
+| conv_2/kernel:0 | 0.0               | 1.66484487057    | 35.0450668335 | 
+| conv_2/bias:0   | 0.0               | 1.92982572317    | 32.3456077576 | 
+| conv_3/kernel:0 | 0.0               | 0.00264493352734 | 0.994562149048 | 
+| conv_3/bias:0   | 0.0               | 0.0790541470051  | 0.651404976845 | 
+| outputs/kernel:0| 0.0               | 0.609182775021   | 13.113743782 | 
+| outputs/bias:0  | 0.587451648712    | 1.07309710979    | 5.84625816345 |
+
+<img src="/imgs/18-10-25_tiny_v2.png" alt="training curves domain forest with domain A as validation" style="width: 200px;"/>
+
+
+
+Version 3:
+
+- omitting third layer as it does not cary any importance.
+|version 3        | 1 %               | 50 %           | 100 %         |
+|----|---|-|-|
+| conv_1/kernel:0 | 0.0               | 2.86850702763  | 24.1308441162 | 
+| conv_1/bias:0   | 0.000353121575899 | 5.0508633852   | 22.3155937195 | 
+| conv_2/kernel:0 | 0.0               | 0.262367263436 | 19.84623909   | 
+| conv_2/bias:0   | 0.0129857982695   | 1.40598601103  | 16.2036933899 | 
+| outputs/kernel:0 | 0.0              | 0.460116073489 | 9.48332977295 | 
+| outputs/bias:0   | 0.618516955376   | 4.14057350159  | 4.93872261047 |
+
+
+Learning curves:
+
+-brown: no LL loss
+-dark blue: 1w LL loss
+-light blue: 10w LL loss
+-pink: 100w LL loss
+
+<img src="/imgs/18-10-26_accuracy_tiny3.png" alt="" style="width: 200px;"/>
+<img src="/imgs/18-10-26_lll_loss_tiny3.png" alt="" style="width: 200px;"/>
 
 
