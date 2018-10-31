@@ -44,5 +44,5 @@ python main.py --continue_training --load_config --checkpoint_path LLL_doshico/f
 
 
 Learning curves training and validation accuracy with training accuracy in the new domain (canyon) and validation accuracy in the previous domain (forest).
-<img src="/imgs/18-10-30_forest_canyon_learning_curve.png" alt="Learning curves training and validation accuracy" style="width: 200px;"/>
+<img src="/imgs/18-10-30_forest_canyon_learning_curve.png" alt="Learning curves training and validation accuracy" style="width: 600px;"/>
 
