@@ -288,15 +288,15 @@ Version 1:
 - adding biases at layer 2 and 3,
 - increasing conv3 from 20 to 60 channels from version 0.
 
-|Tiny Version 1 |||
-|---------------|-------------------------------|---|
-| conv_1/kernel | 13.4514789581 (314.933105469) | min: 0.0 max: 72.9205703735 |
-| conv_1/bias | 21.4636192322 (739.829956055) | min: 0.0 max: 89.7408294678 |
-| conv_2/kernel | 20.2254314423 (1781.6619873) | min: 0.0 max: 367.401062012 |
-| conv_2/bias | 27.6430358887 (648.143554688) | min: 0.0 max: 102.526069641 |
-| conv_3/kernel | 0.131326898932 (0.0408737957478) | min: 0.0 max: 2.49755930901 |
-| conv_3/bias | 1.16912293434 (0.789529025555) | min: 0.0 max: 2.80949091911 |
-| outputs/kernel | 5.87380933762 (38.5804977417) | min: 0.0 max: 28.9524116516 |
+|version 1      | 1 %               | 50 %             | 100 %         |
+|---------------|-------------------------------|---|---|
+| conv_1/kernel:0 | 0.0 | 0.0209853337146 | 13.4104738235 | 
+| conv_1/bias:0 | 0.000116533400724 | 0.068588513881 | 26.4526062012 | 
+| conv_2/kernel:0 | 0.0 | 2.8729316e-05 | 34.4239120483 | 
+| conv_2/bias:0 | 0.0 | 1.25800824165 | 19.7109375 | 
+| conv_3/kernel:0 | 0.0 | 0.0 | 20.0884895325 | 
+| conv_3/bias:0 | 0.0 | 1.24238663912 | 4.42420768738 | 
+| outputs/kernel:0 | 0.0 | 7.85297513008 | 39.6474113464 |
 
 All the importances has decreased with an increase in complexity of the network on average as well as the variance.
 The mean importance is dropped from 0.5 to 0.13 and the variance from 0.68 to 0.04.
@@ -311,14 +311,13 @@ Version 2:
 
 |version 2|       | 1 %               | 50 %             | 100 %         |
 |----|---|-|-|
-| conv_1/kernel:0 | 0.000171526053746 | 6.16096901894    | 15.8702602386 | 
-| conv_1/bias:0   | 0.106992102483    | 6.36944532394    | 16.1871128082 | 
-| conv_2/kernel:0 | 0.0               | 1.66484487057    | 35.0450668335 | 
-| conv_2/bias:0   | 0.0               | 1.92982572317    | 32.3456077576 | 
-| conv_3/kernel:0 | 0.0               | 0.00264493352734 | 0.994562149048 | 
-| conv_3/bias:0   | 0.0               | 0.0790541470051  | 0.651404976845 | 
-| outputs/kernel:0| 0.0               | 0.609182775021   | 13.113743782 | 
-| outputs/bias:0  | 0.587451648712    | 1.07309710979    | 5.84625816345 |
+| conv_1/kernel:0 | 0.0 | 2.0694159884 | 20.5786838531 | 
+| conv_1/bias:0 | 0.000162490841467 | 2.78869257681 | 46.3988685608 | 
+| conv_2/kernel:0 | 0.0 | 9.60830911936e-05 | 28.4184017181 | 
+| conv_2/bias:0 | 0.0 | 3.85405147076 | 30.5794525146 | 
+| conv_3/kernel:0 | 0.0 | 0.0 | 2.98759841919 | 
+| conv_3/bias:0 | 0.0 | 0.242561176419 | 1.23395502567 | 
+| outputs/kernel:0 | 0.0 | 2.13700377941 | 22.0174388885 |
 
 <img src="/imgs/18-10-25_tiny_v2.png" alt="training curves domain forest with domain A as validation" style="width: 200px;"/>
 
@@ -346,5 +345,32 @@ Learning curves:
 
 <img src="/imgs/18-10-26_accuracy_tiny3.png" alt="" style="width: 200px;"/>
 <img src="/imgs/18-10-26_lll_loss_tiny3.png" alt="" style="width: 200px;"/>
+
+Side track:
+how much do the importance weights differ if I compute them on different data from the same domain.
+The earlier table was on 100 batches of training data.
+
+_validation data with batch one_
+|version 3        | 1 %               | 50 %           | 100 %         |
+|----|---|-|-|
+| conv_1/kernel | 0.0 | 8.89598560333 | 73.1118545532 | 
+| conv_1/bias:0 | 0.00180900966749 | 22.1998195648 | 67.0319061279 | 
+| conv_2/kernel | 0.0 | 1.42106860876 | 45.9529457092 | 
+| conv_2/bias:0 | 0.0529289674759 | 8.46519255638 | 39.4173278809 | 
+| outputs/kernel | 0.0 | 2.17242789268 | 24.0413341522 | 
+| outputs/bias:0 | 4.47321969986 | 11.6615533829 | 13.13048172 | 
+
+_validation data with batch one_
+
+|version 3        | 1 %               | 50 %           | 100 %         |
+|----|---|-|-|
+| conv_1/kernel:0 | 0.0 | 6.0346968174 | 53.2386322021 | 
+| conv_1/bias:0 | 0.000681609995663 | 12.905441761 | 46.7749099731 | 
+| conv_2/kernel:0 | 0.0 | 0.508252739906 | 43.0978088379 | 
+| conv_2/bias:0 | 0.0164222687483 | 2.74863028526 | 34.4282493591 | 
+| outputs/kernel:0 | 0.0 | 0.936828702688 | 20.2604408264 | 
+| outputs/bias:0 | 1.07987051249 | 8.33191394806 | 10.6041984558 |
+
+
 
 

@@ -2,6 +2,10 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
+#### [29-10-2018: Online Life Long Learning](./docs/2018-10-29_online_LLL.md)
+
+#### [29-10-2018: Life Long Learning on Doshico](./docs/2018-10-29_LLL_on_doshico.md)
+
 #### [18-10-2018: Real World Life Long Learning](./docs/2018-10-18_real-world-lifelong-learning.md)
 
 #### [16-10-2018: Evaluation of ROS-openAI](./docs/2018-10-16_evaluation_of_ros_openai.md)
