@@ -119,7 +119,7 @@ Potentially the finetuning to domain Ar is not necessary if the knowledge can be
 ## Experiment 3: Online training
 
 ```
-exec_sing_train_pilot
+sing_exec_train_pilot
 # or go into singularity simsup/python project to run script:
 python run_script.py -t test_train_online -pe sing -pp pilot/pilot -w osb_yellow_barrel -pe train_params.yaml -n 3 --robot turtle_sim --fsm nn_turtle_fsm -g --x_pos 0.45 --x_var 0.15 --yaw_var 1 --yaw_or 1.57 
 ```
