@@ -74,18 +74,23 @@ Starting off from a test_branch that should be merged back to the main branch to
 
 After each success the importance weights are updated. By adding the lifelonglearning weight update you ensure the model keeps good information.
 However you could make it incremental learning by incrementally increasing the minimum success time without collision.
-If this works in simulation it could be performed in the real world with a drive back service.
+For example defining 1 minute: `--minimum_collision_free_duration 60`. 
+In order to speed up training you could increment this minimum dynamically online incrementally making the task harder and harder.
 
+If this works in simulation it could be performed in the real world with a drive back service.
 ```
 # via train_in_singularity.sh
 sing_exec_train_pilot
-# interactively within singularity
+# interactively within singularity without lifelonglearning
 python run_script.py -t test_train_online -pe sing -pp pilot/pilot -w osb_yellow_barrel -pe train_params.yaml -n 3 --robot turtle_sim --fsm nn_turtle_fsm -g --x_pos 0.45 --x_var 0.15 --yaw_var 1 --yaw_or 1.57 
+# interactively within singularity with lifelonglearning
+python run_script.py -t test_train_online -pe sing -pp pilot/pilot -w osb_yellow_barrel -pe LLL_train_params.yaml -n 30 --robot turtle_sim --fsm nn_turtle_fsm -g --x_pos 0.45 --x_var 0.15 --yaw_var 1 --yaw_or 1.57 
 ```
 
 With specific tensorflow arguments:
 
 ```
+network: tiny_v2
 epsilon: 0.
 learning_rate: 0.01
 optimizer: gradientdescent
@@ -94,6 +99,13 @@ action_bound: 0.6
 discrete: True
 empty_buffer: True
 buffer_size: -1
+batch_size: -1
+break_and_turn: True
+epsilon: 0.5
+epsilon_decay: 0.9
+#--- with lifelonglearning
+lifelonglearning: True
+minimum_collision_free_duration: 10
 ```
 
 
