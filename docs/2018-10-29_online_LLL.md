@@ -108,6 +108,15 @@ lifelonglearning: True
 minimum_collision_free_duration: 10
 ```
 
+_Extenstion (only in the recent batch implementation)_
+
+In the same way as hard negative mining of prioritized sweeping, you can keep the hard examples in a separate replay buffer for later.
+This stabilizes the training as the final gradient is for some part influenced by some difficult examples.
+The functionality is added with the `--hard_replay_buffer` flag and `--hard_batch_size 100` defining the number of hard examples kept.
+The buffer used at training time creates a batch combining all the hard replay buffer with the recent samples in the normal buffer.
+
+In case of a bigger replay buffer, I can apply prioritized keeping (similar to sweeping).
+
 
 ### Incremental collision avoidance updating at loss plateau
 
