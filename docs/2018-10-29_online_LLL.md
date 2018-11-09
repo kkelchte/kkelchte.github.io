@@ -102,11 +102,13 @@ buffer_size: -1
 batch_size: -1
 break_and_turn: True
 epsilon: 0.5
-epsilon_decay: 0.9
+epsilon_decay: 0.1
 #--- with lifelonglearning
 lifelonglearning: True
+update_importance_weights: True
 minimum_collision_free_duration: 10
 ```
+
 
 _Extenstion (only in the recent batch implementation)_
 
@@ -115,12 +117,37 @@ This stabilizes the training as the final gradient is for some part influenced b
 The functionality is added with the `--hard_replay_buffer` flag and `--hard_batch_size 100` defining the number of hard examples kept.
 The buffer used at training time creates a batch combining all the hard replay buffer with the recent samples in the normal buffer.
 
+--> hard replay buffer could also be used to update importance weights
+
 In case of a bigger replay buffer, I can apply prioritized keeping (similar to sweeping).
 
 
-### Incremental collision avoidance updating at loss plateau
+### experiments
 
-If the loss is stable given the last X batches it means that the model is probably converged.
-This can be checked first with the previous setup. See if a success is most likely at a loss plateau.
+_tests on Tuesday_
+Training with a big replay buffer from which multiple batches are samples tends to learn. After 200 runs one model could drive for 12m without collision.
+Earliest successes occur after 50 runs. 
 
+Big buffer with lifelonglearning crashed due to no labels in buffer. Crash only occurs on condor. Not on Opal.
+
+With emptying recent-buffer and keeping hard buffer, the model can learn a decent collision avoidance driving for 8m collision free after 52 runs.
+It seems to train faster than with the big replay buffer though there is no longterm general trend towards longer collision free driving.
+Including lifelonglearning in this setting had no clear influence but the weights were also not updated in a correct way (summing rather than averaging over the last two).
+
+_test on Wednesday_
+Found one bug that saved targets `[]` causing the model to crash.
+A second tweak was the update of importance weights that now takes the average over current and previous version instead of summing up.
+A third bug was that the star variables were not updated so only the initial params were maintained.
+
+... redoing experiments on condor.
+
+Overview of tensorflow parameter files:
+- train_params_old.yaml: big buffer, no lifelonglearning
+- LLL_train_params_old.yaml: big buffer, with lifelonglearning
+- train_params.yaml: recent buffer, no lifelonglearning
+- LLL_train_params.yaml: recent buffer, with lifelonglearning
+- train_params_hard_replay.yaml: recent buffer, no lifelonglearning, with extra hard buffer
+- LLL_train_params_hard_replay.yaml: recent buffer, with lifelonglearning, with extra hard buffer
+
+Models are trained with epsilon 0.5 exploration which decays at a rate of 0.1.
 
