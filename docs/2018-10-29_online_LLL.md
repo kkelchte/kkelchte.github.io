@@ -151,3 +151,101 @@ Overview of tensorflow parameter files:
 
 Models are trained with epsilon 0.5 exploration which decays at a rate of 0.1.
 
+## Paper set of experiments
+
+In order to demonstrate the lifelonglearning setup we created a long circular corridor with three domains that transition smoothly.
+A tiny_v2 network is pretrained on a dataset with large variance offline:
+
+```
+# Train
+python main.py  --network tiny_v2 --discrete --speed 0.3 --action_bound 0.6 --load_data_in_ram --learning_rate 0.001 --optimizer gradientdescent --dataset varied_corridor_turtle --max_episodes 1000 --scratch --log_tag pretrain_varied_corridor
+# Test online
+python run_script.py -t testing -pe sing -pp pilot_online/pilot -m pretrain_varied_corridor -n 3 -w corridor --robot turtle_sim --fsm nn_turtle_fsm -p eva_params_slow.yaml -g -e --corridor_bends 5 --extension_config vary_exp
+```
+Online model performs pretty bad. Also turtlebot in simulation performs anyong counter steering that network fails to cope with. 
+It is uncertain how much influence comes from the crappy distorted camera.
+
+Continue training in this specific corridor with domain_ABC online using pretrained model.
+
+```
+# train_params.yaml:
+network: tiny_v2
+learning_rate: 0.01
+optimizer: gradientdescent
+speed: 0.3
+action_bound: 0.6
+discrete: True
+empty_buffer: True
+buffer_size: -1
+batch_size: -1
+break_and_turn: True
+epsilon: 0.7
+epsilon_decay: 0.1
+update_importance_weights: True
+minimum_collision_free_distance: 9
+continue_training: True
+load_config: True
+```
+
+```
+# in singularity
+python run_script.py -t online_corridor_ABC/test -pe sing -pp pilot_online/pilot -m pretrain_varied_corridor -w domain_ABC_smooth -p $PARAMS -n 1 --robot turtle_sim --fsm console_nn_db_turtle_fsm -g --x_pos 0 --x_var 0 --yaw_or 1.57 
+
+```
+
+Current issue is that the model keeps on turning without a forward speed. A forward speed in combination with a turn results in severe slipping.
+Best is to do gradient updates each time recency buffer is full. Added option: `--online_gradient_update batch`.
+
+After implementing this my model succeeded at training without any collision using finetuning and no hard replay buffer after only 20min.
+In this case the setup seems too easy. 
+One sollution could be to make the environment harder with for instance different textures on the wall or train from scratch.
+
+Plot trajectory:
+
+```
+pos=[(float(l.strip().split(',')[0]),float(l.strip().split(',')[1])) for l in open('pos.txt','r').readlines()]
+for i,p in enumerate(pos): plt.scatter(p[0],p[1],color=(1-i*1./len(pos),0,i*1./len(pos),1))
+plt.show()
+```
+
+Training with hard replay buffer makes training step take 1.7 seconds, while with only a recent buffer this takes 0.014 seconds.
+Decreasing the hard and recent replay buffer to sizes 10 and 20 decrease the delay to 0.8, still 6x slower...
+
+Plot losses per domain
+```
+import matplotlib.pyplot as plt
+f=open('xterm_python_2018-11-12_0542.txt','r').readlines()
+losses={}           
+colors=['r','g','b']                
+for i,d in enumerate(['A','B','C']):                                                                   
+    plt.ylim((0,5)) 
+    losses[d]=[float(l.split(',')[5].split(':')[1]) if 'domain '+d in l else 0 for l in f if l.startswith('Step')]                             
+    plt.plot(range(len(losses[d])),losses[d], color=colors[i])
+    plt.savefig('losses_domain_'+d)
+```
+
+## Online learning on corridor
+
+```
+python online_learning.py --log_tag online_off_policy/FT_0 --random_seed 123
+python online_learning.py --log_tag online_off_policy/FT_1 --random_seed 245
+python online_learning.py --log_tag online_off_policy/FT_2 --random_seed 651
+
+# LLL
+python online_learning.py --log_tag online_off_policy/LL_1_0 --random_seed 123 --loss_window_length 5 --lll_weight 1
+python online_learning.py --log_tag online_off_policy/LL_1_1 --random_seed 245 --loss_window_length 5 --lll_weight 1
+python online_learning.py --log_tag online_off_policy/LL_1_2 --random_seed 651 --loss_window_length 5 --lll_weight 1
+
+python online_learning.py --log_tag online_off_policy/LL_5_0 --random_seed 123 --loss_window_length 5 --lll_weight 5
+python online_learning.py --log_tag online_off_policy/LL_5_1 --random_seed 245 --loss_window_length 5 --lll_weight 5
+python online_learning.py --log_tag online_off_policy/LL_5_2 --random_seed 651 --loss_window_length 5 --lll_weight 5
+
+python online_learning.py --log_tag online_off_policy/LL_10_0 --random_seed 123 --loss_window_length 5 --lll_weight 10
+python online_learning.py --log_tag online_off_policy/LL_10_1 --random_seed 245 --loss_window_length 5 --lll_weight 10
+python online_learning.py --log_tag online_off_policy/LL_10_2 --random_seed 651 --loss_window_length 5 --lll_weight 10
+
+python online_learning.py --log_tag online_off_policy/LL_20_0 --random_seed 123 --loss_window_length 5 --lll_weight 20
+python online_learning.py --log_tag online_off_policy/LL_20_1 --random_seed 245 --loss_window_length 5 --lll_weight 20
+python online_learning.py --log_tag online_off_policy/LL_20_2 --random_seed 651 --loss_window_length 5 --lll_weight 20
+```
+
