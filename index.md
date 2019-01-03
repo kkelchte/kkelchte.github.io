@@ -2,6 +2,8 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
+#### [03-01-2019: Transition from TF to PyTorch](./docs/2019-01-03_transition_tf_pytorch.md)
+
 #### [29-10-2018: Online Life Long Learning](./docs/2018-10-29_online_LLL.md)
 
 #### [29-10-2018: Life Long Learning on Doshico](./docs/2018-10-29_LLL_on_doshico.md)
