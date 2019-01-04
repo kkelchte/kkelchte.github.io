@@ -38,17 +38,22 @@ Shape of tensor: nsample x height x width x nchannels --> nsample x nchannels x 
 | .zero_grad() | zeroes the gradient buffers of all parameters | |
 | state_dict() | print values of parameters of network as dictionary used for saving and loading model | self.net.state_dict().keys() |
 
-## Step 1: pytorch load in model, no logging, no visualizations, tf data loading, continuous
 
-First step is to have an alex model trained on the canyon dataset and evaluated online in gazebo with tensorflow everywhere pruned out except for the data loading.
+Different steps and notes during implementation:
 
-Todo-list:
+_reproducability_
+Cudnn, torch, random, numpy are all seeded. If only one thread `--num_threads 1` is used, the model can be trained in a fully reproducable way.
 
-- load pretrained model if continue_training and model-file exists
-- train with global step variable to continue from checkpoint
+_saving and loading model_
 
-## Next:
+For each network the layers of the network that are modular should have the same name so they are easily transferrable.
+The optimizer is saved in the model by name and hyperparameters are only loaded when the current optimizer is the same.
 
-Continuous to discrete:
+In case a pretrained model from torch.vision is required, it is best to make a new Net class for this model that loads the architecture and concatenate the output layers.
 
-- add classification layers
+_continuous to discrete actions_
+
+The CrossEntropy Loss takes as prediction input the raw values before soft max and as targets the indices of the correct label but not in a one-hot fashion.
+In the `discretize` function, the target values are translated to the correct form depending on the loss function.
+
+_test online_
