@@ -1,9 +1,22 @@
 ---
-title: Transition from Tensorflow to Pytorch
+title: Preparation for Policy Learning Batch
 layout: default
 ---
 
-<!-- <img src="/imgs/18-10-29_doshico.png" alt="doshico environments" style="width: 800px;"/> -->
+
+### Creation of circular ESAT
+
+Created new Blender model with windows, lights and a circular parcours without dead ends.
+
+<img src="/imgs/19-01-10_esatv3.jpg" alt="circular esat" style="width: 500px;"/>
+<img src="/imgs/19-01-10_esatv3_1.jpg" alt="circular esat" style="width: 300px;"/>
+
+
+Todo:
+- Add starting positions
+- Add yaml file with configuration of success/failure
+
+### Transition from Tensorflow to Pytorch
 
 Due to the lack of reproducable computations with tensorflow, I decided to transfer my code to pytorch.
 In this post I'll keep track of the major changes in structure and overall required translations.
@@ -57,3 +70,12 @@ The CrossEntropy Loss takes as prediction input the raw values before soft max a
 In the `discretize` function, the target values are translated to the correct form depending on the loss function.
 
 _test online_
+
+check!
+
+_Extensions_
+
+- Add tensorboard logging
+- Add visualizations in tools: https://github.com/choosehappy/PytorchDigitalPathology/tree/master/visualization_densenet/pytorch-cnn-visualizations
+
+## 
