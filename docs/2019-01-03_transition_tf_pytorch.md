@@ -1,5 +1,5 @@
 ---
-title: Preparation for Policy Learning Batch
+title: Preparation for Policy Learning Experiments
 layout: default
 ---
 
@@ -8,8 +8,8 @@ layout: default
 
 Created new Blender model with windows, lights and a circular parcours without dead ends.
 
-<img src="/imgs/19-01-10_esatv3.jpg" alt="circular esat" style="width: 500px;"/>
-<img src="/imgs/19-01-10_esatv3_1.jpg" alt="circular esat" style="width: 300px;"/>
+<img src="/imgs/19-01-10_esatv3.jpg" alt="circular esat" style="width: 400px;"/>
+<img src="/imgs/19-01-10_esatv3_1.jpg" alt="circular esat" style="width: 400px;"/>
 
 
 Todo:
@@ -78,4 +78,27 @@ _Extensions_
 - Add tensorboard logging
 - Add visualizations in tools: https://github.com/choosehappy/PytorchDigitalPathology/tree/master/visualization_densenet/pytorch-cnn-visualizations
 
-## 
+## Add Pauzing and Reset of Gazebo Physics
+
+
+`rosservice call /gazebo/pause_physics "{}"`
+
+
+`rosservice call /gazebo/reset_simulation "{}"`
+
+`rosservice call /gazebo/set_model_state '{model_state: { model_name: quadrotor, pose: { position: { x: 0.3, y: 0.2 ,z: 0 }, orientation: {x: 0, y: 0.491983115673, z: 0, w: 0.870604813099 } }, twist: { linear: {x: 0.0 , y: 0 ,z: 0 } , angular: { x: 0.0 , y: 0 , z: 0.0 } } , reference_frame: world } }'`
+
+Use `--one_world` option if each run should be in the same world when the world has also a generator.
+
+## Primal experiment
+
+Settings
+
+| Setting        | Value |
+|----------------|-------|
+| policy-mixing  |  0.5  |
+| buffersize     |  500  |
+| speed          |  1.3  |
+| turn speed     |  0.5  |
+
+
