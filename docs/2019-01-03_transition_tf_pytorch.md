@@ -101,4 +101,19 @@ Settings
 | speed          |  1.3  |
 | turn speed     |  0.5  |
 
+By pauzing and unpauzing gazebo during the process and training step of torch, the real time factor of ROS is less than 50%. 
+This means that 4minutes of training time takes more than 8minutes of real time.
+It is questionable whether this is actually required.
+
+Duration for 1 training step at each frame is 0.124s. This means that if pause simulator was not on, the duration is longer than the period rosinterface has between 2 frames (0.1s).
+Tensorboard logging has almost no influence on this.
+Taking two gradient steps for the same replay buffer increases the delay to 0.168s.
+
+One way to fasten the experiment is by lowering the frame rate (6FPS ~ 0.16s) of the camera and not pausing the simulator.
+Similarly you could work at 30FPS and repeating the previous action for 5 frames requiring a next training step and control decision every 6FP and not pausing the simulator.
+The main speed up lies in training at the same rate as the frames come in so there is no waiting for a next frame.
+Just increasing the framerate to 30FPS would already lower the 0.1s waiting for next frame to 0.033s however not that much will have changed in the simulated environment, making the two frames almost identical.
+Conclusion: as DQN's have shown that working at 30FPS but repeating an action over several frames to adjust the training speed with the frame rate will probably give most gains.
+In general I'm not very fond of this technique as the control will always be 0.125s later than the frame on which it is decided.
+By pausing the simulator we ensure this delay does not effect the performance. So unpausing for speed up seems like a bad idea to startoff with.
 
