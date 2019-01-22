@@ -25,6 +25,7 @@ The model trained in a factorized fashion is referred to as **fact model**.
 <img src="/imgs/18-08-28_gz_1.jpg" alt="Corridor Model Inside" style="width: 200px;"/>
 <img src="/imgs/18-08-28_gz_2.jpg" alt="Empty model with poster" style="width: 200px;"/>
 <img src="/imgs/18-08-28_gz_3.jpg" alt="Full corridor" style="width: 200px;"/>
+<img src="/imgs/18-08-28_gz_4.jpg" alt="Total corridor" style="width: 200px;"/>
 
 ## Grouping corridor settings and defining fragmented datasets
 
@@ -180,7 +181,7 @@ $ cat checkpoint
 $ sed -i 's/esat\/opal\/kkelchte\/docker_home\/tensorflow\/log\/varied_corridor\/mobile/home\/klaas\/tensorflow\/log\/varied_corridor/' checkpoint
 # try on alienware itself within gazebo environment
 $ roscd simulation_supervised/python
-$ python run_script.py -t test_online -g -e -p eva_params.yaml --robot drone_sim -m varied_corridor -pe virtualenv -w esatv1 --fsm console_interactive_fsm
+$ python run_script.py -t test_online -g -e -p eva_params.yaml --robot drone_sim -m varied_corridor -pe virtualenv -w esatv1 --fsm console_interactive_fs
 ```
 
 Seems like drivers of nvidia are too old.
@@ -249,7 +250,20 @@ __Online results: esat distance__
 |Squeeze_v3    |                | 3.94            | 17.2             |
 
 
-### Extension on visualizations
+### Next step? Extension on visualizations
+
 
 Add regularization by penalizing low attentions with weight minimization... for improving vizualizations?
 http://openaccess.thecvf.com/content_cvpr_2018/papers/Mascharka_Transparency_by_Design_CVPR_2018_paper.pdf
+
+
+### Next step? Put control factors within straight corridor
+
+The results are hard to interpret, see noise_augmentation blog. In general noise augmentation has a good influence but for sure not always.
+I would guess that the main problem currently lies at how the data is created.
+Because each expert is trained on kind of weird data I assume some networks are expected to learn impossible things.
+A way to bypass this issue is by placing the different visual cues or factors each time within the corridor.
+The benefit of doing this, is that the expert will be more reliable when flying in the real corridor making the online corridor results better.
+It would not give in on the story as two combinations are not so hard as many combinations.
+This step is more related to the factoring_control in an ensemble.
+

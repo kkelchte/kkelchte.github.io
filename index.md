@@ -2,6 +2,16 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
+#### [03-01-2019: Transition from TF to PyTorch](./docs/2019-01-03_transition_tf_pytorch.md)
+
+#### [29-10-2018: Online Life Long Learning](./docs/2018-10-29_online_LLL.md)
+
+#### [29-10-2018: Life Long Learning on Doshico](./docs/2018-10-29_LLL_on_doshico.md)
+
+#### [18-10-2018: Real World Life Long Learning](./docs/2018-10-18_real-world-lifelong-learning.md)
+
+#### [16-10-2018: Evaluation of ROS-openAI](./docs/2018-10-16_evaluation_of_ros_openai.md)
+
 #### [24-09-2018: Noise Augmentation](./docs/2018-09-24_noise_augmentation.md)
 
 #### [06-09-2018: Implementing Ensemble](./docs/2018-09-06_implementing_ensemble.md)
