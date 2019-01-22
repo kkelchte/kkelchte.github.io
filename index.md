@@ -2,6 +2,8 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
+#### [22-01-2019: Notes on experiments related to policy learning chapter](./docs/2019-01-22_policy_learning_blogversion.md)
+
 #### [03-01-2019: Transition from TF to PyTorch](./docs/2019-01-03_transition_tf_pytorch.md)
 
 #### [29-10-2018: Online Life Long Learning](./docs/2018-10-29_online_LLL.md)

@@ -1,47 +1,47 @@
 ## 0. Summary / Abstract
 
-In this work we explore the feasiblity of applying Deep Reinforcement Learning techniques to the task of monocular autonomous navigation of small robots in indoor environments.
-In IROS 2018 more than one out of four papers were related to deep learning. 
-After speech and computer vision, deep learning is finaly becoming a valid tool in robotics. 
-Deep learning methods enable the robotics community to enrich there vision algorithms towards better understanding of the current state of the robot, for instance by estimating the egomotion of the robot.
-On the other hand reinforcement learning allows the training of a control algorithm based on a reward signal without the need of accurate dynamic models.
-However the amount of success stories combining deep learning as state extractor with end-to-end reinforcement learning is limited due to a number of challenges.
-These challenges are researched in this work resulting in guidelines and good practices when designing deep neural network controller.
-The first collection of design decisions tackle the implementation of the learning algorithm as well as how to use neural networks to represent an agent or controller.
-In the second part we dive deeper in architectural decisions.
-After exploring the first two regimes in simulation, a third strenuous part of this work handles on the step from simulation to the real world. 
-Different techniques can be applied to transfer the knowledge from one domain, namely simulation, to the very different domain, namely the real world.
-These three regimes of design decisions are taken together in a final proof-of-concept before we conclude this thesis with an extended discussion on the application of DRL in monocular navigation tasks.
+Although Deep Learning in robotics was viewed with scepticism compared to areas like speech or computer vision, it is rightfully becoming an accepted tool, as evidenced by one in four papers related to Deep Learning at the IROS conference 2018.
+Deep learning methods enable the robotics community to enrich vision algorithms to better understand current robot state. Moreover, Deep learning combined with Reinforcement Learning, namely Deep Reinforcement Learning (DRL), allows control algorithms to be trained with a reward signal instead of accurate dynamic models. However DRL has had limited success due to a noumber of challenges, such as data hungeriness and local minima. Based on the analysis of these challenges, we provide guidelines and good practices for designing deep neural network policies.
+The first set of design decisions described, compares versions of learning algorithms as well as how neural networks can represent an agent or controller.
+The second set of design decisions identifies the networks architecture and hyperparameters.
+A third design step handles on the knowledge transfer from simulation to the real world.
+After bringing these three sets of design decision together in a final proof-of-concept, an extended discussion on the application of DRL in monocular navigation concludes this thesis.
+
 
 ## 1. Introduction
 
-_General drones and general DRL_
+_drones are awesome and agile, autonomous controls are hard_
+Drones are becomming more and more affordable and stable to fly. 
+As they are not restricted to flat terrain as drivable robots, they are more agile and applicable in a wider range of situations.
+Shark prevention at coastlines, building surveillance, victim search after natural disasters or bridge inspection are some classical examples.
+Indoor environments have the difficulty of providing less free space, possible self-turbulence and often a lack of GPS coverage.
+Outdoor environments on the contrary have natural wind turbulences, a wider range of textures and lighting, as well as more legal restrictions.
+Building an autonomous controller that can navigate in this variety of situations remains very challenging. 
+Especially because of a limited battery budget, the controller is only allowed to use limited computation power and lightweight sensors.
+The camera with an IMU (inertia measurement system) is a popular combination of lightweight sensors.
 
-Lightweight drones are becomming gradually more reliable and affordable. 
-
-As they are not restricted to flat terrain as drivable robots, they are more agile and applicable in a wider range situations.
-
-Indoor environments are especially difficult due to several reasons for instance narrow passages, turbulence from wind reflection and lack of GPS signal.
-
-Building an autonomous controller that can navigate these drones with only limited computation power and limited sensor info is very challenging.
-
-Collision avoidance is often solved with the use of extra sensors from which the depth of the obstacles can be estimated for example sonars, LIDARs or stereo-cameras. 
-
-These extra sensors however limit the range of possible drones that can be used and decreases the maximum flight duration due to the battery limit.
-
-In this work we will compare the benefits of different sensors over others.
-
-In order to get usefull information from the high dimensional camera input, we rely on the deep convolutional neural network to extract a lower dimensional state representation.
-
-Neural networks have the benefit to be trainable with any objective function with a simple gradient descent algorithm. 
-
-_Autonomous Navigation split up_
-
+_autonomous navigation has multiple layers of complexity_
 Autonomous navigation is a broad concept that can be split into different tasks. 
-Firstly collision avoidance makes the drone turn away from near obstacles like walls or chairs. 
+Firstly collision avoidance makes the drone turn away from near obstacles like walls or objects. 
 A second task consists of maintaining a direction despite deviations from turbulences or obstacles.
 The direction is often defined by intermediate waypoints along a planned trajectory.
-The trajectory is the result of a path planning algorithm given a map of its environment and the coordinates of the destination.
+This trajectory is the result of a path planning algorithm given a map of its environment and the coordinates of the destination.
+
+Autonomous navigation systems based on camera input traditionally build a map in which the robot tries to localize itself.
+In combination with some points of interest selection within this map and path planning algorithm, the robot can follow waypoints along a trajectory. 
+During the navigation, the robot simulatenously refines this map hand in hand with a better estimate of its own location.
+In order to extract both the environment and its own movement within this environment, these algorithms use keypoints in the image to track.
+However, tracking these keypoints and storing this map takes quite some processing time. 
+Moreover in indoor environments it is often difficult to find proper features to track due to plain walls and narrow passages. 
+Especially once the tracking is lost, the robot fails to localize itself within the map which results in having to start the map building all over again. 
+
+In this thesis we explore whether we can substitute this metric based approaches with a machine learning approach based on deep neural networks.
+Deep learning has demonstrated impressive results in fields like speech and computer vision. 
+Task for which plenty of data is available, seems to be solved for example speech recognition or object detection.
+Neural networks are capable of learning to extract those features most relevant for the task.
+Moreover, if the network is recurrent, they are even capable of memorizing sequences and predicting the future based on the innerstate of the network.
+These advantages make them very usefull for autonomous navigation. 
+In this case we can look at it as a control prediction problem where a function is optimized to map the RGB input to a correct action.
 
 Each intermediate task is usually solved in a classic control optimization problem but can be substituted by a trained neural network.
 We will mainly focus on the first task, collision avoidance, because this task lies at the core of autonomous navigation.
@@ -49,6 +49,17 @@ Besides, the other task have a higher complexity resulting in more data and time
 
 Our framework however is general enough to be applicable to the full autonomous navigation task which we will demonstrate in the penultimate chapter.
 Because of the high amount of experiments required to finetune hyperparameters, it is best to start from one smaller task like collision avoidance.
+
+Collision avoidance is often solved with the use of extra sensors from which the depth of the obstacles can be estimated for example sonars, LIDARs or stereo-cameras. 
+These extra sensors however limit the range of possible drones that can be used and decreases the maximum flight duration due to the battery limit.
+In this work we will compare the benefits of different sensors over others.
+
+In order to get usefull information from the high dimensional camera input, we rely on the deep convolutional neural network to extract a lower dimensional state representation.
+Neural networks have the benefit to be trainable with a simple gradient descent algorithm over an objective function. 
+
+_Autonomous Navigation split up_
+
+
 
 _ambiguity of collision avoidance_
 
@@ -87,7 +98,7 @@ _Technical setup_
 
 - ROS - Gazebo - Tensorflow - Docker/Singularity - Xpra - Condor
 
-## 3. Experimental Setup
+## 3. Simulation Supervised Learning - The Framework 
 
 In the introduction I explained how we will focus on training a robot to avoid collisions with the assumption that the differences in training algorithms and architectural design will be applicable to more complex tasks. 
 
