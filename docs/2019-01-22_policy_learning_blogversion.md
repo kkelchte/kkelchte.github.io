@@ -120,8 +120,14 @@ The policy mixing and advantage should be demonstratable in the top-down view.
 One way to improve this behavior towards a safer learning, is to allow small mistakes of the student, but let the expert take over each time the loss is too high.
 Having such an adaptive online policy mixing behavior might result in a higher sample efficiency due a decreased variance as well as bias.
 
+DEBUG:
+- for visualization: 
+	- add save batch function
+	- (possibly add animation of current samples in batch)
+	
 TODO
 - specify set of experiments
+
 
 
 ## More and more online
