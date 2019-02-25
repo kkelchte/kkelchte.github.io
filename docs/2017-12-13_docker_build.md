@@ -145,13 +145,24 @@ $# apt-get update
 $# apt-get install ...
 CTR+D
 $ scp ros_gazebo_tensorflow_writable.img kkelchte@ssh.esat.kuleuven.be:/esat/opal/kkelchte/singularity_images
-# In case you want to update the drone_ws in /code, you first copy the drone_ws to /root with sudo as only /root is loaded in the image shell for sudo user.
-$ rm -r /root/drone_ws
-$ cp -r ~/drone_ws /root/
+```
+
+Changing the code within singularity's /code directory requires you to first copy the new code to /root as this directory is mounted.
+
+```bash
+# on ESAT machine
+$ cd /esat/opal/kkelchte/docker_home
+$ tar -cvf dronews.tar drone_ws
+# on alienware
+$ cd /root 
+$ sudo rm -r drone_ws
+$ scp kkelchte@ssh.esat.kuleuven.be:/esat/opal/kkelchte/docker_home/dronews.tar .
+$ sudo tar -xvf dronews.tar
 $ sudo singularity shell --nv --writable ~/singularity_images/ros_gazebo_tensorflow_writable.img
 $# rm -r /code/drone_ws
 $# mv /root/drone_ws /code
 CTR+D
+$ scp ros_gazebo_tensorflow_writable.img kkelchte@ssh.esat.kuleuven.be:/esat/opal/kkelchte/singularity_images
 ```
 
 ### 7 (Alternative to clean build) Add package to docker container and rebuild singularity

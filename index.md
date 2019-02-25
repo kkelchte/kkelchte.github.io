@@ -2,6 +2,10 @@
 
 Welcome on my github blog space where I might publish some preliminary results.
 
+#### [22-02-2019: Extensive notes on experiments](./docs/2019-02-22_notes_on_experiments.md)
+
+#### [22-02-2019: Short notes on how to reproduce results](./docs/2019-02-22_reproduce_results.md)
+
 #### [22-01-2019: Notes on experiments related to policy learning chapter](./docs/2019-01-22_policy_learning_blogversion.md)
 
 #### [03-01-2019: Transition from TF to PyTorch](./docs/2019-01-03_transition_tf_pytorch.md)
