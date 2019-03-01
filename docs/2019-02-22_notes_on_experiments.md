@@ -3,9 +3,117 @@ title: Reproduce Results
 layout: default
 ---
 
-
-
 # Neural Architecture Experimental Notes:
+
+_NA: Compare realistic architectures_
+
+| network | alex                 | squeeze              | tiny                 |
+|---------|----------------------|----------------------|----------------------|
+| LR      | 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001|
+| BS      | ??                   | ??                   | ??                   |
+| init    | scratch              | scratch              | scratch              |
+| optim   | winner               | winner               | winner               |
+| seed    | 123,456,789          | 123,456,789          | 123,456,789          |
+| dataset | 100K, 50K, 20K, 10K  | 100K, 50K, 20K, 10K  | 100K, 50K, 20K, 10K  |
+
+Justify step to scratch as hand crafted models do not have a imagenet pretrained checkpoint available.
+The three models above are competing in performance on gradual smaller datasets.
+Ideally a smaller model is less prune to overfitting and allows faster learning.
+Handcraft different versions of tiny net according to pruning with importance weights.
+
+_NA: Compare deep architectures_
+
+| network | vgg16                | alex                 | incpetion            | res18                | dense                |
+|---------|----------------------|----------------------|----------------------|----------------------|----------------------|
+| LR      | 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001|
+| BS      | ??                   | ??                   | ??                   | ??                   | ??                   |
+| init    | imagenet             | imagenet             | imagenet             | imagenet             | imagenet             |
+| optim   | winner               | winner               | winner               | winner               | winner               |
+| seed    | 123,456,789          | 123,456,789          | 123,456,789          | 123,456,789          | 123,456,789          |
+
+Models are compared in the same setting. 
+If a model fails to learn due to severe overfitting, overfitting is handled with by regularization techniques (DO, WD, BN).
+Regularized model is add to the validation learning graph.
+
+_NA: VGG preparation_
+
+| network | vgg16                |
+|---------|----------------------|
+| LR      | 0.1,0.01,0.001,0.0001|
+| BS      | ??                   |
+| init    | scratch, imagenet    |
+| optim   | SGD, adam, adadelta  |
+| seed    | 123,456,789          |
+
+_imagenet pretrained speeds up learning and decreases overfitting_
+For VGG16 SGD from scratch / imagenetpretrained is compared over different learning rates.
+_optimizers can increase learning rate without overfitting_
+For VGG16 with SGD, ADAM and ADADELTA are compared for 'best' learning rate in pretrained setting.
+Possibly add the same setting for alex net?
+
+Plot curves of validation accuracy and table final test accuracies with std over different seeds.
+
+TODO:
+- test proper batch size so model fits on gpu
+- estimate condor training time
+
+
+_NA: Influence of data normalization on Alexnet_
+
+| network | alex                 |
+|---------|----------------------|
+| LR      | 0.1,0.01,0.001,0.0001|
+| BS      | 100                  |
+| init    | scratch              |
+| optim   | SGD                  |
+| seed    | 123,456,789          |
+
+Baseline is no normalization with images [0,1].
+Models: Shifted input [-0.5,0.5] `--shifted_input`; Normalized input N(0,1) `--scaled_input`; Normalized output `--normalized_output`.
+Esatv3 has following normalization parameters: `--scale_means` [0.42, 0.46, 0.5] and `--scale_stds` [0.218, 0.239, 0.2575].
+
+If improvement on models with normalized input is not large enough, stick to shifted or normal input.
+Estimating the mean, variance and covariance matrix of a dataset is not feasible in an online setting, unless with some running average.
+
+Plot curves of validation accuracy and table final test accuracies with std over different seeds.
+
+```bash
+for LR in 1 01 001 0001 ; do
+  name="alex_net/esatv3_expert_200K/ref/$LR"
+  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete --owr\
+   --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 500 --batch_size 100\
+   --learning_rate 0.$LR"
+  dag_args="--number_of_models 3"
+  condor_args="--wall_time_rec $((5*500*60)) --rammem 15"
+  python dag_train.py -t $name $pytorch_args $dag_args $condor_args
+
+  name="alex_net/esatv3_expert_200K/shifted_input/$LR"
+  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete --owr\
+   --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 500 --batch_size 100\
+   --learning_rate 0.$LR --shifted_input"
+  dag_args="--number_of_models 3"
+  condor_args="--wall_time_rec $((5*500*60)) --rammem 15"
+  python dag_train.py -t $name $pytorch_args $dag_args $condor_args
+
+  name="alex_net/esatv3_expert_200K/scaled_input/$LR"
+  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete --owr\
+   --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 500 --batch_size 100\
+   --learning_rate 0.$LR --scaled_input"
+  dag_args="--number_of_models 3"
+  condor_args="--wall_time_rec $((5*500*60)) --rammem 15"
+  python dag_train.py -t $name $pytorch_args $dag_args $condor_args
+
+  name="alex_net/esatv3_expert_200K/normalized_output/$LR"
+  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete --owr\
+   --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 500 --batch_size 100\
+   --learning_rate 0.$LR --normalized_output"
+  dag_args="--number_of_models 3"
+  condor_args="--wall_time_rec $((5*500*60)) --rammem 15"
+  python dag_train.py -t $name $pytorch_args $dag_args $condor_args
+done
+```
+
+
 
 _NA: Load Imagenet Pretrained Alexnet_
 
@@ -22,7 +130,7 @@ It is however crucial to load a scratch saved pytorch model to be able to have t
 ```bash
 for d in 'esatv3_expert' 'esatv3_expert_10K' 'esatv3_expert_5K' 'esatv3_expert_1K' 'esatv3_expert_500' ; do
   name="tinyv2/$d"
-  pytorch_args="--dataset $d --turn_speed 0.8 --speed 0.8 --discrete --load_in_ram --owr --loss CrossEntropy \
+  pytorch_args="--dataset $d --turn_speed 0.8 --speed 0.8 --discrete --load_data_in_ram --owr --loss CrossEntropy \
    --continue_training --checkpoint_path tiny_net_scratch --tensorboard --max_episodes 100 --batch_size 64\
    --learning_rate 0.01"
   dag_args="--number_of_models 2"
