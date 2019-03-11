@@ -32,7 +32,7 @@ _NA: Compare deep architectures_
 | seed    | 123,456,789          | 123,456,789          | 123,456,789          | 123,456,789          | 123,456,789          |
 
 Models are compared in the same setting. 
-If a model fails to learn due to severe overfitting, overfitting is handled with by regularization techniques (DO, WD, BN).
+If a model fails to learn due to severe overfitting, overfitting is handled by regularization techniques (DO, WD, BN).
 Regularized model is add to the validation learning graph.
 
 _NA: VGG preparation_
@@ -47,9 +47,9 @@ _NA: VGG preparation_
 
 _imagenet pretrained speeds up learning and decreases overfitting_
 For VGG16 SGD from scratch / imagenetpretrained is compared over different learning rates.
+
 _optimizers can increase learning rate without overfitting_
 For VGG16 with SGD, ADAM and ADADELTA are compared for 'best' learning rate in pretrained setting.
-Possibly add the same setting for alex net?
 
 Plot curves of validation accuracy and table final test accuracies with std over different seeds.
 
@@ -75,7 +75,37 @@ Esatv3 has following normalization parameters: `--scale_means` [0.42, 0.46, 0.5]
 If improvement on models with normalized input is not large enough, stick to shifted or normal input.
 Estimating the mean, variance and covariance matrix of a dataset is not feasible in an online setting, unless with some running average.
 
+|         | 0.1  |  0.01  | 0.001 | 0.0001 | 
+|---------|------|--------|-------|--------|
+|reference| check|11392 11393| check | running|
+|shifted  | check| check  | check | check|        
+|scaled i | check| check  | run   | running|
+|scaled o |11386 |11389 11390| check | run|
+
 Plot curves of validation accuracy and table final test accuracies with std over different seeds.
+
+
+Conclusion:
+At the input side is not much difference. Shifting the data, as well as scaling has a slight improvement over the reference.
+The difference is not large and mainly visible at the beginning of training.
+Because scaling the data requires estimation of mean and standard deviations for each new dataset, we continue working with shifted input.
+<img src="/imgs/19-03-10_data_normalization.jpg" alt="data normalization" style="width: 400px;"/>
+
+
+The difference on the different learning rates was negligible:
+<img src="/imgs/19-03-10_data_normalization_learningrate.jpg" alt="data normalization learning rates" style="width: 400px;"/>
+
+Normalizing the different discrete actions within a batch at the output has a slight negative impact in this setting.
+The data imbalance and force normalization makes some samples much less represented in the training data, leading to a poorer validation accuracy.
+
+The variance over different seeds is also negligible:
+<img src="/imgs/19-03-10_data_normalization_seeds.jpg" alt="data normalization seeds" style="width: 400px;"/>
+
+
+```bash
+python combine_results.py --subsample 10 --tags Loss_val_accuracy --log_folders alex_net/esatv3_expert_200K/shifted_input/1/2 alex_net/esatv3_expert_200K/ref/1/2 alex_net/esatv3_expert_200K/scaled_input/1/2 alex_net/esatv3_expert_200K/normalized_output/1/2 --legend_names shifted_input reference scaled_input normalized_output
+```
+
 
 ```bash
 for LR in 1 01 001 0001 ; do
