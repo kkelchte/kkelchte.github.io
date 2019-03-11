@@ -57,6 +57,13 @@ TODO:
 - test proper batch size so model fits on gpu
 - estimate condor training time
 
+```bash
+python main.py --network vgg16_net
+
+```
+
+
+
 
 _NA: Influence of data normalization on Alexnet_
 
@@ -103,7 +110,25 @@ The variance over different seeds is also negligible:
 
 
 ```bash
-python combine_results.py --subsample 10 --tags Loss_val_accuracy --log_folders alex_net/esatv3_expert_200K/shifted_input/1/2 alex_net/esatv3_expert_200K/ref/1/2 alex_net/esatv3_expert_200K/scaled_input/1/2 alex_net/esatv3_expert_200K/normalized_output/1/2 --legend_names shifted_input reference scaled_input normalized_output
+python combine_results.py --subsample 10 --tags Loss_val_accuracy\
+  --log_folders alex_net/esatv3_expert_200K/shifted_input/1/2\
+                alex_net/esatv3_expert_200K/ref/1/2\
+                alex_net/esatv3_expert_200K/scaled_input/1/2\
+                alex_net/esatv3_expert_200K/normalized_output/1/2\
+  --legend_names shifted_input reference scaled_input normalized_output
+
+python combine_results.py --subsample 10 --tags Loss_val_accuracy\
+                alex_net/esatv3_expert_200K/ref/1/2\
+                alex_net/esatv3_expert_200K/ref/01/2\
+                alex_net/esatv3_expert_200K/ref/001/2\
+                alex_net/esatv3_expert_200K/ref/0001/2\
+  --legend_names 0.1 0.01 0.001 0.0001
+
+python combine_results.py --subsample 10 --tags Loss_val_accuracy\
+                alex_net/esatv3_expert_200K/ref/1/0\
+                alex_net/esatv3_expert_200K/ref/1/1\
+                alex_net/esatv3_expert_200K/ref/1/2\
+  --legend_names 0 1 2
 ```
 
 
