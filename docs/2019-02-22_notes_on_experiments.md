@@ -26,10 +26,10 @@ _NA: Compare deep architectures_
 | network | vgg16                | alex                 | incpetion            | res18                | dense                |
 |---------|----------------------|----------------------|----------------------|----------------------|----------------------|
 | LR      | 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001|
-| BS      | ??                   | ??                   | ??                   | ??                   | ??                   |
+| BS      | 64                   | 64                   | 64                   | 64                   | 64                   |
 | init    | imagenet             | imagenet             | imagenet             | imagenet             | imagenet             |
 | optim   | winner               | winner               | winner               | winner               | winner               |
-| seed    | 123,456,789          | 123,456,789          | 123,456,789          | 123,456,789          | 123,456,789          |
+| seed    | 123                  | 123                  | 123                  | 123                  | 123                  |
 
 Models are compared in the same setting. 
 If a model fails to learn due to severe overfitting, overfitting is handled by regularization techniques (DO, WD, BN).
@@ -40,10 +40,10 @@ _NA: VGG preparation_
 | network | vgg16                |
 |---------|----------------------|
 | LR      | 0.1,0.01,0.001,0.0001|
-| BS      | ??                   |
+| BS      | 32                   |
 | init    | scratch, imagenet    |
 | optim   | SGD, adam, adadelta  |
-| seed    | 123,456,789          |
+| seed    | 123                  |
 
 _imagenet pretrained speeds up learning and decreases overfitting_
 For VGG16 SGD from scratch / imagenetpretrained is compared over different learning rates.
@@ -54,12 +54,21 @@ For VGG16 with SGD, ADAM and ADADELTA are compared for 'best' learning rate in p
 Plot curves of validation accuracy and table final test accuracies with std over different seeds.
 
 TODO:
-- test proper batch size so model fits on gpu
+- test proper batch size so model fits on 4G gpu
 - estimate condor training time
 
 ```bash
-python main.py --network vgg16_net
-
+for LR in 1 001 00001 ; do
+  for OP in SGD Adadelta Adam ; do 
+    name="vgg16_net/esatv3_expert_200K/$OP/$LR"
+    pytorch_args="--network vgg16_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8\
+     --continue_training --checkpoint_path vgg16_net_scratch --tensorboard --max_episodes 100 --batch_size 32\
+     --learning_rate 0.$LR --loss CrossEntropy --shifted_input --optimizer $OP"
+    dag_args="--number_of_models 1"
+    condor_args="--wall_time_rec $((100*2*60+3600)) --rammem 6 --gpumem 7000"
+    python dag_train.py -t $name $pytorch_args $dag_args $condor_args
+  done
+done
 ```
 
 
@@ -135,33 +144,33 @@ python combine_results.py --subsample 10 --tags Loss_val_accuracy\
 ```bash
 for LR in 1 01 001 0001 ; do
   name="alex_net/esatv3_expert_200K/ref/$LR"
-  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete --owr\
+  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8\
    --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 500 --batch_size 100\
-   --learning_rate 0.$LR"
+   --learning_rate 0.$LR --loss CrossEntropy"
   dag_args="--number_of_models 3"
   condor_args="--wall_time_rec $((5*500*60)) --rammem 15"
   python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 
   name="alex_net/esatv3_expert_200K/shifted_input/$LR"
-  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete --owr\
+  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8\
    --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 500 --batch_size 100\
-   --learning_rate 0.$LR --shifted_input"
+   --learning_rate 0.$LR --shifted_input --loss CrossEntropy"
   dag_args="--number_of_models 3"
   condor_args="--wall_time_rec $((5*500*60)) --rammem 15"
   python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 
   name="alex_net/esatv3_expert_200K/scaled_input/$LR"
-  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete --owr\
+  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8\
    --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 500 --batch_size 100\
-   --learning_rate 0.$LR --scaled_input"
+   --learning_rate 0.$LR --scaled_input --loss CrossEntropy"
   dag_args="--number_of_models 3"
   condor_args="--wall_time_rec $((5*500*60)) --rammem 15"
   python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 
   name="alex_net/esatv3_expert_200K/normalized_output/$LR"
-  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete --owr\
+  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8\
    --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 500 --batch_size 100\
-   --learning_rate 0.$LR --normalized_output"
+   --learning_rate 0.$LR --normalized_output --loss CrossEntropy"
   dag_args="--number_of_models 3"
   condor_args="--wall_time_rec $((5*500*60)) --rammem 15"
   python dag_train.py -t $name $pytorch_args $dag_args $condor_args
