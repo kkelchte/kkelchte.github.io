@@ -65,7 +65,7 @@ for LR in 1 001 00001 ; do
      --continue_training --checkpoint_path vgg16_net_scratch --tensorboard --max_episodes 100 --batch_size 32\
      --learning_rate 0.$LR --loss CrossEntropy --shifted_input --optimizer $OP"
     dag_args="--number_of_models 1"
-    condor_args="--wall_time_rec $((100*2*60+3600)) --rammem 6 --gpumem 7000"
+    condor_args="--wall_time_rec $((100*2*60+3600)) --rammem 6 --gpumem 7000 --copy_dataset"
     python dag_train.py -t $name $pytorch_args $dag_args $condor_args
   done
 done
@@ -148,7 +148,7 @@ for LR in 1 01 001 0001 ; do
    --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 500 --batch_size 100\
    --learning_rate 0.$LR --loss CrossEntropy"
   dag_args="--number_of_models 3"
-  condor_args="--wall_time_rec $((5*500*60)) --rammem 15"
+  condor_args="--wall_time_rec $((5*500*60)) --rammem 6 --copy_dataset"
   python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 
   name="alex_net/esatv3_expert_200K/shifted_input/$LR"
@@ -156,7 +156,7 @@ for LR in 1 01 001 0001 ; do
    --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 500 --batch_size 100\
    --learning_rate 0.$LR --shifted_input --loss CrossEntropy"
   dag_args="--number_of_models 3"
-  condor_args="--wall_time_rec $((5*500*60)) --rammem 15"
+  condor_args="--wall_time_rec $((5*500*60)) --rammem 6 --copy_dataset"
   python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 
   name="alex_net/esatv3_expert_200K/scaled_input/$LR"
@@ -164,7 +164,7 @@ for LR in 1 01 001 0001 ; do
    --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 500 --batch_size 100\
    --learning_rate 0.$LR --scaled_input --loss CrossEntropy"
   dag_args="--number_of_models 3"
-  condor_args="--wall_time_rec $((5*500*60)) --rammem 15"
+  condor_args="--wall_time_rec $((5*500*60)) --rammem 6 --copy_dataset"
   python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 
   name="alex_net/esatv3_expert_200K/normalized_output/$LR"
@@ -172,7 +172,7 @@ for LR in 1 01 001 0001 ; do
    --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 500 --batch_size 100\
    --learning_rate 0.$LR --normalized_output --loss CrossEntropy"
   dag_args="--number_of_models 3"
-  condor_args="--wall_time_rec $((5*500*60)) --rammem 15"
+  condor_args="--wall_time_rec $((5*500*60)) --rammem 6 --copy_dataset"
   python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 done
 ```
