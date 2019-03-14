@@ -5,15 +5,31 @@ layout: default
 
 # Neural Architecture Experimental Notes:
 
+_NA: Gather specifications_
+
+| network      | feature layers | decision layers | parameters | GPU size[MB] |   FPS (cpu) |
+|--------------|----------------|-----------------|------------|--------------|-------------|
+| alex         |        5       |        3        |   57*10^6  |       1013   |  1188 (38)  | 
+| vgg16        |       13       |        3        |  134*10^6  |       1091   |   603 (8)   |
+| inception    |        7       |        1        |   24*10^6  |       1341   |    35 ()    |
+| res18        |                |                 |            |              |             |
+| dense        |                |                 |            |              |             |
+| squeeze      |                |                 |            |              |             |
+| tiny         |                |                 |            |              |             |
+
+The GPU speed depends mainly on how well the torch implementation utilizes the cuda and cudnn accelerations.
+All speed measurements were taken on a Titan X which is also not necessarily representative for an energy efficient onboard GPU. Therefore these results should only be used as an indicator for relative comparison.
+
+
 _NA: Compare realistic architectures_
 
 | network | alex                 | squeeze              | tiny                 |
 |---------|----------------------|----------------------|----------------------|
 | LR      | 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001|
-| BS      | ??                   | ??                   | ??                   |
+| BS      | 100                  | 100                  | 100                  |
 | init    | scratch              | scratch              | scratch              |
-| optim   | winner               | winner               | winner               |
-| seed    | 123,456,789          | 123,456,789          | 123,456,789          |
+| optim   | SGD                  | SGD                  | SGD                  |
+| seed    | 123                  | 123                  | 123                  |
 | dataset | 100K, 50K, 20K, 10K  | 100K, 50K, 20K, 10K  | 100K, 50K, 20K, 10K  |
 
 Justify step to scratch as hand crafted models do not have a imagenet pretrained checkpoint available.
@@ -23,10 +39,10 @@ Handcraft different versions of tiny net according to pruning with importance we
 
 _NA: Compare deep architectures_
 
-| network | vgg16                | alex                 | incpetion            | res18                | dense                |
+| network | vgg16                | alex                 | inception            | res18                | dense                |
 |---------|----------------------|----------------------|----------------------|----------------------|----------------------|
 | LR      | 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001|
-| BS      | 64                   | 64                   | 64                   | 64                   | 64                   |
+| BS      | 32                   | 32                   | 32                   | 32                   | 32                   |
 | init    | imagenet             | imagenet             | imagenet             | imagenet             | imagenet             |
 | optim   | winner               | winner               | winner               | winner               | winner               |
 | seed    | 123                  | 123                  | 123                  | 123                  | 123                  |
@@ -49,7 +65,9 @@ _imagenet pretrained speeds up learning and decreases overfitting_
 For VGG16 SGD from scratch / imagenetpretrained is compared over different learning rates.
 
 _optimizers can increase learning rate without overfitting_
-For VGG16 with SGD, ADAM and ADADELTA are compared for 'best' learning rate in pretrained setting.
+For VGG16 with SGD, ADAM and ADADELTA are compared for 'best' learning rate in scratch setting.
+
+<img src="/imgs/19-03-14_different_optimizer_vgg_scratch.jpg" alt="different optimizer for vgg scratch" style="width: 400px;"/>
 
 Plot curves of validation accuracy and table final test accuracies with std over different seeds.
 
@@ -127,14 +145,14 @@ python combine_results.py --subsample 10 --tags Loss_val_accuracy\
   --legend_names shifted_input reference scaled_input normalized_output
 
 python combine_results.py --subsample 10 --tags Loss_val_accuracy\
-                alex_net/esatv3_expert_200K/ref/1/2\
+    --log_folders alex_net/esatv3_expert_200K/ref/1/2\
                 alex_net/esatv3_expert_200K/ref/01/2\
                 alex_net/esatv3_expert_200K/ref/001/2\
                 alex_net/esatv3_expert_200K/ref/0001/2\
   --legend_names 0.1 0.01 0.001 0.0001
 
 python combine_results.py --subsample 10 --tags Loss_val_accuracy\
-                alex_net/esatv3_expert_200K/ref/1/0\
+  --log_folders alex_net/esatv3_expert_200K/ref/1/0\
                 alex_net/esatv3_expert_200K/ref/1/1\
                 alex_net/esatv3_expert_200K/ref/1/2\
   --legend_names 0 1 2
