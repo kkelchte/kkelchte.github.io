@@ -11,15 +11,16 @@ _NA: Gather specifications_
 |--------------|----------------|-----------------|------------|--------------|-------------|
 | alex         |        5       |        3        |   57*10^6  |       1013   |  1188 (38)  | 
 | vgg16        |       13       |        3        |  134*10^6  |       1091   |   603 (8)   |
-| inception    |        7       |        1        |   24*10^6  |       1341   |    35 ()    |
-| res18        |                |                 |            |              |             |
-| dense        |                |                 |            |              |             |
-| squeeze      |                |                 |            |              |             |
-| tiny         |                |                 |            |              |             |
+| inception    |        7       |        1        |   24*10^6  |       1341   |    35 (3)   |
+| res18        |        4       |        1        |   11*10^6  |       1277   |   297 (21)  |
+| dense        |       24       |        1        |    6*10^6  |        913   |    52 (5)   |
+| squeeze      |        9       |        1        |    736963  |       1303   |   293 (22)  |
+| tiny         |        2       |        2        |    8*10^6  |       1335   |  2369 (59)  |
 
 The GPU speed depends mainly on how well the torch implementation utilizes the cuda and cudnn accelerations.
 All speed measurements were taken on a Titan X which is also not necessarily representative for an energy efficient onboard GPU. Therefore these results should only be used as an indicator for relative comparison.
 
+To reproduce these results please use the `parse_network_details.ipynb` script.
 
 _NA: Compare realistic architectures_
 
@@ -41,10 +42,10 @@ _NA: Compare deep architectures_
 
 | network | vgg16                | alex                 | inception            | res18                | dense                |
 |---------|----------------------|----------------------|----------------------|----------------------|----------------------|
-| LR      | 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001|
+| LR      | 0.1,0.001,0.00001    | 0.1,0.001,0.00001    | 0.1,0.001,0.00001    | 0.1,0.001,0.00001    | 0.1,0.001,0.00001    |
 | BS      | 32                   | 32                   | 32                   | 32                   | 32                   |
 | init    | imagenet             | imagenet             | imagenet             | imagenet             | imagenet             |
-| optim   | winner               | winner               | winner               | winner               | winner               |
+| optim   | SGD                  | SGD                  | SGD                  | SGD                  | SGD                  |
 | seed    | 123                  | 123                  | 123                  | 123                  | 123                  |
 
 Models are compared in the same setting. 
@@ -55,7 +56,7 @@ _NA: VGG preparation_
 
 | network | vgg16                |
 |---------|----------------------|
-| LR      | 0.1,0.01,0.001,0.0001|
+| LR      | 0.1,0.001,0.00001    |
 | BS      | 32                   |
 | init    | scratch, imagenet    |
 | optim   | SGD, adam, adadelta  |
@@ -63,6 +64,8 @@ _NA: VGG preparation_
 
 _imagenet pretrained speeds up learning and decreases overfitting_
 For VGG16 SGD from scratch / imagenetpretrained is compared over different learning rates.
+
+<img src="/imgs/19-03-14_different_optimizer_vgg_scratch.jpg" alt="different optimizer for vgg scratch" style="width: 400px;"/>
 
 _optimizers can increase learning rate without overfitting_
 For VGG16 with SGD, ADAM and ADADELTA are compared for 'best' learning rate in scratch setting.
@@ -83,7 +86,7 @@ for LR in 1 001 00001 ; do
      --continue_training --checkpoint_path vgg16_net_scratch --tensorboard --max_episodes 100 --batch_size 32\
      --learning_rate 0.$LR --loss CrossEntropy --shifted_input --optimizer $OP"
     dag_args="--number_of_models 1"
-    condor_args="--wall_time_rec $((100*2*60+3600)) --rammem 6 --gpumem 7000 --copy_dataset"
+    condor_args="--wall_time_train $((100*5*60+2*3600)) --rammem 6 --gpumem 6000 --copy_dataset"
     python dag_train.py -t $name $pytorch_args $dag_args $condor_args
   done
 done
