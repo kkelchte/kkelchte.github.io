@@ -5,6 +5,31 @@ layout: default
 
 # Neural Architecture Experimental Notes:
 
+_NA: LSTM training methods_
+
+We distinguish three types of feeding sequential batches of data throught the network.
+The sequences can be fed to the network in its full length leading to fully unrolled backpropagation through time (FBPTT).
+Or the sequences can be truncated at a fixed length, for instance 20, leading to truncated backpropagation through time (TBPTT).
+The order the sequences are provided to the network, can be as a sliding window providing for each step a new shifted data sequence, sliding TBPTT (S-TBPTT).
+Or the order can be shuffled leading to better stabilization wich is called windowwise-truncated backpropagation through time (WW-TBPTT).
+
+| network | tiny_LSTM F-BPTT     | tiny_LSTM WW-BPTT    | tiny_LSTM S-BPTT     | alex_LSTM F-BPTT     | alex_LSTM WW-BPTT    | alex_LSTM S-BPTT     |
+|---------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|
+| LR      | 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001|
+| BS      | 1                    | 32                   | 32                   | 1                    | 32                   | 32                   |
+| TL      | -1                   | 20                   | 20                   | -1                   | 20                   | 20                   |
+| init    | scratch              | scratch              | scratch              | scratch              | scratch              | scratch              |
+| optim   | SGD                  | SGD                  | SGD                  | SGD                  | SGD                  | SGD                  |
+| seed    | 123                  | 123                  | 123                  | 123                  | 123                  | 123                  |
+| dataset | 100K, 50K, 20K, 10K  | 100K, 50K, 20K, 10K  | 100K, 50K, 20K, 10K  | 100K, 50K, 20K, 10K  | 100K, 50K, 20K, 10K  | 100K, 50K, 20K, 10K  |
+| gpu     | 3800                 | 3800                 | 3800                 | 3800                 | 3800                 | 3800                 |
+
+```bash
+python main.py --network tiny_LSTM_net --discrete --dataset esatv3_expert_200K --turn_speed 0.8 --speed 0.8 --tensorboard --max_episodes 100 --batch_size 32 --learning_rate 0.01 --loss CrossEntropy --shifted_input --optimizer SGD --continue_training --checkpoint_path tiny_LSTM_net_scratch
+```
+
+
+
 _NA: Gather specifications_
 
 | network      | feature layers | decision layers | parameters | GPU size[MB] |   FPS (cpu) |
@@ -27,7 +52,7 @@ _NA: Compare realistic architectures_
 | network | alex                 | squeeze              | tiny                 |
 |---------|----------------------|----------------------|----------------------|
 | LR      | 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001|
-| BS      | 100                  | 100                  | 100                  |
+| BS      | 32                   | 32                   | 32                   |
 | init    | scratch              | scratch              | scratch              |
 | optim   | SGD                  | SGD                  | SGD                  |
 | seed    | 123                  | 123                  | 123                  |
