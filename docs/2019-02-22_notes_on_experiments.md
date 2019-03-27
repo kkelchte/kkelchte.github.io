@@ -49,31 +49,55 @@ To reproduce these results please use the `parse_network_details.ipynb` script.
 
 _NA: Compare realistic architectures_
 
-| network | alex                 | squeeze              | tiny                 |
-|---------|----------------------|----------------------|----------------------|
-| LR      | 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001|
-| BS      | 32                   | 32                   | 32                   |
-| init    | scratch              | scratch              | scratch              |
-| optim   | SGD                  | SGD                  | SGD                  |
-| seed    | 123                  | 123                  | 123                  |
-| dataset | 100K, 50K, 20K, 10K  | 100K, 50K, 20K, 10K  | 100K, 50K, 20K, 10K  |
+| network | alex                 | tiny                 |
+|---------|----------------------|----------------------|
+| LR      | 0.1,0.01,0.001,0.0001| 0.1,0.01,0.001,0.0001|
+| BS      | 32                   | 32                   |
+| init    | scratch              | scratch              |
+| optim   | SGD                  | SGD                  |
+| seed    | 123                  | 123                  |
+| dataset | 100K, 50K, 20K, 10K  | 100K, 50K, 20K, 10K  |
 
 Justify step to scratch as hand crafted models do not have a imagenet pretrained checkpoint available.
 The three models above are competing in performance on gradual smaller datasets.
 Ideally a smaller model is less prune to overfitting and allows faster learning.
 Handcraft different versions of tiny net according to pruning with importance weights.
 
+```bash
+for DS in 100K 50K 20K 10K 5K 1K ; do 
+  for LR in 1 01 001 ; do
+    name="tiny_net/esatv3_expert_$DS/$LR"
+    pytorch_args="--network tiny_net --checkpoint_path tiny_net_scratch --dataset esatv3_expert_$DS --discrete --turn_speed 0.8 --speed 0.8\
+  --tensorboard --max_episodes 10000 --batch_size 32 --learning_rate 0.$LR --loss CrossEntropy --shifted_input --optimizer SGD"
+    dag_args="--number_of_models 1"
+    condor_args="--wall_time_train $((100*1*60+2*3600)) --rammem 6 --gpumem 900 --copy_dataset"
+    python dag_train.py -t $name $pytorch_args $dag_args $condor_args
+  done
+done
+
+for DS in 100K 50K 20K 10K 5K 1K; do 
+  for LR in 1 01 001 ; do
+    name="alex_net/esatv3_expert_$DS/$LR"
+    pytorch_args="--network alex_net --checkpoint_path alex_net_scratch --dataset esatv3_expert_$DS --discrete --turn_speed 0.8 --speed 0.8\
+  --tensorboard --max_episodes 10000 --batch_size 32 --learning_rate 0.$LR --loss CrossEntropy --shifted_input --optimizer SGD"
+    dag_args="--number_of_models 1"
+    condor_args="--wall_time_train $((100*1*60+2*3600)) --rammem 6 --gpumem 1900 --copy_dataset"
+    python dag_train.py -t $name $pytorch_args $dag_args $condor_args
+  done
+done
+```
+
 
 
 _NA: Compare deep architectures_
-
-| network | vgg16                | alex                 | inception            | res18                | dense                |
-|---------|----------------------|----------------------|----------------------|----------------------|----------------------|
-| LR      | 0.1,0.001,0.00001    | 0.1,0.001,0.00001    | 0.1,0.001,0.00001    | 0.1,0.001,0.00001    | 0.1,0.001,0.00001    |
-| BS      | 32                   | 32                   | 32                   | 32                   | 32                   |
-| init    | imagenet             | imagenet             | imagenet             | imagenet             | imagenet             |
-| optim   | SGD                  | SGD                  | SGD                  | SGD                  | SGD                  |
-| seed    | 123                  | 123                  | 123                  | 123                  | 123                  |
+               
+| network | vgg16                | alex                 | inception            | res18                | dense                | squeeze               |
+|---------|----------------------|----------------------|----------------------|----------------------|----------------------|-----------------------|
+| LR      | 0.1,0.001,0.00001    | 0.1,0.001,0.00001    | 0.1,0.001,0.00001    | 0.1,0.001,0.00001    | 0.1,0.001,0.00001    | 0.1,0.01,0.001,0.00001|
+| BS      | 32                   | 32                   | 32                   | 32                   | 32                   | 32                    |
+| init    | imagenet             | imagenet             | imagenet             | imagenet             | imagenet             | imagenet              |
+| optim   | SGD                  | SGD                  | SGD                  | SGD                  | SGD                  | SGD                   |
+| seed    | 123                  | 123                  | 123                  | 123                  | 123                  | 123                   |
 
 Models are compared in the same setting. 
 If a model fails to learn due to severe overfitting, overfitting is handled by regularization techniques (DO, WD, BN).
@@ -92,7 +116,7 @@ for net in inception_net vgg16_net dense_net ; do
   done
 done
 
-for net in res18_net alex_net ; do
+for net in res18_net alex_net; do
   for LR in 1 01 001 0001 00001 ; do
     name="${net}_pretrained/esatv3_expert_200K/$LR"
     pytorch_args="--network ${net} --pretrained --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --clip 1.0\
@@ -105,6 +129,9 @@ done
 
 # After training
 for net in alex vgg16 inception res18 dense ; do python combine_results.py --subsample 5 --tags validation_accuracy --log_folders ${net}_net_pretrained/esatv3_expert_200K --legend_names 0.00001 0.0001 0.001 0.01 0.1; done
+
+# select the winners and combine:
+python combine_results.py --subsample 5 --tags validation_accuracy --log_folders alex_net_pretrained/esatv3_expert_200K/01 dense_net_pretrained/esatv3_expert_200K/001 inception_net_pretrained/esatv3_expert_200K/1 res18_net_pretrained/esatv3_expert_200K/01 squeeze_net_pretrained/esatv3_expert_200K/1 vgg16_net_pretrained/esatv3_expert_200K/1 --legend_names Alexnet Densenet Inception Resnet Squeezenet Vgg
 ```
 <img src="/imgs/19-03-26_pretrained_architectures.jpg" alt="validation accuracy of pretrained archtictures." style="width: 400px;"/>
 
