@@ -116,7 +116,7 @@ for net in inception_net vgg16_net dense_net ; do
   done
 done
 
-for net in res18_net alex_net; do
+for net in res18_net alex_net squeeze_net; do
   for LR in 1 01 001 0001 00001 ; do
     name="${net}_pretrained/esatv3_expert_200K/$LR"
     pytorch_args="--network ${net} --pretrained --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --clip 1.0\
