@@ -87,7 +87,11 @@ for DS in 100K 50K 20K 10K 5K 1K; do
 done
 ```
 
-
+TODO:
+wait only for tiny 200K 1
+```bash
+combine_results.py --tags validation_accuracy train_accuracy --log_folders tiny_net/esatv3_expert_200K/001/seed_0 tiny_net/esatv3_expert_200K/01/seed_0 tiny_net/esatv3_expert_200K/1/seed_0 --legend_names 0.001 0.01 0.1 
+```
 
 _NA: Compare deep architectures_
                
@@ -133,8 +137,9 @@ for net in alex vgg16 inception res18 dense ; do python combine_results.py --sub
 # select the winners and combine:
 python combine_results.py --subsample 5 --tags validation_accuracy --log_folders alex_net_pretrained/esatv3_expert_200K/01 dense_net_pretrained/esatv3_expert_200K/001 inception_net_pretrained/esatv3_expert_200K/1 res18_net_pretrained/esatv3_expert_200K/01 squeeze_net_pretrained/esatv3_expert_200K/1 vgg16_net_pretrained/esatv3_expert_200K/1 --legend_names Alexnet Densenet Inception Resnet Squeezenet Vgg
 ```
-<img src="/imgs/19-03-26_pretrained_architectures.jpg" alt="validation accuracy of pretrained archtictures." style="width: 400px;"/>
-
+<!-- <img src="/imgs/19-03-26_pretrained_architectures.jpg" alt="validation accuracy of pretrained archtictures." style="width: 400px;"/> -->
+<img src="/imgs/19-03-29_deeparchs_training.jpg" alt="training accuracy of pretrained archtictures." style="width: 400px;"/>
+<img src="/imgs/19-03-29_deeparchs_validation.jpg" alt="validation accuracy of pretrained archtictures." style="width: 400px;"/>
 
 _NA: VGG preparation_
 
@@ -189,7 +194,10 @@ for OP in SGD Adadelta Adam ; do
 done
 ```
 
-
+TODO when Adam VGG is finished
+```bash
+python combine_results.py --tags validation_accuracy --log_folders vgg16_net/esatv3_expert_200K/SGD/1/seed_0 vgg16_net/esatv3_expert_200K/Adam/00001/seed_0 vgg16_net_pretrained/esatv3_expert_200K/Adadelta/1/seed_0 --legend_names SGD Adam Adadelta
+```
 
 
 _NA: Influence of data normalization on Alexnet: REDOING_
@@ -217,7 +225,7 @@ Conclusion:
 At the input side is not much difference. Shifting the data, as well as scaling has a slight improvement over the reference.
 The difference is not large and mainly visible at the beginning of training.
 Because scaling the data requires estimation of mean and standard deviations for each new dataset, we continue working with shifted input.
-<img src="/imgs/19-03-10_data_normalization.jpg" alt="data normalization" style="width: 400px;"/>
+<img src="/imgs/19-03-10_data_normalization_methods.jpg" alt="data normalization" style="width: 400px;"/>
 
 
 The difference on the different learning rates was negligible:
@@ -231,21 +239,21 @@ The variance over different seeds is also negligible:
 
 
 ```bash
-python combine_results.py --subsample 10 --tags Loss_val_accuracy\
+python combine_results.py --subsample 10 --tags validation_accuracy\
   --log_folders alex_net/esatv3_expert_200K/shifted_input/1/2\
                 alex_net/esatv3_expert_200K/ref/1/2\
                 alex_net/esatv3_expert_200K/scaled_input/1/2\
                 alex_net/esatv3_expert_200K/normalized_output/1/2\
   --legend_names shifted_input reference scaled_input normalized_output
 
-python combine_results.py --subsample 10 --tags Loss_val_accuracy\
+python combine_results.py --subsample 10 --tags validation_accuracy\
     --log_folders alex_net/esatv3_expert_200K/ref/1/2\
                 alex_net/esatv3_expert_200K/ref/01/2\
                 alex_net/esatv3_expert_200K/ref/001/2\
                 alex_net/esatv3_expert_200K/ref/0001/2\
   --legend_names 0.1 0.01 0.001 0.0001
 
-python combine_results.py --subsample 10 --tags Loss_val_accuracy\
+python combine_results.py --subsample 10 --tags validation_accuracy\
   --log_folders alex_net/esatv3_expert_200K/ref/1/0\
                 alex_net/esatv3_expert_200K/ref/1/1\
                 alex_net/esatv3_expert_200K/ref/1/2\
