@@ -274,13 +274,13 @@ done
 for DS in 100K 50K 20K 10K 5K 1K ; do combine_results.py --tags validation_accuracy train_accuracy --mother_dir tiny_net/esatv3_expert_$DS --legend_names 0.001 0.01 0.1 ; done
 for DS in 100K 50K 20K 10K 5K 1K ; do combine_results.py --tags validation_accuracy train_accuracy --mother_dir alex_net/esatv3_expert_$DS --legend_names 0.001 0.01 0.1 ; done
 
-```
-
-```bash
+# specific image:
 jupyter notebook pars_clean_results_interactively.ipynb
 ```
-
+Tiny Net:
 <img src="/imgs/19-04-02_datadependency_tiny.jpg" alt="train and validation accuracy over different dataset sizes." style="width: 400px;"/>
+
+Alex Net:
 <img src="/imgs/19-04-02_datadependency_alex.jpg" alt="train and validation accuracy over different dataset sizes." style="width: 400px;"/>
 
 
@@ -385,16 +385,26 @@ _NA: VGG preparation_
 _imagenet pretrained speeds up learning and decreases overfitting_
 For VGG16 SGD from scratch / imagenetpretrained is compared over different learning rates.
 
+SGD:
 <img src="/imgs/19-04-02_vgg_optimizers_pretrained_SGD_validation_accuracy.jpg" alt="SGD pretrained" style="width: 400px;"/>
+ADAM:
 <img src="/imgs/19-04-02_vgg_optimizers_pretrained_Adam_validation_accuracy.jpg" alt="Adam pretrained" style="width: 400px;"/>
+ADADELTA:
 <img src="/imgs/19-04-02_vgg_optimizers_pretrained_Adadelta_validation_accuracy.jpg" alt="Adadelta pretrained" style="width: 400px;"/>
 
 _optimizers can increase learning rate without overfitting_
 For VGG16 with SGD, ADAM and ADADELTA are compared for 'best' learning rate in scratch setting.
-
+SGD scratch:
 <img src="/imgs/19-04-02_vgg_optimizers_scratch_SGD_validation_accuracy.jpg" alt="SGD scratch" style="width: 400px;"/>
+ADAM scratch:
 <img src="/imgs/19-04-02_vgg_optimizers_scratch_Adam_validation_accuracy.jpg" alt="Adam scratch" style="width: 400px;"/>
+ADADELTA scratch:
 <img src="/imgs/19-04-02_vgg_optimizers_scratch_Adadelta_validation_accuracy.jpg" alt="Adadelta scratch" style="width: 400px;"/>
+
+<img src="/imgs/19-04-02_vgg_optimizers_scratch_combined_train_accuracy.jpg" alt="Adadelta scratch" style="width: 400px;"/>
+
+<img src="/imgs/19-04-02_vgg_optimizers_scratch_combined_validation_accuracy.jpg" alt="Adadelta scratch" style="width: 400px;"/>
+
 
 Plot curves of validation accuracy and table final test accuracies with std over different seeds.
 
@@ -423,11 +433,15 @@ for LR in 1 001 00001 ; do
     python dag_train.py -t $name $pytorch_args $dag_args $condor_args
   done
 done
-# combine results
+# parse results
 for OP in SGD Adadelta Adam ; do \
   python combine_results.py --subsample 5 --tags validation_accuracy --mother_dir vgg16_net_pretrained/esatv3_expert_200K/$OP --legend_names 0.00001 0.001 0.1 --blog_destination 19-04-02_vgg_optimizers_pretrained_${OP};\
   python combine_results.py --subsample 5 --tags validation_accuracy --mother_dir vgg16_net/esatv3_expert_200K/$OP --legend_names 0.00001 0.001 0.1 --blog_destination 19-04-02_vgg_optimizers_scratch_${OP};\
 done
+# combine best results
+python combine_results.py --subsample 5 --tags train_accuracy validation_accuracy --log_folders vgg16_net_pretrained/esatv3_expert_200K/SGD/1 vgg16_net_pretrained/esatv3_expert_200K/Adam/00001 vgg16_net_pretrained/esatv3_expert_200K/Adadelta/1 --legend_names SGD Adam Adadelta --blog_destination 19-04-02_vgg_optimizers_pretrained_combined
+python combine_results.py --subsample 5 --tags train_accuracy validation_accuracy --log_folders vgg16_net/esatv3_expert_200K/SGD/1 vgg16_net/esatv3_expert_200K/Adam/00001 vgg16_net/esatv3_expert_200K/Adadelta/1 --legend_names SGD Adam Adadelta --blog_destination 19-04-02_vgg_optimizers_scratch_combined
+
 ```
 
 
