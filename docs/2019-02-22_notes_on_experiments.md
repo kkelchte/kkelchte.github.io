@@ -270,10 +270,15 @@ for DS in 100K 50K 20K 10K 5K 1K ; do combine_results.py --tags validation_accur
 jupyter notebook pars_clean_results_interactively.ipynb
 ```
 Tiny Net:
+
 <img src="/imgs/19-04-02_datadependency_tiny.jpg" alt="train and validation accuracy over different dataset sizes." style="width: 400px;"/>
 
 Alex Net:
+
 <img src="/imgs/19-04-02_datadependency_alex.jpg" alt="train and validation accuracy over different dataset sizes." style="width: 400px;"/>
+
+
+Note: it would be nice to add an overregularization example with weight decay. However, 10K failed as there was no clear overfitting. Moreover
 
 
 _NA: Compare deep architectures_
