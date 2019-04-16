@@ -17,7 +17,7 @@ The data is augmented for the following factors:
 
 
 
-<img src="/imgs/18-09-24_example_images.png" alt="Example image of data with noise background" style="width: 2000px;"/>
+<img src="/imgs/18-09/18-09-24_example_images.png" alt="Example image of data with noise background" style="width: 2000px;"/>
 
 ## 1. Masking fore- and background
 
@@ -156,7 +156,7 @@ The pullback force, theta, is sampled from a beta distribution with alpha 2 and 
 The deviation force, sigma, is sampled from a beta distribution with alpha 1 and beta 3.
 
 
-<img src="/imgs/18-09-24_example_ou.jpg" alt="Example image with ou noise" style="width: 500px;"/>
+<img src="/imgs/18-09/18-09-24_example_ou.jpg" alt="Example image with ou noise" style="width: 500px;"/>
 
 ## 7. Next step:
 

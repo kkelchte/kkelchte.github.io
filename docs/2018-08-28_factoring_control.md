@@ -21,11 +21,11 @@ We hypothesize that a significantly smaller model can be trained on significantl
 The ease with which these simple models can be created as well as the win in training time and data are some of the benefits of factorizing control prediction.
 The model trained in a factorized fashion is referred to as **fact model**.
 
-<img src="/imgs/18-08-28_gz.jpg" alt="Corridor Model Outsied" style="width: 200px;"/>
-<img src="/imgs/18-08-28_gz_1.jpg" alt="Corridor Model Inside" style="width: 200px;"/>
-<img src="/imgs/18-08-28_gz_2.jpg" alt="Empty model with poster" style="width: 200px;"/>
-<img src="/imgs/18-08-28_gz_3.jpg" alt="Full corridor" style="width: 200px;"/>
-<img src="/imgs/18-08-28_gz_4.jpg" alt="Total corridor" style="width: 200px;"/>
+<img src="/imgs/18-08/18-08-28_gz.jpg" alt="Corridor Model Outsied" style="width: 200px;"/>
+<img src="/imgs/18-08/18-08-28_gz_1.jpg" alt="Corridor Model Inside" style="width: 200px;"/>
+<img src="/imgs/18-08/18-08-28_gz_2.jpg" alt="Empty model with poster" style="width: 200px;"/>
+<img src="/imgs/18-08/18-08-28_gz_3.jpg" alt="Full corridor" style="width: 200px;"/>
+<img src="/imgs/18-08/18-08-28_gz_4.jpg" alt="Total corridor" style="width: 200px;"/>
 
 ## Grouping corridor settings and defining fragmented datasets
 

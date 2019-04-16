@@ -11,7 +11,7 @@ This is obviously quite some memory. In this setting we would like to work with 
 
 ## Discussion on online learning?
 
-<!-- <img src="/imgs/18-10-19_osb_yellow_barrel_world.jpg" alt="osb_yellow_barrel.world" style="width: 200px;"/> -->
+<!-- <img src="/imgs/18-10/18-10-19_osb_yellow_barrel_world.jpg" alt="osb_yellow_barrel.world" style="width: 200px;"/> -->
 
 
 So there are two general open questions in the comparison of online learning and replay buffering:

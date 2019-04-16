@@ -8,8 +8,8 @@ layout: default
 
 Created new Blender model with windows, lights and a circular parcours without dead ends.
 
-<img src="/imgs/19-01-10_esatv3.jpg" alt="circular esat" style="width: 400px;"/>
-<img src="/imgs/19-01-10_esatv3_1.jpg" alt="circular esat" style="width: 400px;"/>
+<img src="/imgs/19-01/19-01-10_esatv3.jpg" alt="circular esat" style="width: 400px;"/>
+<img src="/imgs/19-01/19-01-10_esatv3_1.jpg" alt="circular esat" style="width: 400px;"/>
 
 
 Todo:

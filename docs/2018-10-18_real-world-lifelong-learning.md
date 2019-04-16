@@ -67,9 +67,9 @@ But more importantly, we hope to see a clear performance drop in domain A for mo
 The performance drop of nn_A_B will probably depend on how long the model is trained, on how much data, and so on...
 
 
-<img src="/imgs/18-10-19_osb_yellow_barrel_world.jpg" alt="osb_yellow_barrel.world" style="width: 200px;"/>
-<img src="/imgs/18-10-19_osb_yellow_barrel_blue_world.jpg" alt="osb_yellow_barrel_blue.world" style="width: 200px;"/>
-<img src="/imgs/18-10-19_osb_carton_box_world.jpg" alt="osb_carton_box.world" style="width: 200px;"/>
+<img src="/imgs/18-10/18-10-19_osb_yellow_barrel_world.jpg" alt="osb_yellow_barrel.world" style="width: 200px;"/>
+<img src="/imgs/18-10/18-10-19_osb_yellow_barrel_blue_world.jpg" alt="osb_yellow_barrel_blue.world" style="width: 200px;"/>
+<img src="/imgs/18-10/18-10-19_osb_carton_box_world.jpg" alt="osb_carton_box.world" style="width: 200px;"/>
 
 
 
@@ -203,7 +203,7 @@ $ python main.py -t test_nn_B --dataset domain_B --discrete --speed 0.3 --action
 $ python main.py -t test_nn_B_action_norm --dataset domain_B --discrete --speed 0.3 --action_bound 0.6 --learning_rate 0.1 --max_episodes 500
 ```
 Training curves in domain A (yellow barrel OSB) with and without action normalization:
-<img src="/imgs/18-10-20_training_curve_domain_A_with_and_without_action_norm.png" alt="offline training curves domain A" style="width: 200px;"/>
+<img src="/imgs/18-10/18-10-20_training_curve_domain_A_with_and_without_action_norm.png" alt="offline training curves domain A" style="width: 200px;"/>
 
 There is no need for action normalization as the data is well spread over the different actions. There is also no need to train more than 300 epochs as the validation accuracy is well saturated.
 
@@ -319,7 +319,7 @@ Version 2:
 | conv_3/bias:0 | 0.0 | 0.242561176419 | 1.23395502567 | 
 | outputs/kernel:0 | 0.0 | 2.13700377941 | 22.0174388885 |
 
-<img src="/imgs/18-10-25_tiny_v2.png" alt="training curves domain forest with domain A as validation" style="width: 200px;"/>
+<img src="/imgs/18-10/18-10-25_tiny_v2.png" alt="training curves domain forest with domain A as validation" style="width: 200px;"/>
 
 
 
@@ -343,8 +343,8 @@ Learning curves:
 -light blue: 10w LL loss
 -pink: 100w LL loss
 
-<img src="/imgs/18-10-26_accuracy_tiny3.png" alt="" style="width: 200px;"/>
-<img src="/imgs/18-10-26_lll_loss_tiny3.png" alt="" style="width: 200px;"/>
+<img src="/imgs/18-10/18-10-26_accuracy_tiny3.png" alt="" style="width: 200px;"/>
+<img src="/imgs/18-10/18-10-26_lll_loss_tiny3.png" alt="" style="width: 200px;"/>
 
 Side track:
 how much do the importance weights differ if I compute them on different data from the same domain.

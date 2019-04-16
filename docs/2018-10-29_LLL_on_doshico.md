@@ -10,7 +10,7 @@ In this set of experiments we explore the benefit of lifelonglearning when a rob
 By switching the order of the tasks and comparing the distances in importance weights we can see different tasks are more or less related.
 
 
-<img src="/imgs/18-10-29_doshico.png" alt="doshico environments" style="width: 800px;"/>
+<img src="/imgs/18-10/18-10-29_doshico.png" alt="doshico environments" style="width: 800px;"/>
 
 In this case we assume that the domain forest and canyon are more related than the sandbox domain.
 It is then interesting to see whether the relative benefit of using lifelong learning is bigger on tasks when the domains are further apart. 
@@ -51,7 +51,7 @@ python main.py --continue_training --load_config --load_data_in_ram --checkpoint
 Due to the instability of normal gradient descent we are obliged to increase batchsizes from 32 to 128.
 
 Learning curves training and validation accuracy with training accuracy in the new domain (canyon) and validation accuracy in the previous domain (forest).
-<img src="/imgs/18-10-30_forest_canyon_learning_curve.png" alt="Learning curves training and validation accuracy" style="width: 600px;"/>
+<img src="/imgs/18-10/18-10-30_forest_canyon_learning_curve.png" alt="Learning curves training and validation accuracy" style="width: 600px;"/>
 
 ## Results:
 

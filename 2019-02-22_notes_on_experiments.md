@@ -68,8 +68,8 @@ jupyter notebook pars_clean_results_interactively.ipynb
 
 ```
 
-<img src="/imgs/19-04/19-04-2_LSTM_train_accuracy.jpg" alt="LSTM_train_accuracy" style="width: 400px;"/>
-<img src="/imgs/19-04/19-04-2_LSTM_validation_accuracy.jpg" alt="LSTM_validation_accuracy" style="width: 400px;"/>
+<img src="/imgs/19-4-2_LSTM_train_accuracy.jpg" alt="LSTM_train_accuracy" style="width: 400px;"/>
+<img src="/imgs/19-4-2_LSTM_validation_accuracy.jpg" alt="LSTM_validation_accuracy" style="width: 400px;"/>
 
 Training LSTM's can be tedious as the time unrolment quickly takes over the GPU memory space. 
 In order to deal with this, we subsampled the data by a factor of 10.
@@ -151,22 +151,14 @@ python combine_results.py --tags validation_accuracy train_accuracy --subsample 
 
 ```
 
-<img src="/imgs/19-04/19-04-02_inputspace_train_acurracy.jpg" alt="inputspace_train_acurracy" style="width: 400px;"/>
-<img src="/imgs/19-04/19-04-02_inputspace_validation_acurracy.jpg" alt="inputspace_validation_acurracy" style="width: 400px;"/>
+<img src="/imgs/19-04-02_inputspace_train_acurracy.jpg" alt="inputspace_train_acurracy" style="width: 400px;"/>
+<img src="/imgs/19-04-02_inputspace_validation_acurracy.jpg" alt="inputspace_validation_acurracy" style="width: 400px;"/>
 
 Conclusion:
 A clear win for the usage of multiple input samples between one and 3 frames in shared feature extraction part.
 The improvement from three to five is not so clear. 
 
-```
-for f in *.md; do sed -i 's/imgs\/18\-09\-/imgs\/18\-09\/18\-09\-/g ' $f; done
-for f in *.md; do sed -i 's/imgs\/18\-08\-/imgs\/18\-08\/18\-08\-/g ' $f; done
-for f in *.md; do sed -i 's/imgs\/18\-07\-/imgs\/18\-07\/18\-07\-/g ' $f; done
-for f in *.md; do sed -i 's/imgs\/18\-05\-/imgs\/18\-05\/18\-05\-/g ' $f; done
-for f in *.md; do sed -i 's/imgs\/17\-12\-/imgs\/17\-12\/17\-12\-/g ' $f; done
 
-
-```
 
 _NA: Continuous action space_
 
@@ -194,15 +186,15 @@ python combine_results.py --subsample 5 --tags validation_imitation_learning tra
 ```
 Results MSE on validation set for continuous action space over different learning rates:
 
-<img src="/imgs/19-04/19-04-02_continuous_learningrate_validation_imitation_learning.jpg" alt="continuous_learningrate_validation_imitation_learning" style="width: 400px;"/>
+<img src="/imgs/19-04-02_continuous_learningrate_validation_imitation_learning.jpg" alt="continuous_learningrate_validation_imitation_learning" style="width: 400px;"/>
 
 Results MSE on validation set for discrete action space over different learning rates:
 
-<img src="/imgs/19-04/19-04-02_datadependency_tiny.jpg" alt="train and validation accuracy over different dataset sizes." style="width: 400px;"/>
+<img src="/imgs/19-04-02_datadependency_tiny.jpg" alt="train and validation accuracy over different dataset sizes." style="width: 400px;"/>
 
 Results MSE on validation set for discrete and continuous action space:
 
-<img src="/imgs/19-04/19-04-02_continuous_discrete_validation_imitation_learning.jpg" alt="19-04-02_continuous_discrete_validation_imitation_learning" style="width: 400px;"/>
+<img src="/imgs/19-04-02_continuous_discrete_validation_imitation_learning.jpg" alt="19-04-02_continuous_discrete_validation_imitation_learning" style="width: 400px;"/>
 
 
 Conclusion:
@@ -279,11 +271,11 @@ jupyter notebook pars_clean_results_interactively.ipynb
 ```
 Tiny Net:
 
-<img src="/imgs/19-04/19-04-02_datadependency_tiny.jpg" alt="train and validation accuracy over different dataset sizes." style="width: 400px;"/>
+<img src="/imgs/19-04-02_datadependency_tiny.jpg" alt="train and validation accuracy over different dataset sizes." style="width: 400px;"/>
 
 Alex Net:
 
-<img src="/imgs/19-04/19-04-02_datadependency_alex.jpg" alt="train and validation accuracy over different dataset sizes." style="width: 400px;"/>
+<img src="/imgs/19-04-02_datadependency_alex.jpg" alt="train and validation accuracy over different dataset sizes." style="width: 400px;"/>
 
 
 Note: it would be nice to add an overregularization example with weight decay. However, 10K failed as there was no clear overfitting. Moreover
@@ -337,8 +329,8 @@ for net in alex vgg16 inception res18 dense squeeze ; do python combine_results.
 # select the winners and combine:
 python combine_results.py --subsample 5 --tags train_accuracy validation_accuracy --log_folders alex_net_pretrained/esatv3_expert_200K/01 dense_net_pretrained/esatv3_expert_200K/001 inception_net_pretrained/esatv3_expert_200K/1 res18_net_pretrained/esatv3_expert_200K/01 squeeze_net_pretrained/esatv3_expert_200K/1 vgg16_net_pretrained/esatv3_expert_200K/1 --legend_names Alexnet Densenet Inception Resnet Squeezenet Vgg --blog_destination 19-04-02_deeparchitectures_pretrained
 ```
-<img src="/imgs/19-04/19-04-02_deeparchitectures_pretrained_train_accuracy.jpg" alt="training accuracy of pretrained archtictures." style="width: 400px;"/>
-<img src="/imgs/19-04/19-04-02_deeparchitectures_pretrained_validation_accuracy.jpg" alt="validation accuracy of pretrained archtictures." style="width: 400px;"/>
+<img src="/imgs/19-04-02_deeparchitectures_pretrained_train_accuracy.jpg" alt="training accuracy of pretrained archtictures." style="width: 400px;"/>
+<img src="/imgs/19-04-02_deeparchitectures_pretrained_validation_accuracy.jpg" alt="validation accuracy of pretrained archtictures." style="width: 400px;"/>
 
 
 
@@ -373,8 +365,8 @@ for net in alex vgg16 inception res18 dense squeeze; do python combine_results.p
 python combine_results.py --subsample 5 --tags train_accuracy validation_accuracy --log_folders alex_net_finetune/01 dense_net_finetune/001 inception_net_finetune/1 res18_net_finetune/1 squeeze_net_finetune/1 vgg16_net_finetune/1 --legend_names Alexnet Densenet Inception Resnet Squeezenet Vgg --blog_destination 19-04-02_deeparchitectures_finetune
 ```
 
-<img src="/imgs/19-04/19-04-02_deeparchitectures_finetune_train_accuracy.jpg" alt="training accuracy of finetune archtictures." style="width: 400px;"/>
-<img src="/imgs/19-04/19-04-02_deeparchitectures_finetune_validation_accuracy.jpg" alt="validation accuracy of finetune archtictures." style="width: 400px;"/>
+<img src="/imgs/19-04-02_deeparchitectures_finetune_train_accuracy.jpg" alt="training accuracy of finetune archtictures." style="width: 400px;"/>
+<img src="/imgs/19-04-02_deeparchitectures_finetune_validation_accuracy.jpg" alt="validation accuracy of finetune archtictures." style="width: 400px;"/>
 
 
 _NA: VGG preparation_
@@ -391,24 +383,24 @@ _imagenet pretrained speeds up learning and decreases overfitting_
 For VGG16 SGD from scratch / imagenetpretrained is compared over different learning rates.
 
 SGD:
-<img src="/imgs/19-04/19-04-02_vgg_optimizers_pretrained_SGD_validation_accuracy.jpg" alt="SGD pretrained" style="width: 400px;"/>
+<img src="/imgs/19-04-02_vgg_optimizers_pretrained_SGD_validation_accuracy.jpg" alt="SGD pretrained" style="width: 400px;"/>
 ADAM:
-<img src="/imgs/19-04/19-04-02_vgg_optimizers_pretrained_Adam_validation_accuracy.jpg" alt="Adam pretrained" style="width: 400px;"/>
+<img src="/imgs/19-04-02_vgg_optimizers_pretrained_Adam_validation_accuracy.jpg" alt="Adam pretrained" style="width: 400px;"/>
 ADADELTA:
-<img src="/imgs/19-04/19-04-02_vgg_optimizers_pretrained_Adadelta_validation_accuracy.jpg" alt="Adadelta pretrained" style="width: 400px;"/>
+<img src="/imgs/19-04-02_vgg_optimizers_pretrained_Adadelta_validation_accuracy.jpg" alt="Adadelta pretrained" style="width: 400px;"/>
 
 _optimizers can increase learning rate without overfitting_
 For VGG16 with SGD, ADAM and ADADELTA are compared for 'best' learning rate in scratch setting.
 SGD scratch:
-<img src="/imgs/19-04/19-04-02_vgg_optimizers_scratch_SGD_validation_accuracy.jpg" alt="SGD scratch" style="width: 400px;"/>
+<img src="/imgs/19-04-02_vgg_optimizers_scratch_SGD_validation_accuracy.jpg" alt="SGD scratch" style="width: 400px;"/>
 ADAM scratch:
-<img src="/imgs/19-04/19-04-02_vgg_optimizers_scratch_Adam_validation_accuracy.jpg" alt="Adam scratch" style="width: 400px;"/>
+<img src="/imgs/19-04-02_vgg_optimizers_scratch_Adam_validation_accuracy.jpg" alt="Adam scratch" style="width: 400px;"/>
 ADADELTA scratch:
-<img src="/imgs/19-04/19-04-02_vgg_optimizers_scratch_Adadelta_validation_accuracy.jpg" alt="Adadelta scratch" style="width: 400px;"/>
+<img src="/imgs/19-04-02_vgg_optimizers_scratch_Adadelta_validation_accuracy.jpg" alt="Adadelta scratch" style="width: 400px;"/>
 
-<img src="/imgs/19-04/19-04-02_vgg_optimizers_scratch_combined_train_accuracy.jpg" alt="Adadelta scratch" style="width: 400px;"/>
+<img src="/imgs/19-04-02_vgg_optimizers_scratch_combined_train_accuracy.jpg" alt="Adadelta scratch" style="width: 400px;"/>
 
-<img src="/imgs/19-04/19-04-02_vgg_optimizers_scratch_combined_validation_accuracy.jpg" alt="Adadelta scratch" style="width: 400px;"/>
+<img src="/imgs/19-04-02_vgg_optimizers_scratch_combined_validation_accuracy.jpg" alt="Adadelta scratch" style="width: 400px;"/>
 
 
 Plot curves of validation accuracy and table final test accuracies with std over different seeds.
@@ -475,17 +467,17 @@ Conclusion:
 At the input side is not much difference. Shifting the data, as well as scaling has a slight improvement over the reference.
 The difference is not large and mainly visible at the beginning of training.
 Because scaling the data requires estimation of mean and standard deviations for each new dataset, we continue working with shifted input.
-<img src="/imgs/19-04/19-04-02_data_normalization_methods_validation_accuracy.jpg" alt="data normalization" style="width: 400px;"/>
+<img src="/imgs/19-04-02_data_normalization_methods_validation_accuracy.jpg" alt="data normalization" style="width: 400px;"/>
 
 
 The difference on the different learning rates is very clear:
-<img src="/imgs/19-04/19-04-02_data_normalization_learningrate_validation_accuracy.jpg" alt="data normalization learning rates" style="width: 400px;"/>
+<img src="/imgs/19-04-02_data_normalization_learningrate_validation_accuracy.jpg" alt="data normalization learning rates" style="width: 400px;"/>
 
 Normalizing the different discrete actions within a batch at the output has a slight negative impact in this setting.
 The data imbalance and force normalization makes some samples much less represented in the training data, leading to a poorer validation accuracy.
 
 The variance over different seeds is also negligible:
-<img src="/imgs/19-04/19-04-02_data_normalization_seed_validation_accuracy.jpg" alt="data normalization seeds" style="width: 400px;"/>
+<img src="/imgs/19-04-02_data_normalization_seed_validation_accuracy.jpg" alt="data normalization seeds" style="width: 400px;"/>
 
 
 ```bash

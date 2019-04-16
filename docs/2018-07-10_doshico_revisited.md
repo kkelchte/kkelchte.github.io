@@ -55,7 +55,7 @@ Recorded data at 10fps:
 | total   | 9.30 (2.53)  | 9.28 (2.22)  | 9.31 (2.77)  | 9.30 (2.72)  | 9.29 (2.45)  | 9.30 (2.61)  | 
 
 
-\![Plot]({{ "/imgs/18-07-12-fps_create_data.png" | absolute_url }})
+\![Plot]({{ "/imgs/18-07/18-07-12-fps_create_data.png" | absolute_url }})
 
 Conclusion:
 Yildun, Matar, Sadr and Oculus has consistently lower framerates than Garnet, Kunzite, Emerald, Jade, Amethyst and Iolite (6 instead of 10).  

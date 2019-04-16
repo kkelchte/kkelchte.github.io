@@ -92,5 +92,5 @@ For some reason the drone model would not load its mesh.
 Reward evolution while training for 20 hours. 
 There is a gradual increase in reward per episode though it is far from stable and 20 hours were not enough to reach the destination once.
 
-<img src="/imgs/18-10-16_reward_my_parrot.png" alt="Reward evolution while training for 20 hours" style="width: 200px;"/>
+<img src="/imgs/18-10/18-10-16_reward_my_parrot.png" alt="Reward evolution while training for 20 hours" style="width: 200px;"/>
 
