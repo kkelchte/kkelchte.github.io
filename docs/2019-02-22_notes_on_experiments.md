@@ -158,16 +158,6 @@ Conclusion:
 A clear win for the usage of multiple input samples between one and 3 frames in shared feature extraction part.
 The improvement from three to five is not so clear. 
 
-```
-for f in *.md; do sed -i 's/imgs\/18\-09\-/imgs\/18\-09\/18\-09\-/g ' $f; done
-for f in *.md; do sed -i 's/imgs\/18\-08\-/imgs\/18\-08\/18\-08\-/g ' $f; done
-for f in *.md; do sed -i 's/imgs\/18\-07\-/imgs\/18\-07\/18\-07\-/g ' $f; done
-for f in *.md; do sed -i 's/imgs\/18\-05\-/imgs\/18\-05\/18\-05\-/g ' $f; done
-for f in *.md; do sed -i 's/imgs\/17\-12\-/imgs\/17\-12\/17\-12\-/g ' $f; done
-
-
-```
-
 _NA: Continuous action space_
 
 
