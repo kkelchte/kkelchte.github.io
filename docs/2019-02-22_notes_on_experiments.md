@@ -299,6 +299,10 @@ As end-to-end training leads to a better accuracy than only retraining the last 
 
 
 ```bash
+
+python combine_results.py --subsample 5 --tags train_accuracy validation_accuracy --log_folders log_neural_architectures/alex_net_pretrained/esatv3_expert_200K/01 log_neural_architectures/dense_net_pretrained/esatv3_expert_200K/001 log_neural_architectures/inception_net_pretrained/esatv3_expert_200K/1 log_neural_architectures/res18_net_pretrained/esatv3_expert_200K/01 log_neural_architectures/squeeze_net_pretrained/esatv3_expert_200K/1 log_neural_architectures/vgg16_net_pretrained/esatv3_expert_200K/1 tinyv3_net/esatv3_expert_200K --legend_names Alexnet Densenet Inception Resnet Squeezenet Vgg Tiny --blog_destination 19-04/19-04-02_deeparchitectures_pretrained
+
+
 for net in inception_net vgg16_net dense_net ; do
   for LR in 1 01 001 0001 00001 ; do
     name="${net}_pretrained/esatv3_expert_200K/$LR"
