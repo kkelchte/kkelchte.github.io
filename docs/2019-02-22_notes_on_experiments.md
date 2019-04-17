@@ -25,35 +25,29 @@ Or the order can be shuffled leading to better stabilization wich is called wind
 | gpu     | 3800                 | 3800                 | 3800                 | 3800                 | 3800                 | 3800                 |
 
 ```bash
-# wwbptt
-for LR in 1 01 ; do
-  name="tiny_LSTM_1ss/wwbptt/$LR"
-  pytorch_args="--weight_decay 0 --network tiny_LSTM_net --checkpoint_path tiny_LSTM_net_scratch --dataset esatv3_expert_10K --discrete --turn_speed 0.8 --speed 0.8\
- --tensorboard --max_episodes 30000 --batch_size 4 --learning_rate 0.$LR --loss CrossEntropy --shifted_input --optimizer SGD --time_length 20 --subsample 1 --load_data_in_ram"
-  dag_args="--number_of_models 1"
-  condor_args="--wall_time_train $((300*5*60+2*3600)) --rammem 7 --gpumem 900"
-  python dag_train.py -t $name $pytorch_args $dag_args $condor_args
-done
+# FBPTT
+name="tinyv3_LSTM_net/fbptt"
+pytorch_args="--network tinyv3_LSTM_net --checkpoint_path tinyv3_LSTM_net_scratch --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8\
+ --tensorboard --max_episodes 30000 --batch_size 5 --learning_rate 0.1 --loss CrossEntropy --shifted_input --optimizer SGD --time_length -1 --subsample 10 --load_data_in_ram"
+dag_args="--number_of_models 1"
+condor_args="--wall_time_train $((17200)) --rammem 7 --gpumem 1800"
+python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 
-# sbptt
-for LR in 1 01 ; do
-  name="tiny_LSTM_1ss/sbptt/$LR"
-  pytorch_args="--weight_decay 0 --network tiny_LSTM_net --checkpoint_path tiny_LSTM_net_scratch --dataset esatv3_expert_10K --discrete --turn_speed 0.8 --speed 0.8\
- --tensorboard --max_episodes 30000 --batch_size 4 --learning_rate 0.$LR --loss CrossEntropy --shifted_input --optimizer SGD --time_length 20 --sliding_tbptt --subsample 1 --sliding_step_size 5 --load_data_in_ram"
-  dag_args="--number_of_models 1"
-  condor_args="--wall_time_train $((300*1*60+2*3600)) --rammem 7 --gpumem 900"
-  python dag_train.py -t $name $pytorch_args $dag_args $condor_args
-done
+#WWBPTT
+name="tinyv3_LSTM_net/wwbptt"
+pytorch_args="--network tinyv3_LSTM_net --checkpoint_path tinyv3_LSTM_net_scratch --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8\
+ --tensorboard --max_episodes 30000 --batch_size 5 --learning_rate 0.1 --loss CrossEntropy --shifted_input --optimizer SGD --time_length 20 --subsample 10 --load_data_in_ram"
+dag_args="--number_of_models 1"
+condor_args="--wall_time_train $((19200)) --rammem 9 --gpumem 1500"
+python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 
-# fbptt
-for LR in 1 01 ; do
-  name="tiny_LSTM_1ss/fbptt/$LR"
-  pytorch_args="--weight_decay 0 --network tiny_LSTM_net --checkpoint_path tiny_LSTM_net_scratch --dataset esatv3_expert_10K --discrete --turn_speed 0.8 --speed 0.8\
- --tensorboard --max_episodes 3000 --batch_size 4 --learning_rate 0.$LR --loss CrossEntropy --shifted_input --optimizer SGD --time_length -1 --subsample 1 --load_data_in_ram"
-  dag_args="--number_of_models 1"
-  condor_args="--wall_time_train $((3000*10+3600)) --rammem 11 --gpumem 6000"
-  python dag_train.py -t $name $pytorch_args $dag_args $condor_args
-done
+#SBPTT
+name="tinyv3_LSTM_net/sbptt"
+pytorch_args="--network tinyv3_LSTM_net --checkpoint_path tinyv3_LSTM_net_scratch --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8\
+ --tensorboard --max_episodes 30000 --batch_size 5 --learning_rate 0.1 --loss CrossEntropy --shifted_input --optimizer SGD --time_length 20 --subsample 10 --load_data_in_ram --sliding_tbptt"
+dag_args="--number_of_models 1"
+condor_args="--wall_time_train $((13200)) --rammem 7 --gpumem 1500"
+python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 
 python combine_results.py --tags validation_accuracy --subsample 5 --mother_dir tiny_LSTM/wwbptt --legend_names 0.01 0.1
 python combine_results.py --tags validation_accuracy --subsample 5 --mother_dir tiny_LSTM/sbptt --legend_names 0.01 0.1
@@ -82,9 +76,6 @@ EXTENSION:
 The sliding-window is very unstable due to multiple gradient steps are based on consecutive frames that are highly correlated.
 Rather than taking a gradient step at each time window, it would be better to accumulate the gradients first over the full sequence before changing the parameters.
 The latter would create gradient steps based on the full sequence just like in FBPTT which are more stable.
-
-
-
 
 
 
