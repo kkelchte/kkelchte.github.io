@@ -373,40 +373,40 @@
 #---------------------------------------------- DATA NORMALIZATION
 # Wall time = number_of_episodes*(batch_size/10.)*60+7200
 
-# for LR in 1 01 001 0001 ; do
+for LR in 1 01 001 0001 ; do
 
-#    name="alex_net/esatv3_expert_200K/ref/$LR"
-#    pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8\
-#     --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 20000 --batch_size 100\
-#     --loss CrossEntropy --learning_rate 0.$LR"
-#    dag_args="--number_of_models 3"
-#    condor_args="--wall_time_train $((5*200*60+3600*2)) -gpumem 1900 --rammem 7 --copy_dataset"
-#    python dag_train.py -t $name $pytorch_args $dag_args $condor_args
+   name="alex_net/esatv3_expert_200K/ref/$LR"
+   pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8\
+    --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 20000 --batch_size 100\
+    --loss CrossEntropy --learning_rate 0.$LR"
+   dag_args="--number_of_models 3"
+   condor_args="--wall_time_train $((5*200*60+3600*2)) -gpumem 1900 --rammem 7 --copy_dataset"
+   python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 
-#   name="alex_net/esatv3_expert_200K/shifted_input/$LR"
-#   pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete\
-#    --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 20000 --batch_size 100 --loss CrossEntropy\
-#    --learning_rate 0.$LR --shifted_input"
-#   dag_args="--number_of_models 1"
-#   condor_args="--wall_time_train $((5*200*60+3600*2)) -gpumem 1900 --rammem 7 --copy_dataset"
-#   python dag_train.py -t $name $pytorch_args $dag_args $condor_args
+  name="alex_net/esatv3_expert_200K/shifted_input/$LR"
+  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete\
+   --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 20000 --batch_size 100 --loss CrossEntropy\
+   --learning_rate 0.$LR --shifted_input"
+  dag_args="--number_of_models 1"
+  condor_args="--wall_time_train $((5*200*60+3600*2)) -gpumem 1900 --rammem 7 --copy_dataset"
+  python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 
-#   name="alex_net/esatv3_expert_200K/scaled_input/$LR"
-#   pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete\
-#    --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 20000 --batch_size 100 --loss CrossEntropy\
-#    --learning_rate 0.$LR --scaled_input"
-#   dag_args="--number_of_models 1"
-#   condor_args="--wall_time_train $((5*200*60+3600*2)) -gpumem 1900 --rammem 7 --copy_dataset"
-#   python dag_train.py -t $name $pytorch_args $dag_args $condor_args
+  name="alex_net/esatv3_expert_200K/scaled_input/$LR"
+  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete\
+   --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 20000 --batch_size 100 --loss CrossEntropy\
+   --learning_rate 0.$LR --scaled_input"
+  dag_args="--number_of_models 1"
+  condor_args="--wall_time_train $((5*200*60+3600*2)) -gpumem 1900 --rammem 7 --copy_dataset"
+  python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 
-#   name="alex_net/esatv3_expert_200K/normalized_output/$LR"
-#   pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete\
-#    --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 20000 --batch_size 100 --loss CrossEntropy\
-#    --learning_rate 0.$LR --normalized_output"
-#   dag_args="--number_of_models 1"
-#   condor_args="--wall_time_train $((5*200*60+3600*2)) -gpumem 1900 --rammem 7 --copy_dataset"
-#   python dag_train.py -t $name $pytorch_args $dag_args $condor_args
-# done
+  name="alex_net/esatv3_expert_200K/normalized_output/$LR"
+  pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --discrete\
+   --continue_training --checkpoint_path alex_net_scratch --tensorboard --max_episodes 20000 --batch_size 100 --loss CrossEntropy\
+   --learning_rate 0.$LR --normalized_output"
+  dag_args="--number_of_models 1"
+  condor_args="--wall_time_train $((5*200*60+3600*2)) -gpumem 1900 --rammem 7 --copy_dataset"
+  python dag_train.py -t $name $pytorch_args $dag_args $condor_args
+done
 
 #--------------------------- COLLECT DATASET
 
