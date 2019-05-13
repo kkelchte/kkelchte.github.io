@@ -97,3 +97,24 @@ python dag_evaluate.py -t epsilon/evaluate_5K --number_of_models 2 --wall_time $
 ```
 
 
+## On-policy training (offline)
+
+With the use of a large replay buffer, the on-policy training can be tested without non-idd issues.
+Required parameters are:
+
+- start training when minimum number experiences in buffer: `--min_buffer_size 1000`
+- there is no need for an upperbound on the replaybuffer: `--buffer_size -1` (! note that this introduces memory leakage so do with care!)
+- sample minibatches stochastically with `--batchsize 60`
+- sample multiple batches and take multiple gradient steps with `--gradient_steps 5`, adjust `--learning_rate 0.1` accordingly
+
+
+## On-policy online training
+
+With the use of a large replay buffer, the on-policy training can be tested without non-idd issues.
+Required parameters are:
+
+- small buffer of `--buffer_size 100` and start training when it's full `--min_buffer_size -1`
+- minibatches are all taken into account at each training step with `--batchsize -1`
+- take multiple gradient steps with `--gradient_steps 5`, adjust `--learning_rate 0.1` accordingly
+- update buffer by sorting according to there difficulty with `--buffer_update_rule hard` (does not work with minibatches)
+- define ratio hard and recent buffers by setting `--train_every_N_steps` which means that first N recent samples are collected before a training step occurs
