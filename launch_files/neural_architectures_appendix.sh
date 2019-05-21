@@ -50,7 +50,7 @@ python dag_create_data.py -t $name $script_args $pytorch_args $dag_args $condor_
 name="alex_net_seeds"
 pytorch_args="--network alex_net --dataset esatv3_expert_200K --discrete --turn_speed 0.8 --speed 0.8 --action_bound 0.9\
  --tensorboard --max_episodes 10000 --batch_size 100 --learning_rate 0.1 --loss CrossEntropy --optimizer SGD --clip 1 --weight_decay 0"
-dag_args="--number_of_models 3"
+dag_args="--number_of_models 3 --seeds 123 456 789"
 condor_args="--wall_time_train $((67200)) --rammem 7 --gpumem 1800 --copy_dataset"
 python dag_train.py -t $name $pytorch_args $dag_args $condor_args
 
