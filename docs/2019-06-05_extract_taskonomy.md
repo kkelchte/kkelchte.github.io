@@ -57,8 +57,10 @@ For each task, evaluate the extracted features from the real world how the contr
 
 ```bash
 for TASK in rgb2depth autoencoder curvature colorization denoise edge2d edge3d rgb2mist inpainting_whole jigsaw keypoint2d keypoint3d class_1000 reshade room_layout class_places segment2d segment25d segmentsemantic rgb2sfnorm vanishing_point point_match ego_motion non_fixated_pose fix_pose ; do
-  dag_train.py --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --max_episodes 20000 --task $TASK --log_tag chapter_domain_shift/decision_nets/$TASK
+  python dag_train.py --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --max_episodes 20000 --task $TASK --log_tag chapter_domain_shift/decision_nets/$TASK
 done
+for TASK in autoencoder curvature colorization denoise edge2d edge3d rgb2mist inpainting_whole jigsaw keypoint2d keypoint3d class_1000 reshade room_layout class_places segment2d segment25d segmentsemantic rgb2sfnorm vanishing_point point_match ego_motion non_fixated_pose fix_pose ; do  python dag_train.py --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --max_episodes 20000 --task $TASK --log_tag chapter_domain_shift/decision_nets/$TASK; done
+
 ```
 
 
@@ -91,5 +93,15 @@ CTR: 0.12983009219169617
 
 ==> conclusion: use control prediction rather than distance.
 
+
+# extract neural style transferred images
+
+One job copies run_dir to destination, moves RGB to original and starts transferring from original to RGB.
+Other jobs can be added on condor (after this initial step is performed).
+
+```bash
+python neural_style_tutorial.py --content_run_dir /esat/opal/kkelchte/docker_home/pilot_data/esatv3_expert/original/00003_esatv3 --style_run_dir /esat/opal/kkelchte/docker_home/pilot_data/real_drone/flying_2_subsampled --destination_dir /esat/opal/kkelchte/docker_home/pilot_data/esat_transferred
+condor_submit condor_job_0
+```
 
 
