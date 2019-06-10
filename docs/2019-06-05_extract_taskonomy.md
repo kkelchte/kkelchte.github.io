@@ -57,10 +57,9 @@ For each task, evaluate the extracted features from the real world how the contr
 
 ```bash
 for TASK in rgb2depth autoencoder curvature colorization denoise edge2d edge3d rgb2mist inpainting_whole jigsaw keypoint2d keypoint3d class_1000 reshade room_layout class_places segment2d segment25d segmentsemantic rgb2sfnorm vanishing_point point_match ego_motion non_fixated_pose fix_pose ; do
-  python dag_train.py --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --max_episodes 100000 --task $TASK --log_tag chapter_domain_shift/decision_nets/$TASK
+  python dag_train.py --load_data_in_ram --rammem 5 --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --max_episodes 100000 --task $TASK --log_tag chapter_domain_shift/feature_extraction/$TASK/decision_net
 done
-for TASK in autoencoder curvature colorization denoise edge2d edge3d rgb2mist inpainting_whole jigsaw keypoint2d keypoint3d class_1000 reshade room_layout class_places segment2d segment25d segmentsemantic rgb2sfnorm vanishing_point point_match ego_motion non_fixated_pose fix_pose ; do  python dag_train.py --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --max_episodes 20000 --task $TASK --log_tag chapter_domain_shift/decision_nets/$TASK; done
-
+for TASK in rgb2depth autoencoder curvature colorization denoise edge2d edge3d rgb2mist inpainting_whole jigsaw keypoint2d keypoint3d class_1000 reshade room_layout class_places segment2d segment25d segmentsemantic rgb2sfnorm vanishing_point point_match ego_motion non_fixated_pose fix_pose ; do python dag_train.py --load_data_in_ram --rammem 5 --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --max_episodes 100000 --task $TASK --log_tag chapter_domain_shift/feature_extraction/$TASK/decision_net; done
 ```
 
 
