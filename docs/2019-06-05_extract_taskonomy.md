@@ -57,17 +57,22 @@ For each task, evaluate the extracted features from the real world how the contr
 
 ```bash
 for TASK in rgb2depth autoencoder curvature colorization denoise edge2d edge3d rgb2mist inpainting_whole jigsaw keypoint2d keypoint3d class_1000 reshade room_layout class_places segment2d segment25d segmentsemantic rgb2sfnorm vanishing_point point_match ego_motion non_fixated_pose fix_pose ; do
-  python dag_train.py --load_data_in_ram --rammem 5 --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --max_episodes 100000 --task $TASK --log_tag chapter_domain_shift/feature_extraction/$TASK/decision_net --n_frames 1
+  python dag_train.py --load_data_in_ram --rammem 5 --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --learning_rates 0.0001 0.00001 0.000001 --max_episodes 1000000 --task $TASK --log_tag chapter_domain_shift/feature_extraction/$TASK/decision_net2 --n_frames 1 
 done
 for TASK in point_match non_fixated_pose fix_pose ; do
-  python dag_train.py --load_data_in_ram --rammem 5 --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --max_episodes 100000 --task $TASK --log_tag chapter_domain_shift/feature_extraction/$TASK/decision_net --n_frames 2
+  python dag_train.py --load_data_in_ram --rammem 5 --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --learning_rates 0.0001 0.00001 0.000001 --max_episodes 1000000 --task $TASK --log_tag chapter_domain_shift/feature_extraction/$TASK/decision_net2 --n_frames 2 
 done
 for TASK in ego_motion ; do
-  python dag_train.py --load_data_in_ram --rammem 5 --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --max_episodes 100000 --task $TASK --log_tag chapter_domain_shift/feature_extraction/$TASK/decision_net --n_frames 3
+  python dag_train.py --load_data_in_ram --rammem 5 --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --learning_rates 0.0001 0.00001 0.000001 --max_episodes 1000000 --task $TASK --log_tag chapter_domain_shift/feature_extraction/$TASK/decision_net2 --n_frames 3 
 done
+```
 
-for TASK in point_match non_fixated_pose fix_pose ; do  python dag_train.py --load_data_in_ram --rammem 5 --wall_time "$((24*3600))" -pp taskonomy/taskbank/tools -ps train_decision_layers.py --max_episodes 100000 --task $TASK --log_tag chapter_domain_shift/feature_extraction/$TASK/decision_net --n_frames 2; done
+Drop out and action normalization failed to have a positive impact.
+Next: train much longer but with smaller learning rates.
 
+Parse results:
+```bash
+LR=lr_001; for d in * ; do echo " $d & $(cat $d/decision_net/$LR/tf_log | grep validation_loss | tail -n 1 | cut -d , -f 7 | cut -d : -f 2) & $(cat $d/decision_net/$LR/tf_log | grep test_loss | tail -n 1 | cut -d , -f 7 | cut -d : -f 2)\\\\"; done
 ```
 
 
