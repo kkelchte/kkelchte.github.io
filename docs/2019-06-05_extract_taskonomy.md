@@ -75,6 +75,26 @@ Parse results:
 LR=lr_001; for d in * ; do echo " $d & $(cat $d/decision_net/$LR/tf_log | grep validation_loss | tail -n 1 | cut -d , -f 7 | cut -d : -f 2) & $(cat $d/decision_net/$LR/tf_log | grep test_loss | tail -n 1 | cut -d , -f 7 | cut -d : -f 2)\\\\"; done
 ```
 
+In general all decision layers become degenerate, predicting one output and reaching the best overall performance which is not nice...
+Therefore, extract depth maps from taskonomy network and train tiny net on depth inputs.
+
+```bash
+for TASK in rgb2depth ; do
+  for DATASET in /esat/opal/kkelchte/docker_home/pilot_data/esatv3_expert/original/00000_esatv3 \
+    /esat/opal/kkelchte/docker_home/pilot_data/esatv3_expert/original/00001_esatv3 \
+    /esat/opal/kkelchte/docker_home/pilot_data/esatv3_expert/original/00002_esatv3 \
+    /esat/opal/kkelchte/docker_home/pilot_data/esatv3_expert/original/00003_esatv3 \
+    /esat/opal/kkelchte/docker_home/pilot_data/real_drone/flying_1_subsampled \
+    /esat/opal/kkelchte/docker_home/pilot_data/real_drone/flying_2_subsampled; do
+    echo "----------$(date +%H:%M) $DATASET"
+    echo
+    IMAGES="$(for f in $DATASET/RGB/* ; do printf " $f"; done)"
+    LOGFOLDER=/esat/opal/kkelchte/docker_home/tensorflow/log/chapter_domain_shift/feature_extraction/$TASK/predictions/$(basename $DATASET)/
+    mkdir -p $LOGFOLDER
+    python tools/get_representations.py --task $TASK --imgs $IMAGES --store-pred --store $LOGFOLDER
+  done
+done
+```
 
 # Calculating feature distances for network with varying corridors
 
